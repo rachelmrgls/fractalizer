@@ -1,0 +1,365 @@
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+precision mediump int;
+uniform mat4 uMVMatrix;
+
+// some constant        
+#define INFINITY 1.0e+12
+#define EPS 1.0e-3
+#define M_PI 3.1415926535897932384626433832795
+
+// some scene 
+#define MAX_OBJECTS 20
+#define MAX_LIGHTS 10
+#define MAX_STEPS 50
+
+#define INFSPHERE 1
+#define SPHERE 2
+#define SIER 3
+#define CYLINDER 4
+#define CONE 5
+
+struct Shape {
+    int shapeType;
+    vec3 v1;
+    vec3 v2;
+    float rad;
+};
+
+#define NONE 0
+#define CHECKERBOARD 1
+#define MYSPECIAL 2
+
+#define BASICMATERIAL 1
+#define PHONGMATERIAL 2
+#define LAMBERTMATERIAL 3
+
+#define NONEREFLECT 1
+#define MIRRORREFLECT 2
+#define GLASSREFLECT 3
+
+struct Material {
+    int materialType;
+    vec3 color;
+    float shininess;
+    vec3 specular;
+
+    int materialReflectType;
+    float reflectivity; 
+    float refractionRatio;
+    int special;
+
+};
+
+struct Object {
+    Shape shape;
+    Material material;
+};
+
+struct Light {
+    vec3 position;
+    vec3 color;
+    float intensity;
+    float attenuate;
+};
+
+uniform int frame;        
+uniform float height;
+uniform float width;
+uniform vec3 camera;
+uniform int numObjects;
+uniform int numLights;
+uniform Object objects[MAX_OBJECTS];
+uniform Light lights[MAX_LIGHTS];
+uniform vec3 objectNorm;
+
+varying vec2 v_position;
+
+struct Ray {
+    vec3 origin;
+    vec3 direction;
+};
+
+struct Intersection {
+    vec3 position;
+    vec3 normal;
+    int steps;
+};
+
+// find then position some distance along a ray
+vec3 rayGetOffset( Ray ray, float dist ) {
+    return ray.origin + ( dist * ray.direction );
+}
+
+// if a newly found intersection is closer than the best found so far, record the new intersection and return true;
+// otherwise leave the best as it was and return false.
+bool chooseCloserIntersection(float dist, inout float best_dist, inout Intersection intersect, inout Intersection best_intersect) {
+    if (best_dist <= dist) return false;
+    best_dist = dist;
+    best_intersect.position = intersect.position;
+    best_intersect.normal   = intersect.normal;
+    best_intersect.steps    = intersect.steps;
+    return true;
+}
+
+
+// sphere/cylinder/cone extraction
+vec3  getShapeCenter(Shape shape)      { return shape.v2; }
+float getShapeRadius(Shape shape)      { return shape.rad; }
+
+
+#define MAX_RECURSION 8
+
+// pseudorandom number generator from precept 9 slide 15
+// range is [0 1]
+float rand(vec2 co) {
+    return fract(sin(dot(co.xy, vec2(12.9898,78.233))) * 43758.5453);
+}
+
+vec3 calcSpecularColor(Object obj, vec3 posIntersection, vec3 normalVector, vec3 eyeVector, bool phongOnly) {
+	vec3 diffuseColor = obj.material.color;
+
+	vec3 outputColor = vec3( 0.0, 0.0, 0.0 ); // color defaults to black	
+	
+    for (int i=0; i<MAX_LIGHTS; i++) {
+
+        if(i>=numLights) break; // because GLSL will not allow looping to numLights
+		
+        vec3 lightVector = lights[i].position - posIntersection;
+        //if ( pointInShadow( lights[i].position, lightVector ) ) continue;
+
+        // add color to output color for each light, based on material type
+        if (obj.material.materialType == BASICMATERIAL) {
+            outputColor += diffuseColor;
+        } 
+        else if (obj.material.materialType == PHONGMATERIAL || 
+                 obj.material.materialType == LAMBERTMATERIAL) {
+            // get light attenuation
+            float dist = length(lightVector);
+            float attenuation = lights[i].attenuate * dist * dist;
+
+            float diffuseIntensity = max(0.0, dot(normalVector, lightVector)) * lights[i].intensity;
+            
+            // glass and mirror objects have specular highlights but no diffuse lighting
+            if (!phongOnly) {
+                outputColor += (diffuseColor * lights[i].color) * diffuseIntensity / attenuation; 
+            }
+            
+            if (obj.material.materialType == PHONGMATERIAL) {
+                // ----------- STUDENT CODE BEGIN ------------
+                vec3 phongTerm = vec3( 0.0, 0.0, 0.0 ); // not implemented yet, so just add black   
+
+                if (dot(normalVector, lightVector) > -EPS) {
+                    vec3 Lhat = normalize(lightVector);
+                    vec3 Nhat = normalize(normalVector);
+                    vec3 Rhat = normalize(2.0 * dot(Lhat,Nhat) * Nhat - Lhat);
+                    vec3 Vhat = normalize(camera - eyeVector);
+
+                    float tmp = dot(Rhat,Vhat);
+                    if (tmp > EPS) {
+                        phongTerm += obj.material.specular * pow(tmp,obj.material.shininess) * lights[i].intensity / (attenuation / 50.0);
+                    }
+                }
+                // ----------- STUDENT CODE END ------------
+                outputColor += phongTerm;
+            }
+        }
+	}
+	
+	return outputColor;
+}
+
+float sphere_de( vec3 p, float r ) {
+    return sqrt( dot( p, p ) ) - r;
+}
+
+// source: http://blog.hvidtfeldts.net/index.php/2011/08/distance-estimated-3d-fractals-iii-folding-space/
+float tetra_de( vec3 z ) {
+
+    float Scale = 0.5;
+    int Iterations = 1;
+
+    vec3 a1 = vec3(1.0,1.0,1.0);
+    vec3 a2 = vec3(-1.0,-1.0,1.0);
+    vec3 a3 = vec3(1.0,-1.0,-1.0);
+    vec3 a4 = vec3(-1.0,1.0,-1.0);
+    vec3 c;
+    int n = 0;
+    float dist, d;
+    for (int n = 0; n < MAX_RECURSION; n++) {
+        if (n >= Iterations) break;
+
+        c = a1; dist = length(z-a1);
+        d = length(z-a2); if (d < dist) { c = a2; dist=d; }
+        d = length(z-a3); if (d < dist) { c = a3; dist=d; }
+        d = length(z-a4); if (d < dist) { c = a4; dist=d; }
+        z = Scale*z-c*(Scale-1.0);
+    }
+ 
+    return length(z) * pow(Scale, float(-n));
+
+/*  , int level, float scale, float offset
+    for ( int i = 0; i < MAX_RECURSION; i++ ) {
+        if (i >= level) break;
+        if (p.x + p.y < 0.0) p.xy = -p.yx; // fold 1
+        if (p.x + p.z < 0.0) p.xz = -p.zx; // fold 2
+        if (p.y + p.z < 0.0) p.zy = -p.yz; // fold 3
+
+        p = p*scale - offset * (scale - 1.0);
+    }
+
+    return length(p) * pow(scale, -float(level));*/
+}
+
+// finite difference method
+// except you can't use functions as arguments to other functions
+// so we can't pass in 'sphere_de'. which is annoying
+// ughhhh. will fix laters?
+vec3 finiteDifference(vec3 pos, float rad) {
+
+    vec3 dx = vec3(EPS,0.0,0.0);
+    vec3 dy = vec3(0.0,EPS,0.0);
+    vec3 dz = vec3(0.0,0.0,EPS);
+    
+    return normalize(vec3(sphere_de(pos + dx,rad) - sphere_de(pos - dx,rad),
+            sphere_de(pos + dy,rad) - sphere_de(pos - dy,rad),
+            sphere_de(pos + dz,rad) - sphere_de(pos - dz,rad)));
+}
+
+vec3 fDiff(vec3 pos, int level, float scale, float offset) {
+
+    vec3 dx = vec3(EPS,0.0,0.0);
+    vec3 dy = vec3(0.0,EPS,0.0);
+    vec3 dz = vec3(0.0,0.0,EPS);
+    
+    return normalize(vec3(tetra_de(pos + dx) - tetra_de(pos - dx),
+            tetra_de(pos + dy) - tetra_de(pos - dy),
+            tetra_de(pos + dz) - tetra_de(pos - dz)));
+    /*return normalize(vec3(tetra_de(pos + dx,level,scale,offset) - tetra_de(pos - dx,level,scale,offset),
+            tetra_de(pos + dy,level,scale,offset) - tetra_de(pos - dy,level,scale,offset),
+            tetra_de(pos + dz,level,scale,offset) - tetra_de(pos - dz,level,scale,offset)));*/
+}
+
+float findIntersectionWithSierpinski( vec3 pos, Shape shape, out Intersection intersect) {
+    int level = int(shape.v1.x);
+    float offset = shape.v1.y;
+    float scale = shape.v1.z;
+
+    float dist = tetra_de(pos);
+
+    intersect.position = pos;
+    intersect.normal = fDiff(pos,level,scale,offset);
+    return dist;
+}
+
+float findIntersectionWithInfSphere( vec3 pos, Shape shape, out Intersection intersect) {
+    float rad = getShapeRadius(shape);
+    vec3 modpos = vec3(mod(pos.x,2.0 * rad) - rad,pos.y,mod(pos.z,2.0 * rad) - rad); 
+    
+    float dist = sphere_de( modpos, rad );
+
+    intersect.position = pos;
+
+    // theres something wrong with thissssss. 
+    intersect.normal = normalize(modpos); // finiteDifference(modpos, rad);
+
+    return dist;
+}
+
+float findIntersectionWithSphere( vec3 pos, Shape shape, out Intersection intersect) {
+    vec3 cen = getShapeCenter(shape);
+    float rad = getShapeRadius(shape);
+
+    vec3 tmp = pos - cen;
+    float dist = sphere_de(tmp,rad);
+
+    intersect.position = pos;
+    intersect.normal = normalize(tmp);
+    return dist;
+}
+
+
+float findIntersection( vec3 pos, Shape shape, out Intersection intersect ) {
+    if( shape.shapeType == INFSPHERE) {
+        return findIntersectionWithInfSphere(pos, shape, intersect);
+    }
+    if( shape.shapeType == SPHERE) {
+        return findIntersectionWithSphere(pos, shape, intersect);
+    }
+    if( shape.shapeType == SIER) {
+        return findIntersectionWithSierpinski(pos, shape, intersect);
+    }
+
+    return INFINITY;
+}
+
+// test ray against each implicit function - union is the min
+float rayIntersectScene( Ray ray, out Object obj, out Intersection out_intersect ) {
+    
+    // initialize distance along ray to 0
+    float t = 0.0;
+
+    for ( int i = 0; i < MAX_STEPS; i++ )
+    {
+        // evaluate the distance to the nearest part of the geometry
+        vec3 posIntersection = rayGetOffset( ray, t );
+        
+        float deltat = INFINITY;
+        Intersection intersect;
+        for (int j=0; j<MAX_OBJECTS; j++) {
+            if ( j>= numObjects ) break;
+            
+            float cur_dist = findIntersection( posIntersection, objects[j].shape, intersect );
+            intersect.steps = i;
+            if ( chooseCloserIntersection(cur_dist, deltat, intersect, out_intersect) ) {
+                obj = objects[j];
+            }
+            
+        }
+
+        if ( deltat < EPS ) return deltat;
+        if (deltat < INFINITY) t += deltat;
+    }
+
+    return t;
+}
+
+// implementation of raymarching algorithm for rendering fractals/other complex geometries
+vec3 marchRay( Ray ray ) {
+    Object obj;
+    Intersection intersect;
+
+    float deltat = rayIntersectScene( ray, obj, intersect );
+    
+    // if we're very close to the surface/inside of the geometry
+    if ( deltat < EPS ) {
+        // find the normal vector at this position
+        // analytically or through finite difference method
+        vec3 eyeVector = normalize(ray.origin - intersect.position);           
+        if (dot(eyeVector, intersect.normal) < 0.0) { intersect.normal = -intersect.normal; }
+
+        vec3 resColor = calcSpecularColor(obj, intersect.position, intersect.normal, eyeVector, false);
+        return (1.0 - float(intersect.steps)/float(MAX_STEPS)) * resColor;
+    }
+
+    // didn't hit anything - default return black
+    return vec3( 0.0, 0.0, 0.0 );
+}
+
+void main() {
+    float cameraFOV = 0.6;
+    vec3 direction = vec3(v_position.x * cameraFOV * width/height, v_position.y * cameraFOV, 1.0);
+
+    Ray ray;
+	ray.origin    = vec3( uMVMatrix * vec4(camera, 1.0) );
+    ray.direction = vec3( uMVMatrix * vec4(direction, 0.0) );
+
+    // march the ray for this pixel
+    vec3 res = marchRay( ray );
+    
+    // paint the resulting color into this pixel
+    gl_FragColor = vec4( res.x, res.y, res.z, 1.0 );
+}

@@ -2,36 +2,25 @@
 <html>
 
 <head>
-    <title> COS426 Assignment 2 &mdash; Mesh Processing &mdash; Interactive</title>
+    <title> COS426 Final Project &mdash; Rendering </title>
     <link href="css/style.css" type="text/css" rel="stylesheet"/>
 </head>
 
 <body>
     <script src="libjs/dat.gui.min.js"> </script>
-    <script src="libjs/stats.min.js"></script>
-    <script src="libjs/three.min.js"></script>
-    <script src="libjs/TrackballControls.js"></script>
-
-    <script src="libjs/OBJLoader.js"></script>
-
-    <script src="js/gui.js"></script>
-    <script src="js/renderer.js"></script>
-    <script src="js/scene.js"></script>
-    <script src="js/filters.js"></script>
     <script src="js/student.js"> </script>
-    <script src="js/mesh.js"> </script>
-    <script src="js/meshStudent.js"> </script>
-    <script src="js/parser.js"> </script>
-
-    <script src="js/main.js"> </script>
-
-    <div id="stats"></div>
-    <div id="main_div">
-        <h1> <span class="assignment">COS426 Assignment 2<br></span> Mesh Processing </h1>
-        <h2 id="student"></h2>
-        <canvas id="canvas"> </canvas>
+    <script> 
+    window.onload = function() {
+        Student.updateHTML(); 
+    }
+    </script>
+    <div id="index-div">
+        <h1> COS426 Final Project &mdash; Fractals</h1>
+        <h2 id='student'></h2>
+        <table id="index-table">
+            <td> <a href="raytracer.html">  <img class="demoplot" src="results/infinitespheres.png"> <br> Raytracer </a> </td>
+            <td> <a href="writeup.html">  <img class="demoplot" src="css/writeup.jpg"> <br> Writeup </a> </td>
+        </table>
     </div>
-    <div id="alert_div" title="alert"> </div>
-
 </body>
 </html>

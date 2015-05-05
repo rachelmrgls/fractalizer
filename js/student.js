@@ -1,6 +1,9 @@
 var Student = {
-    'name'  : 'The Winners',
-    'netID' : 'pinner',
+    // please fill in your name and NetID
+    // your NetID is the part of your email before @princeton.edu
+    'name'  : '',
+    'netID' : '',
+};
 
 Student.updateHTML = function( ) {
     var studentInfo = this.name + ' &lt;' + this.netID + '&gt;';
