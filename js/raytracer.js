@@ -7,7 +7,7 @@ Raytracer.lightID = 0;
 
 Raytracer.INFSPHERE = 1;
 Raytracer.SPHERE   = 2;
-Raytracer.SIER  = 3;
+Raytracer.MENGER  = 3;
 Raytracer.CYLINDER = 4;
 Raytracer.CONE     = 5;
 
@@ -216,8 +216,8 @@ Raytracer.addInfSphere = function( radius ) {
     this.setUniformShape( this.INFSPHERE, radius, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 );
 };
 
-Raytracer.addSierpinski = function( level, offset, scale ) {
-    this.setUniformShape( this.SIER, 0.0, level, offset, scale, 0.0, 0.0, 0.0 );
+Raytracer.addMenger = function( level, scale ) {
+    this.setUniformShape( this.MENGER, 0.0, level, scale, 0.0, 0.0, 0.0, 0.0 );
 };
 
 Raytracer.addPlane = function( normX, normY, normZ, dist) {
