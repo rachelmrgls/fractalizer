@@ -245,9 +245,9 @@ float tetra_de( vec3 p ) {
         d = length(z-a3); if (d < dist) { c = a3; dist=d; }
         d = length(z-a4); if (d < dist) { c = a4; dist=d; }
         z = Scale*z-c*(Scale-1.0);
-    }*/
+    }
  
-    return length(z) * pow(Scale, float(-n));
+    return length(z) * pow(Scale, float(-n));*/
 
 /*  , int level, float scale, float offset
     for ( int i = 0; i < MAX_RECURSION; i++ ) {
