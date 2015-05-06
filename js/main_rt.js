@@ -62,7 +62,7 @@ window.onload = function() {
     var height = cmd.height || window.innerHeight;//600;
     var width  = cmd.width  || window.innerWidth;//600;
         
-    var animated= cmd.animated|| 0; // default animated
+    var animated= cmd.animated|| 1; // default animated
     var paused = false;
     var debug = cmd.debug||false;
 

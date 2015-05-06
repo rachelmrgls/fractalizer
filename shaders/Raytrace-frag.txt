@@ -176,6 +176,7 @@ vec3 calcSpecularColor(Object obj, vec3 posIntersection, vec3 normalVector, vec3
 }
 
 float sphere_de( vec3 p, float r ) {
+
     return sqrt( dot( p, p ) ) - r;
 }
 
@@ -195,7 +196,7 @@ mat3 ma = mat3( 0.60, 0.00,  0.80,
                -0.80, 0.00,  0.60 );
 
 // source: http://blog.hvidtfeldts.net/index.php/2011/08/distance-estimated-3d-fractals-iii-folding-space/
-float menger_de( vec3 p ) {
+float menger_de( vec3 p, int level ) {
 
     // menger sponge
     // source: https://www.shadertoy.com/view/4sX3Rn
@@ -204,8 +205,9 @@ float menger_de( vec3 p ) {
     float off = 1.5*sin( 0.01*iGlobalTime );
     
     float s = 1.0;
-    for( int m=0; m<4; m++ )
+    for( int m=0; m< MAX_RECURSION; m++ )
     {
+        if (m >= level) break;
 
         p = mix( p, ma*(p+off), ani );
        
@@ -275,22 +277,22 @@ vec3 finiteDifference(vec3 pos, float rad) {
             sphere_de(pos + dx.yyx,rad) - sphere_de(pos - dx.yyx,rad)));
 }
 
-vec3 fDiff(vec3 pos) {
+vec3 fDiff(vec3 pos, int level) {
 
     vec3 dx = vec3(EPS,0.0,0.0);
 
-    return normalize(vec3(menger_de(pos + dx.xyy) - menger_de(pos - dx.xyy),
-            menger_de(pos + dx.yxy) - menger_de(pos - dx.yxy),
-            menger_de(pos + dx.yyx) - menger_de(pos - dx.yyx)));
+    return normalize(vec3(menger_de(pos + dx.xyy,level) - menger_de(pos - dx.xyy,level),
+            menger_de(pos + dx.yxy,level) - menger_de(pos - dx.yxy,level),
+            menger_de(pos + dx.yyx,level) - menger_de(pos - dx.yyx,level)));
     }
 
 float findIntersectionWithMenger( vec3 pos, Shape shape, out Intersection intersect) {
     int level = int(shape.v1.x);
 
-    float dist = menger_de(pos);
+    float dist = menger_de(pos,level);
 
     intersect.position = pos;
-    intersect.normal = fDiff(pos);
+    intersect.normal = fDiff(pos,level);
     return dist;
 }
 
