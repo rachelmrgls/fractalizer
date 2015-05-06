@@ -182,10 +182,9 @@ float sphere_de( vec3 p, float r ) {
 
 // Created by inigo quilez - iq/2013
 // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
-
 float maxcomp(in vec3 p ) { return max(p.x,max(p.y,p.z));}
-float sdBox( vec3 p, vec3 b )
-{
+
+float sdBox( vec3 p, vec3 b ) {
   vec3  di = abs(p) - b;
   float mc = maxcomp(di);
   return min(mc,length(max(di,0.0)));
@@ -219,7 +218,7 @@ float menger_de( vec3 p, int level ) {
         float dc = max(r.z,r.x);
         float c = (min(da,min(db,dc))-1.0)/s;
 
-        if( c>d ) d = c;
+        if( c > d ) d = c;
     }
 
     return d;
@@ -229,7 +228,7 @@ float menger_de( vec3 p, int level ) {
 float tetra_de( vec3 p ) {
     // sierpinski gasket
     /*float Scale = 2.0;
-    int Iterations = 10;
+    int Iterations = 1;
 
     vec3 a1 = vec3(1.0,1.0,1.0);
     vec3 a2 = vec3(-1.0,-1.0,1.0);
@@ -246,9 +245,9 @@ float tetra_de( vec3 p ) {
         d = length(z-a3); if (d < dist) { c = a3; dist=d; }
         d = length(z-a4); if (d < dist) { c = a4; dist=d; }
         z = Scale*z-c*(Scale-1.0);
-    }
+    }*/
  
-    return length(z) * pow(Scale, float(-n));*/
+    return length(z) * pow(Scale, float(-n));
 
 /*  , int level, float scale, float offset
     for ( int i = 0; i < MAX_RECURSION; i++ ) {
@@ -268,7 +267,7 @@ float tetra_de( vec3 p ) {
 // except you can't use functions as arguments to other functions
 // so we can't pass in 'sphere_de'. which is annoying
 // ughhhh. will fix laters?
-vec3 finiteDifference(vec3 pos, float rad) {
+vec3 fDiff_infSpheres(vec3 pos, float rad) {
 
     vec3 dx = vec3(EPS,0.0,0.0);
     
@@ -277,14 +276,14 @@ vec3 finiteDifference(vec3 pos, float rad) {
             sphere_de(pos + dx.yyx,rad) - sphere_de(pos - dx.yyx,rad)));
 }
 
-vec3 fDiff(vec3 pos, int level) {
+vec3 fDiff_menger(vec3 pos, int level) {
 
     vec3 dx = vec3(EPS,0.0,0.0);
 
     return normalize(vec3(menger_de(pos + dx.xyy,level) - menger_de(pos - dx.xyy,level),
             menger_de(pos + dx.yxy,level) - menger_de(pos - dx.yxy,level),
             menger_de(pos + dx.yyx,level) - menger_de(pos - dx.yyx,level)));
-    }
+}
 
 float findIntersectionWithMenger( vec3 pos, Shape shape, out Intersection intersect) {
     int level = int(shape.v1.x);
@@ -292,7 +291,7 @@ float findIntersectionWithMenger( vec3 pos, Shape shape, out Intersection inters
     float dist = menger_de(pos,level);
 
     intersect.position = pos;
-    intersect.normal = fDiff(pos,level);
+    intersect.normal = fDiff_menger(pos,level);
     return dist;
 }
 
@@ -305,7 +304,7 @@ float findIntersectionWithInfSphere( vec3 pos, Shape shape, out Intersection int
     intersect.position = pos;
 
     // theres something wrong with thissssss. 
-    intersect.normal = normalize(modpos); // finiteDifference(modpos, rad);
+    intersect.normal = normalize(modpos); // fDiff_infSpheres(modpos, rad);
 
     return dist;
 }
