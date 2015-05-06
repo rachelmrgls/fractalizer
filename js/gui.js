@@ -2,71 +2,31 @@
 
 var Gui = Gui || {};
 
-// list of meshes available in the GUI
-Gui.meshList = [
-	"THREE.sphere",
-	"THREE.torus",
-	"THREE.torusknot",	
-	"THREE.icosahedron",
-	"Strongman.obj",
-	"sheep.obj",
-    "male02.obj",
-    "female02.obj"
+Gui.sceneList = [
+    "default",
+    "menger",
 ];
 
 Gui.windowSizes = [ "full","400x400","600x400","600x600","800x600","800x800" ];
 
 Gui.applyList = [];
 
-Gui.shadingList = [
-	"Basic",
-	"Gouraud",
-	"Phong",
-    "EnvMap",
-    "Bump",
-];
-Gui.textureList = [
-	"default",
-	"uv_grid.jpg",
-	"lavatile.jpg",
-	"cloud.png",
-	"grass.jpg",
-	"brick.jpg",
-	"earthcloud.jpg",
-	"valley.jpg",
-	"grandcanyon.jpg",
-	"camera",
-];
-
 // due to a bug in dat GUI we need to initialize floats to non-interger values (like 0.5)
 // (the variable Gui.defaults below then carries their default values, which we set later)
 Gui.values = {
     // general gui
-    meshFile   : Gui.meshList[0],
     windowSize : Gui.windowSizes[0],
     reset      : function () {},
     exclusive  : false,
     guiToBatch : function() {},
 
 	//Shading Model
-	shadingModel : Gui.shadingList[0],
-	inflate : 0.0,
-	texture : Gui.textureList[0],
-	ambient: "#252137",
-	diffuse: "#705d5d",
-	specular: "#4a4a28",
-	shininess: 0.0,
+	scene : Gui.sceneList[0],
 };
 
 // defaults only hold actual mesh modifiers, no display
 Gui.defaults = {
-	shadingModel : Gui.shadingList[0],
-	inflate: 0.0,
-	texture : Gui.textureList[0],
-	ambient: "#252137",
-	diffuse: "#705d5d",
-	specular: "#4a4a28",
-	shininess: 0.0,
+	scene : Gui.sceneList[0],
 };
 
 Gui.selection_possible = true;
@@ -111,17 +71,8 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback ) {
     var meshF   = gui.add( Gui.values, 'meshFile', Gui.meshList ).name("Current Mesh");
     //var exclu   = gui.add( Gui.values, 'exclusive' ).name("Exclusive");
     var gToB    = gui.add( Gui.values, 'guiToBatch' );
-    var shading = gui.add( Gui.values, "shadingModel", Gui.shadingList );
+    var scene = gui.add( Gui.values, "scene", Gui.sceneList );
 
-    var gc = {};
-	gc.inflate = gui.add( Gui.values,'inflate',-1.0,1.0).step(0.05).setValue(  Gui.defaults.inflate );
-	gc.texture = gui.add( Gui.values,'texture', Gui.textureList);
-	gc.ambient = gui.addColor( Gui.values, 'ambient' );
-	gc.diffuse = gui.addColor( Gui.values, 'diffuse' );
-	gc.specular = gui.addColor( Gui.values, 'specular' );
-	
-	gc.shininess = gui.add( Gui.values, 'shininess', 0.0,100.0 ).step(5.0).setValue( Gui.defaults.inflate );
-	
     // Helper functions
     var inReset = false;
     var resetGuiValues = function () {
@@ -185,7 +136,7 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback ) {
 
     size.onChange( Renderer.onWindowResize );
 
-	shading.onChange( controlsChangeCallback );
+	scene.onChange( controlsChangeCallback );
 	
     // setup the callback function for all display related gui changes
     for ( var prop in gc ) {
@@ -194,7 +145,7 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback ) {
 
     // button which creates the corresponding url of current gui
     gToB.onChange( function() {
-        var url = 'rasterizer-batch.html?meshFile=' + Gui.values.meshFile;
+        var url = 'raytracer.html?scene=' + Gui.values.scene;
 
         for (var i = 0; i < Gui.applyList.length; i++) {
             if (i > 0) {

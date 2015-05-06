@@ -68,6 +68,7 @@ struct Light {
     float attenuate;
 };
 
+uniform float data0;
 uniform int frame;        
 uniform float height;
 uniform float width;
@@ -174,8 +175,6 @@ vec3 calcSpecularColor(Object obj, vec3 posIntersection, vec3 normalVector, vec3
 	return outputColor;
 }
 
-
-
 float sphere_de( vec3 p, float r ) {
     return sqrt( dot( p, p ) ) - r;
 }
@@ -201,8 +200,6 @@ float menger_de( vec3 p ) {
     // menger sponge
     // source: https://www.shadertoy.com/view/4sX3Rn
     float d = sdBox(p,vec3(1.0));
-//    return d;
-
     float ani = smoothstep( -0.2, 0.2, -cos(0.5*iGlobalTime) );
     float off = 1.5*sin( 0.01*iGlobalTime );
     
@@ -289,7 +286,6 @@ vec3 fDiff(vec3 pos) {
 
 float findIntersectionWithMenger( vec3 pos, Shape shape, out Intersection intersect) {
     int level = int(shape.v1.x);
-    float scale = shape.v1.y;
 
     float dist = menger_de(pos);
 

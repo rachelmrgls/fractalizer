@@ -2,7 +2,7 @@ var Scene = Scene || {};
 
 
 Scene.default = function () {
-    Raytracer.setUniform('3f', 'camera' ,0.0, 0.0, -15.0);    
+    Raytracer.setUniform('3f', 'camera' ,0.0, 0.0, -25.0);    
     
     // Matte Sphere
     Raytracer.resetMaterial();
@@ -13,9 +13,9 @@ Scene.default = function () {
     Raytracer.setUniformMaterial( '3f','specular', 0.8, 0.8, 0.8 ); 
     Raytracer.setUniformMaterial( '1f','shininess', 200 ); 
     Raytracer.setUniformMaterial( '3f','color', 0.2, 0.4, 0.5 );
+    
     //Raytracer.addSphere( -2.0, -4.0, 0.0, 1.0 );
     Raytracer.addInfSphere( 3.0 ); // radius
-    //Raytracer.addMenger( 1.0, 4.0 ); // recursion level, scale
 
     
     Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);
@@ -29,7 +29,7 @@ Scene.default = function () {
 
 
 Scene.menger = function () {
-    Raytracer.setUniform('3f', 'camera' ,0.0, 0.0, -15.0);    
+    Raytracer.setUniform('3f', 'camera' ,0.0, 0.0, -5.0);    
     
     // Matte Sphere
     Raytracer.resetMaterial();
@@ -41,8 +41,7 @@ Scene.menger = function () {
     Raytracer.setUniformMaterial( '1f','shininess', 200 ); 
     Raytracer.setUniformMaterial( '3f','color', 0.2, 0.4, 0.5 );
     //Raytracer.addSphere( -2.0, -4.0, 0.0, 1.0 );
-    //Raytracer.addInfSphere( 3.0 ); // radius
-    Raytracer.addMenger( 1.0, 4.0 ); // recursion level, scale
+    Raytracer.addMenger( 3.0 ); // recursion level
 
     
     Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);

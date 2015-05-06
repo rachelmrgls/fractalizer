@@ -4,6 +4,8 @@ final project cos426
 
 Sources
 
+(sound stuff) http://joshondesign.com/p/books/canvasdeepdive/chapter12.html
+
 http://blog.hvidtfeldts.net/index.php/2011/06/distance-estimated-3d-fractals-part-i/
 
 http://www.iquilezles.org/www/material/nvscene2008/nvscene2008.htm

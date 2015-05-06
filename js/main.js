@@ -160,7 +160,7 @@ Main.fetchTexture = function(textureName)
 // construct scene given loaded geometry 
 Main.controlsChangeCallback = function()
 {
-	Main.shadingMethod = Gui.values.shadingModel;
+	//Main.shadingMethod = Gui.values.shadingModel;
 
 	var meshs = [];
 	

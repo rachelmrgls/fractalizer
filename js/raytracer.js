@@ -97,6 +97,7 @@ Raytracer.initShader = function ( program, shaderType, src, debug) {
 
 Raytracer.init = function (height, width, debug) {
 	canvas = document.getElementById('canvas');
+
 	this.gl = canvas.getContext( 'experimental-webgl', {preserveDrawingBuffer: true} );
 	canvas.width  = width;
 	canvas.height = height;
@@ -217,7 +218,7 @@ Raytracer.addInfSphere = function( radius ) {
 };
 
 Raytracer.addMenger = function( level, scale ) {
-    this.setUniformShape( this.MENGER, 0.0, level, scale, 0.0, 0.0, 0.0, 0.0 );
+    this.setUniformShape( this.MENGER, 0.0, level, 0.0, 0.0, 0.0, 0.0, 0.0 );
 };
 
 Raytracer.addPlane = function( normX, normY, normZ, dist) {
@@ -260,10 +261,12 @@ Raytracer.resetMaterial = function ( ) {
     
 };
 
-Raytracer.render = function( animated ) {
+Raytracer.render = function( animated, data ) {
     this.frame++;
     if ( animated ) {
         this.setUniform('1i', 'frame', this.frame);
+        //this.gl.uniform3fv(data);
+        this.setUniform('1f', 'data0', data[0]);
     }
 	//rotation matrix
     this.setUniform('Matrix4fv', 'uMVMatrix', false, this.RotationMatrix );
