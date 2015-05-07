@@ -126,8 +126,10 @@ float rand(vec2 co) {
 
 vec3 calcSpecularColor(Object obj, vec3 posIntersection, vec3 normalVector, vec3 eyeVector, bool phongOnly) {
 	
-    
-    
+    /*vec3 diffuseColor = 
+
+
+[fixme]*/
 
     vec3 diffuseColor = obj.material.color;
 	vec3 outputColor = vec3( 0.0, 0.0, 0.0 ); // color defaults to black	
@@ -288,13 +290,9 @@ float tetra_de( vec3 p ) {
         d = length(z-a3); if (d < dist) { c = a3; dist=d; }
         d = length(z-a4); if (d < dist) { c = a4; dist=d; }
         z = Scale*z-c*(Scale-1.0);
-    }
+    }*/
  
-<<<<<<< Updated upstream
-    return length(z) * pow(Scale, float(-n));*/
-=======
     //return length(z) * pow(Scale, float(-n));
->>>>>>> Stashed changes
 
 /*  , int level, float scale, float offset
     for ( int i = 0; i < MAX_RECURSION; i++ ) {
