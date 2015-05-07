@@ -9,7 +9,6 @@ var setup = false; //indicate if audio is set up yet
 
 //init the sound system 
 function init() { 
-    console.log("in init"); 
     try { 
         ctx = new AudioContext();//webkitAudioContext(); //is there a better API for this? 
         //setupCanvas(); 
@@ -62,16 +61,15 @@ window.onload = function() {
     var height = cmd.height || window.innerHeight;//600;
     var width  = cmd.width  || window.innerWidth;//600;
         
-    var animated= cmd.animated|| 1; // default animated
+    var animated= cmd.animated|| 0;
     var paused = false;
     var debug = cmd.debug||false;
 
     Raytracer.init(height, width, debug);
     createScene(batchCMD);
     
-    init();
-    requestAnimationFrame(drawScene);
-    //drawScene();
+    if ( animated ) init();
+    drawScene();
     
     Student.updateHTML();
     
@@ -79,29 +77,6 @@ window.onload = function() {
     function createScene ( sceneID ) {
         Scene[sceneID.toString()]();
     }
-
-/*function setupCanvas() { 
-        var canvas = document.getElementById('canvas'); 
-        gfx = canvas.getContext('2d'); 
-        console.log(gfx)
-        requestAnimationFrame(update); //webkitRequestAnimationFrame(update); 
-    } 
-
-    function update() { 
-        requestAnimationFrame(update);//webkitRequestAnimationFrame(update); 
-        if(!setup) return; 
-        gfx.clearRect(0,0,800,600); 
-        gfx.fillStyle = 'gray'; 
-        gfx.fillRect(0,0,800,600); 
-         
-        var data = new Uint8Array(samples); 
-        fft.getByteFrequencyData(data); 
-        gfx.fillStyle = 'red'; 
-        for(var i=0; i<data.length; i++) { 
-            gfx.fillRect(100+i*4,100+256-data[i]*2,3,100); 
-        } 
-         
-    } */
 
     function drawScene() {
         var data = new Uint8Array(samples); 

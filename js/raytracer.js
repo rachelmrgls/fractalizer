@@ -261,12 +261,52 @@ Raytracer.resetMaterial = function ( ) {
     
 };
 
-Raytracer.render = function( animated, data ) {
+// http://www.john-smith.me/hassles-with-array-access-in-webgl--and-a-couple-of-workarounds
+/*Raytracer.calculatePow2 = function(numBytes) {
+    var nPx = numBytes / 4;
+    if (nPx != Math.floor(nPx)) nPx = Math.floor(nPx + 1);
+    var powOf2 = Math.log(nPx) + Math.LOG2E;
+    if (powOf2 != Math.floor(powOf2)) powOf2 = Math.floor(powOf2 + 1);
+    return Math.pow(2,powOf2);
+}*/
+
+// we need to use a texture instead of an array
+// because GLSL sucks
+Raytracer.createTexture = function( typeddata ) {
+    //var nBytes = typeddata.length * typeddata.BYTES_PER_ELEMENT;
+    var cv = document.createElement("canvas");
+    cv.width = typeddata.length;//Raytracer.calculatePow2(numBytes);;
+    cv.height = 1;
+    var c = cv.getContext("2d");
+    var img = c.createImageData(cv.width,cv.height);
+    var imgd = img.data;
+    for (var i = 0; i < typeddata.length; i++) imgd[i] = typeddata[i];
+    
+    var mytexture = this.gl.createTexture();
+    this.gl.bindTexture(this.gl.TEXTURE_2D, mytexture);
+    this.gl.texImage2D(this.gl.TEXTURE_2D,0,this.gl.RGBA,this.gl.RGBA,this.gl.UNSIGNED_BYTE,img);
+    /* These params let the data through (seemingly) unmolested - via
+    * http://www.khronos.org/webgl/wiki/WebGL_and_OpenGL_Differences#Non-Power_of_Two_Texture_Support
+    */
+    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
+    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
+    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
+    //this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAX_FILTER, this.gl.LINEAR); // this.gl.NEAREST?
+
+    this.gl.bindTexture(this.gl.TEXTURE_2D, null); // 'clear' texture status
+    this.gl.activeTexture(this.gl.TEXTURE0);
+    this.gl.bindTexture(this.gl.TEXTURE_2D, mytexture);
+    this.gl.uniform1i(this.gl.getUniformLocation(this.program, "audio"), 0);
+
+    return;
+}
+
+Raytracer.render = function( animated, typeddata ) {
     this.frame++;
     if ( animated ) {
+        // create a texture for the audio data
+        Raytracer.createTexture(typeddata)
         this.setUniform('1i', 'frame', this.frame);
-        //this.gl.uniform3fv(data);
-        this.setUniform('1f', 'data0', data[0]);
     }
 	//rotation matrix
     this.setUniform('Matrix4fv', 'uMVMatrix', false, this.RotationMatrix );
