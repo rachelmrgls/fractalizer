@@ -318,6 +318,8 @@ Raytracer.render = function( animated, typeddata ) {
     }
 	//rotation matrix
     this.setUniform('Matrix4fv', 'uMVMatrix', false, this.RotationMatrix );
+
+    //console.log(this.RotationMatrix);
     
     if (this.needsToDraw || animated) {
 	    this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);

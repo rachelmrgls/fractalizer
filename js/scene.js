@@ -60,7 +60,7 @@ Scene.julia = function ( value ) {
     Raytracer.resetMaterial();
     // I dunno what is wrong but when I put Raytracer.BASICMATERIAL instead of PHONG
     // its just white?? idk why so i will not fix but someone else can if they feel inclined.
-    Raytracer.setUniformMaterial( '1i','materialType', Raytracer.BASICMATERIAL);
+    Raytracer.setUniformMaterial( '1i','materialType', Raytracer.PHONGMATERIAL);
     Raytracer.setUniformMaterial( '1i','materialReflectType', Raytracer.NONEREFLECT); 
     Raytracer.setUniformMaterial( '3f','specular', 0.8, 0.8, 0.8 ); 
     Raytracer.setUniformMaterial( '1f','shininess', 200 ); 
@@ -82,13 +82,13 @@ Scene.julia = function ( value ) {
 
 
 Scene.mandelbrot = function () {
-    Raytracer.setUniform('3f', 'camera' ,0.0, 0.0, -10.0);    
+    Raytracer.setUniform('3f', 'camera' ,0.175679, -1.04465, -1.61391 - 15);//0.0, 0.0, -10.0);    
 
     // Matte Sphere
     Raytracer.resetMaterial();
     // I dunno what is wrong but when I put Raytracer.BASICMATERIAL instead of PHONG
     // its just white?? idk why so i will not fix but someone else can if they feel inclined.
-    Raytracer.setUniformMaterial( '1i','materialType', Raytracer.BASICMATERIAL);
+    Raytracer.setUniformMaterial( '1i','materialType', Raytracer.PHONGMATERIAL);//BASICMATERIAL);
     Raytracer.setUniformMaterial( '1i','materialReflectType', Raytracer.NONEREFLECT); 
     Raytracer.setUniformMaterial( '3f','specular', 0.8, 0.8, 0.8 ); 
     Raytracer.setUniformMaterial( '1f','shininess', 200 ); 

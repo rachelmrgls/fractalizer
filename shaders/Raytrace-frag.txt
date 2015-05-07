@@ -386,6 +386,24 @@ vec3 fDiff_menger(vec3 pos, int level) {
             menger_de(pos + dx.yyx,level) - menger_de(pos - dx.yyx,level)));
 }
 
+vec3 fDiff_julia(vec3 pos) {
+
+    vec3 dx = vec3(EPS,0.0,0.0);
+
+    return normalize(vec3(julia_de(pos + dx.xyy) - julia_de(pos - dx.xyy),
+            julia_de(pos + dx.yxy) - julia_de(pos - dx.yxy),
+            julia_de(pos + dx.yyx) - julia_de(pos - dx.yyx)));
+}
+
+vec3 fDiff_mandelbrot(vec3 pos) {
+
+    vec3 dx = vec3(EPS,0.0,0.0);
+
+    return normalize(vec3(mandelbrot_de(pos + dx.xyy) - mandelbrot_de(pos - dx.xyy),
+            mandelbrot_de(pos + dx.yxy) - mandelbrot_de(pos - dx.yxy),
+            mandelbrot_de(pos + dx.yyx) - mandelbrot_de(pos - dx.yyx)));
+}
+
 float findIntersectionWithMenger( vec3 pos, Shape shape, out Intersection intersect) {
     int level = int(shape.v1.x);
 
@@ -401,16 +419,18 @@ float findIntersectionWithJulia( vec3 pos, Shape shape, out Intersection interse
     float dist = julia_de(pos);
 
     intersect.position = pos;
-    intersect.normal = vec3(0.0);
+    intersect.normal = fDiff_julia(pos);//vec3(0.0);
     return dist;
 }
+
+
 
 float findIntersectionWithMandelbrot( vec3 pos, Shape shape, out Intersection intersect) {
     
     float dist = mandelbrot_de(pos);
 
     intersect.position = pos;
-    intersect.normal = vec3(0.0);
+    intersect.normal = fDiff_mandelbrot(pos);//vec3(0.0);
     return dist;
 }
 
