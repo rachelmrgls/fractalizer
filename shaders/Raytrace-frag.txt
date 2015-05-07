@@ -17,6 +17,7 @@ uniform float iGlobalTime;
 #define MAX_OBJECTS 20
 #define MAX_LIGHTS 10
 #define MAX_STEPS 50
+#define MAX_MANDEL_ITER 1024
 
 #define INFSPHERE 1
 #define SPHERE 2
@@ -83,6 +84,7 @@ uniform Light lights[MAX_LIGHTS];
 uniform vec3 objectNorm;
 
 varying vec2 v_position;
+float iter;
 
 struct Ray {
     vec3 origin;
@@ -127,12 +129,15 @@ float rand(vec2 co) {
 
 vec3 calcSpecularColor(Object obj, vec3 posIntersection, vec3 normalVector, vec3 eyeVector, bool phongOnly) {
 	
-    /*vec3 diffuseColor = 
+    vec3 diffuseColor;
+
+    if (obj.shape.shapeType == MANDELBROT) {
+        diffuseColor = vec3(iter,iter,iter);
+    } else {
+        diffuseColor = obj.material.color;
+    }
 
 
-[fixme]*/
-
-    vec3 diffuseColor = obj.material.color;
 	vec3 outputColor = vec3( 0.0, 0.0, 0.0 ); // color defaults to black	
 	
     for (int i=0; i<MAX_LIGHTS; i++) {
@@ -286,14 +291,17 @@ float mandelbrot_de( vec3 p ) {
     vec2 dz = vec2( 0.0, 0.0 ); 
 
     float m2;
-    for( int i=0; i<1024; i++ )
+    for( int i=0; i<MAX_MANDEL_ITER; i++ )
     {
+
         dz = 2.0 * complexMult(z,dz) + vec2(1.0,0.0);
         z = complexMult(z,z) + c;
 
         m2 = complexModSquared(z);
-        if( m2>1e20 )
+        if( m2>1e20 ) {
+            iter = float(i)/float(MAX_MANDEL_ITER);
             break;
+        }
     }
 
     // distance estimation: G/|G'|
