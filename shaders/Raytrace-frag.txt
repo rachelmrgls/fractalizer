@@ -21,8 +21,8 @@ uniform float iGlobalTime;
 #define INFSPHERE 1
 #define SPHERE 2
 #define MENGER 3
-#define CYLINDER 4
-#define CONE 5
+#define JULIA 4
+#define MANDELBROT 5
 
 struct Shape {
     int shapeType;
@@ -70,6 +70,7 @@ struct Light {
 
 //uniform float data0;
 //uniform int audio[3];
+uniform float value;
 uniform sampler2D audio;
 uniform int frame;        
 uniform float height;
@@ -268,6 +269,61 @@ float menger_de( vec3 p, int level ) {
 
 }
 
+vec2 complexMult( vec2 a, vec2 b ) {
+    return vec2(a.x * b.x - a.y * b.y,
+                a.x * b.y + b.x * a.y);
+}
+
+float complexModSquared( vec2 a ) {
+    return a.x * a.x + a.y * a.y;
+}
+
+// http://iquilezles.org/www/articles/distancefractals/distancefractals.htm
+
+float mandelbrot_de( vec3 p ) {
+    vec2 c = vec2( p.x, p.y );
+    vec2 z = vec2( 0.0, 0.0 );
+    vec2 dz = vec2( 0.0, 0.0 ); 
+
+    float m2;
+    for( int i=0; i<1024; i++ )
+    {
+        dz = 2.0 * complexMult(z,dz) + vec2(1.0,0.0);
+        z = complexMult(z,z) + c;
+
+        m2 = complexModSquared(z);
+        if( m2>1e20 )
+            break;
+    }
+
+    // distance estimation: G/|G'|
+    return sqrt( m2/complexModSquared(dz) )*0.5*log(m2);
+
+
+}
+
+float julia_de( vec3 p )
+{
+    // julia_de
+    vec2 c = vec2( p.x, p.y );
+    vec2 z = vec2( p.z, value );//0.0f, 0.0f );
+    vec2 dz = vec2( 1.0, 0.0 ); // Complex dz( 1.0f, 0.0f );
+
+    float m2;
+    for( int i=0; i<1024; i++ )
+    {
+        dz = 2.0 * complexMult(z,dz);
+        z = complexMult(z,z) + c;
+
+        m2 = complexModSquared(z);
+        if( m2>1e20 )
+            break;
+    }
+
+    // distance estimation: G/|G'|
+    return sqrt( m2/complexModSquared(dz) )*0.5*log(m2);
+
+}
 
 // source: http://blog.hvidtfeldts.net/index.php/2011/08/distance-estimated-3d-fractals-iii-folding-space/
 float tetra_de( vec3 p ) {
@@ -340,6 +396,24 @@ float findIntersectionWithMenger( vec3 pos, Shape shape, out Intersection inters
     return dist;
 }
 
+float findIntersectionWithJulia( vec3 pos, Shape shape, out Intersection intersect) {
+    
+    float dist = julia_de(pos);
+
+    intersect.position = pos;
+    intersect.normal = vec3(0.0);
+    return dist;
+}
+
+float findIntersectionWithMandelbrot( vec3 pos, Shape shape, out Intersection intersect) {
+    
+    float dist = mandelbrot_de(pos);
+
+    intersect.position = pos;
+    intersect.normal = vec3(0.0);
+    return dist;
+}
+
 float findIntersectionWithInfSphere( vec3 pos, Shape shape, out Intersection intersect) {
     float rad = getShapeRadius(shape);
     
@@ -396,7 +470,13 @@ float findIntersection( vec3 pos, Shape shape, out Intersection intersect ) {
     if( shape.shapeType == MENGER) {
         return findIntersectionWithMenger(pos, shape, intersect);
     }
-
+    if( shape.shapeType == JULIA) {
+        return findIntersectionWithJulia(pos, shape, intersect);
+    }
+    if( shape.shapeType == MANDELBROT) {
+        return findIntersectionWithMandelbrot(pos, shape, intersect);
+    }
+    
     return INFINITY;
 }
 
@@ -461,7 +541,7 @@ vec3 marchRay( Ray ray ) {
 }
 
 void main() {
-    float cameraFOV = 0.6;
+    float cameraFOV = 0.1;
     vec3 direction = vec3(v_position.x * cameraFOV * width/height, v_position.y * cameraFOV, 1.0);
 
     Ray ray;

@@ -17,21 +17,25 @@ http://inst.eecs.berkeley.edu/~cs184/sp12/assignments/Archive/HW6/Fractal%20Rend
 (distance estimation) http://iquilezles.org/www/articles/distance/distance.htm
 http://www.iquilezles.org/www/material/nvscene2008/nvscene2008.htm
 
-To do list
+apollonian gasket
+
+http://en.wikipedia.org/wiki/Apollonian_gasket
+
+Bugs
 -make the distance estimation only look at part of the thing/make recursion level depend on the amount you're zoomed in (???da fuck!?)
--sierpinski? / some other fractal (dragon 3d ?)
-
--run from server instead (rachel)
--fix controls/add dropdown thingy (thomas)
-
--fix normals for menger (sonia)
 -menger run code as is - see if there is issue? (thomas)
--fix/investigate weird corner thing (thomas/sonia)
--fix/optimize lighting
 
 
+New stuff
+-fix controls/add dropdown thingy (thomas)
+-fog/glow
+-inf spheres : fix breaking/make faster, coloring based on music/height
+-julia: bounding volume
+-mandelbrot: coloring
+-mandelbrot: bounding volume 
+-(mandelbrot: make it a cylinder??? or change to purely 2d/single thickness)
+-julia: color
+-apollonian gasket, with translucency (bubbles + random bubbly colors); look at assignment 3 refraction stuff; colored based on bubble size, smaller bubbles more translucent
 
-Extra stuff list?
--music
--colors
--ambient occlusion/fog/glow
+Stuff we probably won't do
+-run from server instead (rachel)

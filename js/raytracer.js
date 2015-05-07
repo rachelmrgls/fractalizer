@@ -8,8 +8,8 @@ Raytracer.lightID = 0;
 Raytracer.INFSPHERE = 1;
 Raytracer.SPHERE   = 2;
 Raytracer.MENGER  = 3;
-Raytracer.CYLINDER = 4;
-Raytracer.CONE     = 5;
+Raytracer.JULIA = 4;
+Raytracer.MANDELBROT     = 5;
 
 // material types - how to light the surface
 Raytracer.BASICMATERIAL   = 1;
@@ -217,8 +217,16 @@ Raytracer.addInfSphere = function( radius ) {
     this.setUniformShape( this.INFSPHERE, radius, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 );
 };
 
-Raytracer.addMenger = function( level, scale ) {
+Raytracer.addMenger = function( level ) {
     this.setUniformShape( this.MENGER, 0.0, level, 0.0, 0.0, 0.0, 0.0, 0.0 );
+};
+
+Raytracer.addJulia = function() {
+    this.setUniformShape( this.JULIA, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 );
+};
+
+Raytracer.addMandelbrot = function() {
+    this.setUniformShape( this.MANDELBROT, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 );
 };
 
 Raytracer.addPlane = function( normX, normY, normZ, dist) {

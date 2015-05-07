@@ -6,6 +6,9 @@ var buf; //audio buffer
 var fft; //fft audio node 
 var samples = 128; 
 var setup = false; //indicate if audio is set up yet  
+var src;
+var startOffset = 0;
+var startTime = 0;
 
 //init the sound system 
 function init() { 
@@ -21,7 +24,7 @@ function init() {
 //load the mp3 file 
 function loadFile() { 
     var req = new XMLHttpRequest(); 
-    req.open("GET","music/Paradise Awaits (Part 2 Ft. Goldlink).mp3",true); 
+    req.open("GET","music/All Too Well.m4a",true);//Paradise Awaits (Part 2 Ft. Goldlink).mp3",true); 
     //we can't use jquery because we need the arraybuffer type 
     req.responseType = "arraybuffer"; 
     req.onload = function() { 
@@ -35,38 +38,61 @@ function loadFile() {
 } 
 
 function play() { 
+
+    startTime = ctx.currentTime;
+    //var source = context.createBufferSource();
+    // Connect graph
+    //source.buffer = this.buffer;
+    //src.loop = true;
+    //source.connect(context.destination);
+    // Start playback, but make sure we stay in bound of the buffer.
+    //source.start(0, startOffset % buffer.duration);
+
+
     //create a source node from the buffer 
-    var src = ctx.createBufferSource();  
+    src = ctx.createBufferSource();  
     src.buffer = buf; 
      
     //create fft 
     fft = ctx.createAnalyser(); 
     fft.fftSize = samples; 
      
+    src.loop = true;
+
     //connect them up into a chain 
     src.connect(fft); 
     fft.connect(ctx.destination); 
      
     //play immediately 
-    src.start(0);//src.noteOn(0); 
+    src.start(0, startOffset % buf.duration);
+    //src.start(0);//src.noteOn(0); 
     setup = true; 
 }  
 
+//http://chimera.labs.oreilly.com/books/1234000001552/ch02.html#s02_2
+function pause() {
+    src.stop();
+    // Measure how much time passed since the last pause.
+    startOffset += ctx.currentTime - startTime;
+}
 
 window.onload = function() {
     
     var cmd = Parser.getCommands(document.URL)[0];
+
     var batchCMD = cmd.scene || "default";
+
+    var value = cmd.value || 1.0;
         
     var height = cmd.height || window.innerHeight;//600;
     var width  = cmd.width  || window.innerWidth;//600;
         
-    var animated= cmd.animated|| 0;
+    var animated= cmd.animated || 0;
     var paused = false;
     var debug = cmd.debug||false;
 
     Raytracer.init(height, width, debug);
-    createScene(batchCMD);
+    createScene(batchCMD,value);
     
     if ( animated ) init();
     drawScene();
@@ -74,8 +100,8 @@ window.onload = function() {
     Student.updateHTML();
     
 
-    function createScene ( sceneID ) {
-        Scene[sceneID.toString()]();
+    function createScene ( sceneID, value ) {
+        Scene[sceneID.toString()](value);
     }
 
     function drawScene() {
@@ -109,6 +135,12 @@ window.onload = function() {
             snapShot();
         }
         else if ( event.which == 32 ) {
+            if (paused) {
+                play();
+            } else {
+                pause();
+            }
+
             paused = !paused;
         }
     });
