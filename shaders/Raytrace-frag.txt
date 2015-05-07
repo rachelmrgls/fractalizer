@@ -343,9 +343,9 @@ float findIntersectionWithMenger( vec3 pos, Shape shape, out Intersection inters
 float findIntersectionWithInfSphere( vec3 pos, Shape shape, out Intersection intersect) {
     float rad = getShapeRadius(shape);
     
-    float xdir = float(int(abs(pos.x + rad) / (2.0 * rad)));
-    float zdir = float(int(abs(pos.z + rad) / (2.0 * rad)));
-    int raddir = int(sqrt(xdir * xdir + zdir * zdir));
+    int xdir = int(abs(pos.x) / (2.0 * rad));
+    int zdir = int(abs(pos.z) / (2.0 * rad));
+    int raddir = xdir + zdir;//int(sqrt(xdir * xdir + zdir * zdir));
 
     float tmp = float(raddir) * 4.0/128.;
     vec2 idx = vec2(tmp/4.0,0.0);
