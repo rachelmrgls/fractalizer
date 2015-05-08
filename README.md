@@ -22,16 +22,12 @@ apollonian gasket
 http://en.wikipedia.org/wiki/Apollonian_gasket
 
 Bugs
--make the distance estimation only look at part of the thing/make recursion level depend on the amount you're zoomed in (???da fuck!?)
--make arrows translate in x and y directions, make mouse zoom
--fix controls/add dropdown thingy (thomas)
+Controls
+	-make the distance estimation only look at part of the thing/make recursion level depend on the amount you're zoomed in (???da fuck!?)
+	-make arrows translate in x and y directions, make mouse zoom
+	-fix controls/add dropdown thingy (thomas)
+	-use key commands to change julia values, if animation is off
 -julia: bounding volume/possibly revisit 3d version
+-julia: music, if animation is on
 
--mandelbrot: make it pulse to music! its gonna be AWESOME (also possibly do this to julia)
 -apollonian gasket, with translucency (bubbles + random bubbly colors); look at assignment 3 refraction stuff; colored based on bubble size, smaller bubbles more translucent
-
-Stuff we probably won't do
--run from server instead (rachel)
--mandelbrot: coloring - find true min/maxiter // mandelbrot: make it 2d instead?? maybes not
--fog/glow
-

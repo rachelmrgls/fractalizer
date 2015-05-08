@@ -152,14 +152,11 @@ vec3 HSLtoRGB( float h, float s, float l ) {
     return vec3(r,g,b);
 }
 
-// squares around spheres
-float dunnoWhatToNameThis( vec3 pos, float rad ) {
-    int xdir = int(abs(pos.x) / (2.0 * rad));
-    int zdir = int(abs(pos.z) / (2.0 * rad));
-    int raddir = xdir + zdir; //int(1.5 * sqrt(float(xdir * xdir + zdir * zdir)));
-
+// retrieve audio data for given index
+float getAudio( int raddir ) {
     float tmp = float(raddir) * 4.0/128.;
     vec2 idx = vec2(tmp/4.0,0.0);
+
     vec4 fourBytes = texture2D(audio,idx);
 
     float fb;
@@ -172,8 +169,22 @@ float dunnoWhatToNameThis( vec3 pos, float rad ) {
     return fb;
 }
 
+// squares around spheres
+float bounceShape( vec3 pos, float rad ) {
+    int xdir = int(abs(pos.x) / (2.0 * rad));
+    int zdir = int(abs(pos.z) / (2.0 * rad));
+    int raddir = xdir + zdir; //int(1.5 * sqrt(float(xdir * xdir + zdir * zdir)));
+
+    return getAudio( raddir );    
+}
+
 float zeroToOne( float mini, float maxi, float val ) {
     return (val - mini)/(maxi - mini);
+}
+
+// inverse of zero to 1
+float oneToZero( float mini, float maxi, float val ) {
+    return val * (maxi - mini) + mini;
 }
 
 vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, bool phongOnly) {
@@ -183,7 +194,11 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
 
     if (shape.shapeType == MANDELBROT) {
 
-        miniter = 0.29;
+        float aud = getAudio( 15 ); // change this to see how it looks
+
+        float shift = oneToZero(-0.2,0.0,1.0 - aud);
+        miniter = 0.29 +shift;
+        //if (aud ) + shift;
         maxiter = 0.5;
 
         diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
@@ -200,10 +215,10 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
     }
     else if (shape.shapeType == INFSPHERE) {
         float rad = getShapeRadius(shape);
-        float fb = dunnoWhatToNameThis( pos, rad );
+        float fb = bounceShape( pos, rad );
 
         float miniter = 0.3; float maxiter = 0.85;
-        diffuseColor = HSLtoRGB(fb * (maxiter - miniter) + miniter,1.0,0.4);
+        diffuseColor = HSLtoRGB(oneToZero(miniter,maxiter,fb),1.0,0.4);
     }
     else {
         diffuseColor = obj.material.color;
@@ -355,6 +370,17 @@ vec2 complexMult( vec2 a, vec2 b ) {
 float complexModSquared( vec2 a ) {
     return a.x * a.x + a.y * a.y;
 }
+/*
+bool inBounds(Object obj, vec3 pos ) {
+    if (obj.shape.shapeType == MANDELBROT) {
+        if (pos.z <= -.5) {
+            return false;
+        }
+    }
+
+    return true;
+}
+*/
 
 // http://iquilezles.org/www/articles/distancefractals/distancefractals.htm
 float mandelbrot_de( vec3 p ) {
@@ -523,7 +549,7 @@ float findIntersectionWithInfSphere( vec3 pos, Shape shape, out Intersection int
     
     float rad = getShapeRadius(shape);
     
-    float fb = dunnoWhatToNameThis( pos, rad );
+    float fb = bounceShape( pos, rad );
 
     vec3 modpos = vec3(mod(pos.x,2.0 * rad) - rad,pos.y - fb * 7.0,mod(pos.z,2.0 * rad) - rad); 
     
