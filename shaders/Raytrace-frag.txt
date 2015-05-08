@@ -156,7 +156,7 @@ vec3 HSLtoRGB( float h, float s, float l ) {
 float dunnoWhatToNameThis( vec3 pos, float rad ) {
     int xdir = int(abs(pos.x) / (2.0 * rad));
     int zdir = int(abs(pos.z) / (2.0 * rad));
-    int raddir = int(1.5 * sqrt(float(xdir * xdir + zdir * zdir)));//xdir + zdir;
+    int raddir = xdir + zdir; //int(1.5 * sqrt(float(xdir * xdir + zdir * zdir)));
 
     float tmp = float(raddir) * 4.0/128.;
     vec2 idx = vec2(tmp/4.0,0.0);
@@ -203,7 +203,7 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
         float fb = dunnoWhatToNameThis( pos, rad );
 
         float miniter = 0.3; float maxiter = 0.85;
-        diffuseColor = HSLtoRGB(fb * (maxiter - miniter) + miniter,1.0,0.5);
+        diffuseColor = HSLtoRGB(fb * (maxiter - miniter) + miniter,1.0,0.4);
     }
     else {
         diffuseColor = obj.material.color;

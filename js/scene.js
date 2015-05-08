@@ -20,9 +20,9 @@ Scene.default = function () {
     Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);
     
     //Raytracer.addLight(-20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 10.0, 1.5);
-    Raytracer.addLight( 20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 40.0, 2);
+    Raytracer.addLight( 20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 10.0, 1);
     //Raytracer.addLight(-10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 20.0, 1);
-    Raytracer.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 40.0, 1);
+    Raytracer.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 30.0, 1);
     Raytracer.setUniform('1i', 'numLights', Raytracer.lightID);
 };
 
