@@ -34,13 +34,13 @@ Scene.menger = function () {
     Raytracer.resetMaterial();
     // I dunno what is wrong but when I put Raytracer.BASICMATERIAL instead of PHONG
     // its just white?? idk why so i will not fix but someone else can if they feel inclined.
-    Raytracer.setUniformMaterial( '1i','materialType', Raytracer.BASICMATERIAL);
+    Raytracer.setUniformMaterial( '1i','materialType', Raytracer.PHONGMATERIAL);
     Raytracer.setUniformMaterial( '1i','materialReflectType', Raytracer.NONEREFLECT); 
     Raytracer.setUniformMaterial( '3f','specular', 0.8, 0.8, 0.8 ); 
     Raytracer.setUniformMaterial( '1f','shininess', 200 ); 
     Raytracer.setUniformMaterial( '3f','color', 0.2, 0.4, 0.5 );
     //Raytracer.addSphere( 0.0, 0.0, 0.0, 1.0 );
-    Raytracer.addMenger( 4. ); // recursion level
+    Raytracer.addMenger( 6. ); // recursion level
 
     
     Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);

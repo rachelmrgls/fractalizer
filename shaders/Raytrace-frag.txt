@@ -152,32 +152,59 @@ vec3 HSLtoRGB( float h, float s, float l ) {
     return vec3(r,g,b);
 }
 
-vec3 calcSpecularColor(Object obj, vec3 posIntersection, vec3 normalVector, vec3 eyeVector, bool phongOnly) {
+// squares around spheres
+float dunnoWhatToNameThis( vec3 pos, float rad ) {
+    int xdir = int(abs(pos.x) / (2.0 * rad));
+    int zdir = int(abs(pos.z) / (2.0 * rad));
+    int raddir = int(1.5 * sqrt(float(xdir * xdir + zdir * zdir)));//xdir + zdir;
+
+    float tmp = float(raddir) * 4.0/128.;
+    vec2 idx = vec2(tmp/4.0,0.0);
+    vec4 fourBytes = texture2D(audio,idx);
+
+    float fb;
+    int tmp1 = int(mod(tmp,4.0));
+    if (tmp1 == 0) fb = fourBytes.x;
+    else if (tmp1 == 1) fb = fourBytes.y;
+    else if (tmp1 == 2) fb = fourBytes.z;
+    else fb = fourBytes.w;
+
+    return fb;
+}
+
+float zeroToOne( float mini, float maxi, float val ) {
+    return (val - mini)/(maxi - mini);
+}
+
+vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, bool phongOnly) {
 	
+    Shape shape = obj.shape;
     vec3 diffuseColor;
 
-    if (obj.shape.shapeType == MANDELBROT) {
+    if (shape.shapeType == MANDELBROT) {
 
         miniter = 0.29;
         maxiter = 0.5;
 
-        diffuseColor = HSLtoRGB((iter - miniter)/(maxiter - miniter),1.0,.5);
-
-
+        diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
         // reset values
         iter = 0.0;
-        //miniter = 1.0;
-        //maxiter = 0.0;
     } 
-    else if (obj.shape.shapeType == JULIA) {
+    else if (shape.shapeType == JULIA) {
         miniter = 0.29;
         maxiter = 0.5;
 
-        diffuseColor = HSLtoRGB((iter - miniter)/(maxiter - miniter),1.0,.5);
+        diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
         // reset values
         iter = 0.0;
     }
+    else if (shape.shapeType == INFSPHERE) {
+        float rad = getShapeRadius(shape);
+        float fb = dunnoWhatToNameThis( pos, rad );
 
+        float miniter = 0.3; float maxiter = 0.85;
+        diffuseColor = HSLtoRGB(fb * (maxiter - miniter) + miniter,1.0,0.5);
+    }
     else {
         diffuseColor = obj.material.color;
     }
@@ -190,7 +217,7 @@ vec3 calcSpecularColor(Object obj, vec3 posIntersection, vec3 normalVector, vec3
 
         if(i>=numLights) break; // because GLSL will not allow looping to numLights
 		
-        vec3 lightVector = lights[i].position - posIntersection;
+        vec3 lightVector = lights[i].position - pos;
         //if ( pointInShadow( lights[i].position, lightVector ) ) continue;
 
         // add color to output color for each light, based on material type
@@ -468,7 +495,7 @@ float findIntersectionWithMenger( vec3 pos, Shape shape, out Intersection inters
     float dist = menger_de(pos,level);
 
     intersect.position = pos;
-    intersect.normal = vec3(0.0);//menger_normal(pos,level);//fDiff_menger(pos,level);
+    intersect.normal = fDiff_menger(pos,level);//vec3(0.0);//menger_normal(pos,level);//
     return dist;
 }
 
@@ -493,24 +520,12 @@ float findIntersectionWithMandelbrot( vec3 pos, Shape shape, out Intersection in
 }
 
 float findIntersectionWithInfSphere( vec3 pos, Shape shape, out Intersection intersect) {
+    
     float rad = getShapeRadius(shape);
     
-    int xdir = int(abs(pos.x) / (2.0 * rad));
-    int zdir = int(abs(pos.z) / (2.0 * rad));
-    int raddir = xdir + zdir;//int(sqrt(xdir * xdir + zdir * zdir));
+    float fb = dunnoWhatToNameThis( pos, rad );
 
-    float tmp = float(raddir) * 4.0/128.;
-    vec2 idx = vec2(tmp/4.0,0.0);
-    vec4 fourBytes = texture2D(audio,idx);
-
-    float fb;
-    int tmp1 = int(mod(tmp,4.0));
-    if (tmp1 == 0) fb = fourBytes.x;
-    else if (tmp1 == 1) fb = fourBytes.y;
-    else if (tmp1 == 2) fb = fourBytes.z;
-    else fb = fourBytes.w;
-
-    vec3 modpos = vec3(mod(pos.x,2.0 * rad) - rad,pos.y - fb * 5.0,mod(pos.z,2.0 * rad) - rad); 
+    vec3 modpos = vec3(mod(pos.x,2.0 * rad) - rad,pos.y - fb * 7.0,mod(pos.z,2.0 * rad) - rad); 
     
     float dist = sphere_de( modpos, rad );
 
@@ -627,7 +642,6 @@ void main() {
     ray.direction = vec3( uMVMatrix * vec4(direction, 0.0) );
 
     // march the ray for this pixel
-    //vec3 fakeres = marchRay( ray );
     vec3 res = marchRay( ray );
     
     // paint the resulting color into this pixel
