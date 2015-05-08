@@ -27,14 +27,14 @@ Bugs
 
 
 New stuff
+-make arrows translate in x and y directions, make mouse zoom
 -fix controls/add dropdown thingy (thomas)
 -fog/glow
 -inf spheres : fix breaking/make faster, coloring based on music/height
--julia: bounding volume
--mandelbrot: coloring
--mandelbrot: bounding volume 
--julia: color
+-julia: bounding volume/possibly revisit 3d version
+-mandelbrot: make it pulse to music! its gonna be AWESOME (also possibly do this to julia)
 -apollonian gasket, with translucency (bubbles + random bubbly colors); look at assignment 3 refraction stuff; colored based on bubble size, smaller bubbles more translucent
 
 Stuff we probably won't do
 -run from server instead (rachel)
+-mandelbrot: coloring - find true min/maxiter // mandelbrot: make it 2d instead?? maybes not

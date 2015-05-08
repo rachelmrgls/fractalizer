@@ -71,7 +71,8 @@ struct Light {
 
 //uniform float data0;
 //uniform int audio[3];
-uniform float value;
+
+uniform vec2 value;
 uniform sampler2D audio;
 uniform int frame;        
 uniform float height;
@@ -85,6 +86,8 @@ uniform vec3 objectNorm;
 
 varying vec2 v_position;
 float iter;
+float miniter;
+float maxiter;
 
 struct Ray {
     vec3 origin;
@@ -127,15 +130,58 @@ float rand(vec2 co) {
     return fract(sin(dot(co.xy, vec2(12.9898,78.233))) * 43758.5453);
 }
 
+// 
+float hueToRGB(  float m1, float m2, float h ) {
+      h = ( h < 0.0 ) ? h + 1.0 : ((h > 1.0) ? h - 1.0 : h);
+      if ( h * 6.0 < 1.0 ) return m1 + (m2 - m1) * h * 6.0;
+      if ( h * 2.0 < 1.0 ) return m2;
+      if ( h * 3.0 < 2.0 ) return m1 + (m2 - m1) * (0.66666 - h) * 6.0;
+      return m1;
+}
+
+// HSL to RGB conversion
+vec3 HSLtoRGB( float h, float s, float l ) {
+    float m1, m2;
+    m2 = (l <= 0.5) ? l * (s + 1.0) : l + s - l * s;
+    m1 = l * 2.0 - m2;
+
+    float r = hueToRGB( m1, m2, h + 1.0 / 3.0 );
+    float g = hueToRGB( m1, m2, h         );
+    float b = hueToRGB( m1, m2, h - 1.0 / 3.0 );
+
+    return vec3(r,g,b);
+}
+
 vec3 calcSpecularColor(Object obj, vec3 posIntersection, vec3 normalVector, vec3 eyeVector, bool phongOnly) {
 	
     vec3 diffuseColor;
 
     if (obj.shape.shapeType == MANDELBROT) {
-        diffuseColor = vec3(iter,iter,iter);
-    } else {
+
+        miniter = 0.29;
+        maxiter = 0.5;
+
+        diffuseColor = HSLtoRGB((iter - miniter)/(maxiter - miniter),1.0,.5);
+
+
+        // reset values
+        iter = 0.0;
+        //miniter = 1.0;
+        //maxiter = 0.0;
+    } 
+    else if (obj.shape.shapeType == JULIA) {
+        miniter = 0.29;
+        maxiter = 0.5;
+
+        diffuseColor = HSLtoRGB((iter - miniter)/(maxiter - miniter),1.0,.5);
+        // reset values
+        iter = 0.0;
+    }
+
+    else {
         diffuseColor = obj.material.color;
     }
+
 
 
 	vec3 outputColor = vec3( 0.0, 0.0, 0.0 ); // color defaults to black	
@@ -284,10 +330,9 @@ float complexModSquared( vec2 a ) {
 }
 
 // http://iquilezles.org/www/articles/distancefractals/distancefractals.htm
-
 float mandelbrot_de( vec3 p ) {
     vec2 c = vec2( p.x, p.y );
-    vec2 z = vec2( 0.0, 0.0 );
+    vec2 z = vec2( .0, .0 ); // thi si s the one 
     vec2 dz = vec2( 0.0, 0.0 ); 
 
     float m2;
@@ -298,8 +343,11 @@ float mandelbrot_de( vec3 p ) {
         z = complexMult(z,z) + c;
 
         m2 = complexModSquared(z);
-        if( m2>1e20 ) {
+        if( m2>1e20 ) { /// fix me fix me the 2d thang
             iter = float(i)/float(MAX_MANDEL_ITER);
+            
+            if (iter < miniter) miniter = iter;
+            if (iter > maxiter) maxiter = iter;
             break;
         }
     }
@@ -313,19 +361,21 @@ float mandelbrot_de( vec3 p ) {
 float julia_de( vec3 p )
 {
     // julia_de
-    vec2 c = vec2( p.x, p.y );
-    vec2 z = vec2( p.z, value );//0.0f, 0.0f );
+    vec2 c = value;//vec2( p.x, p.y );
+    vec2 z = vec2( p.x, p.y );//vec2( p.z, value );//0.0f, 0.0f );
     vec2 dz = vec2( 1.0, 0.0 ); // Complex dz( 1.0f, 0.0f );
 
     float m2;
-    for( int i=0; i<1024; i++ )
+    for( int i=0; i<MAX_MANDEL_ITER; i++ )
     {
         dz = 2.0 * complexMult(z,dz);
         z = complexMult(z,z) + c;
 
         m2 = complexModSquared(z);
-        if( m2>1e20 )
+        if( m2>1e20 ) {
+            iter = float(i)/float(MAX_MANDEL_ITER);
             break;
+        }
     }
 
     // distance estimation: G/|G'|
@@ -577,6 +627,7 @@ void main() {
     ray.direction = vec3( uMVMatrix * vec4(direction, 0.0) );
 
     // march the ray for this pixel
+    //vec3 fakeres = marchRay( ray );
     vec3 res = marchRay( ray );
     
     // paint the resulting color into this pixel

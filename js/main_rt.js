@@ -82,8 +82,10 @@ window.onload = function() {
 
     var batchCMD = cmd.scene || "default";
 
-    var value = cmd.value || 1.0;
+    var value1 = cmd.value1 || -0.4;
+    var value2 = cmd.value2 || 0.6;
         
+    var value = [value1, value2];
     var height = cmd.height || window.innerHeight;//600;
     var width  = cmd.width  || window.innerWidth;//600;
         

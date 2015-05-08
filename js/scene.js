@@ -54,8 +54,8 @@ Scene.menger = function () {
 
 
 Scene.julia = function ( value ) {
-    Raytracer.setUniform('3f', 'camera' ,0.0, 0.0, -15.0);    
-    
+    //Raytracer.setUniform('3f', 'camera' ,-3.29277, 0.499087, -0.896598 - 15);    
+     Raytracer.setUniform('3f', 'camera' ,0.0, 0.0, -16); 
     // Matte Sphere
     Raytracer.resetMaterial();
     // I dunno what is wrong but when I put Raytracer.BASICMATERIAL instead of PHONG
@@ -68,7 +68,7 @@ Scene.julia = function ( value ) {
     //Raytracer.addSphere( 0.0, 0.0, 0.0, 1.0 );
     Raytracer.addJulia(); // recursion level
 
-    Raytracer.setUniform('1f','value',value);
+    Raytracer.setUniform('2f','value',value[0],value[1]);
 
     Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);
     
@@ -82,7 +82,7 @@ Scene.julia = function ( value ) {
 
 
 Scene.mandelbrot = function () {
-    Raytracer.setUniform('3f', 'camera' ,0.175679, -1.04465, -1.61391 - 15);//0.0, 0.0, -10.0);    
+    Raytracer.setUniform('3f', 'camera' ,0.0, 0.0, -16);//0.0, 0.0, -10.0);    
 
     // Matte Sphere
     Raytracer.resetMaterial();
