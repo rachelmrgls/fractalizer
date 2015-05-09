@@ -69,9 +69,6 @@ struct Light {
     float attenuate;
 };
 
-//uniform float data0;
-//uniform int audio[3];
-
 uniform vec2 value;
 uniform sampler2D audio;
 uniform int frame;        
@@ -206,7 +203,11 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
         iter = 0.0;
     } 
     else if (shape.shapeType == JULIA) {
-        miniter = 0.29;
+
+        float aud = getAudio( 15 ); // change this to see how it looks
+
+        float shift = oneToZero(-0.2,0.0,1.0 - aud);
+        miniter = 0.29 + shift;
         maxiter = 0.5;
 
         diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
@@ -414,7 +415,12 @@ float mandelbrot_de( vec3 p ) {
 float julia_de( vec3 p )
 {
     // julia_de
-    vec2 c = value;//vec2( p.x, p.y );
+    float aud1 = getAudio( 10 ); // [0,1]
+    float aud2 = getAudio( 17 ); // [0,1]
+
+    vec2 shift = vec2(oneToZero(0.0,0.3,aud1),oneToZero(0.0,0.3,aud2));
+
+    vec2 c = value + shift;//vec2( p.x, p.y );
     vec2 z = vec2( p.x, p.y );//vec2( p.z, value );//0.0f, 0.0f );
     vec2 dz = vec2( 1.0, 0.0 ); // Complex dz( 1.0f, 0.0f );
 
