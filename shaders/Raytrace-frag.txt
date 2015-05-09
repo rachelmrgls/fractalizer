@@ -79,6 +79,7 @@ uniform int numObjects;
 uniform int numLights;
 uniform Object objects[MAX_OBJECTS];
 uniform Shape bound;
+uniform bool isBounded;
 uniform Light lights[MAX_LIGHTS];
 uniform vec3 objectNorm;
 
@@ -710,10 +711,11 @@ void main() {
     // check if ray will intersect the bounding volume
     // if it does, then shoot the ray using the intersection for the ray.origin 
     Intersection bounds_intersection;
+    
     float dist = findBoundWithSphere(ray, bound, bounds_intersection);
 
     ray.init = 0.0;//dist;
-    if (dist < INFINITY) {        
+    if (dist < INFINITY || ! isBounded ) {        
         //ray.origin = bounds_intersection.position;
 
         // march the ray for this pixel
@@ -726,4 +728,6 @@ void main() {
     else {
         gl_FragColor = vec4( vec3(0.0), 1.0 );
     }
+
+    
 }

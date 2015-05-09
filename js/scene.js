@@ -18,7 +18,8 @@ Scene.default = function () {
     Raytracer.addInfSphere( 1.0 ); // radius
 
     Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);
-    
+    Raytracer.setUniform('1i', 'isBounded', 0);
+
     //Raytracer.addLight(-20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 10.0, 1.5);
     Raytracer.addLight( 20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 10.0, 1);
     //Raytracer.addLight(-10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 20.0, 1);
@@ -50,6 +51,7 @@ Scene.menger = function () {
     //Raytracer.addLight(-10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 20.0, 1);
     Raytracer.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 40.0, 1);
     Raytracer.setUniform('1i', 'numLights', Raytracer.lightID);
+    Raytracer.setUniform('1i', 'isBounded', 0);
 };
 
 
@@ -69,6 +71,7 @@ Scene.julia = function ( ) {
     Raytracer.addJulia(); // recursion level
 
     Raytracer.setBound( 2.0, 0.0, 0.0, 0.0 );
+    Raytracer.setUniform('1i', 'isBounded', 1);
 
     Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);
     
@@ -77,6 +80,8 @@ Scene.julia = function ( ) {
     //Raytracer.addLight(-10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 20.0, 1);
     Raytracer.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 40.0, 1);
     Raytracer.setUniform('1i', 'numLights', Raytracer.lightID);
+
+
 };
 
 
@@ -103,5 +108,7 @@ Scene.mandelbrot = function () {
     //Raytracer.addLight(-10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 20.0, 1);
     Raytracer.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 40.0, 1);
     Raytracer.setUniform('1i', 'numLights', Raytracer.lightID);
+
+    Raytracer.setUniform('1i', 'isBounded', 0);
 };
 
