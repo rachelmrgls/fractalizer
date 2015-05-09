@@ -24,7 +24,7 @@ function init() {
 //load the mp3 file 
 function loadFile() { 
     var req = new XMLHttpRequest(); 
-    req.open("GET","music/Forever (Pt. II) Feat. Kaleem Taylor.mp3",true);//Ten Feet Tall (Elephante Remix)//Paradise Awaits (Part 2 Ft. Goldlink).mp3",true); 
+    req.open("GET","music/Ten Feet Tall (Elephante Remix).mp3",true);//Forever (Pt. II) Feat. Kaleem Taylor
     //we can't use jquery because we need the arraybuffer type 
     req.responseType = "arraybuffer"; 
     req.onload = function() { 
