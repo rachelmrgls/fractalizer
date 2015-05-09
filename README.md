@@ -23,11 +23,20 @@ http://en.wikipedia.org/wiki/Apollonian_gasket
 
 Bugs
 Controls
+
+
 	-make the distance estimation only look at part of the thing/make recursion level depend on the amount you're zoomed in (???da fuck!?)
 	-make arrows translate in x and y directions, make mouse zoom
 	-fix controls/add dropdown thingy (thomas)
-	-use key commands to change julia values, if animation is off
--julia: bounding volume/possibly revisit 3d version
--julia: music, if animation is on
+
+-inf spheres : why are they breaking :(
 
 -apollonian gasket, with translucency (bubbles + random bubbly colors); look at assignment 3 refraction stuff; colored based on bubble size, smaller bubbles more translucent
+-how to render stuff overnight/make a video of higher quality?
+
+
+-julia: bounding volume/possibly revisit 3d version
+bounding thing: do in main before you shoot ray,
+intersect it with the bounding volume, if it hits then shoot ray, if doesn't hit just black --> try for julia set in 3d (not 2d) to contain it
+
+-put julia/mandelbrot into actual 2d

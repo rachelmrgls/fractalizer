@@ -23,8 +23,8 @@ function init() {
 
 //load the mp3 file 
 function loadFile() { 
-    var req = new XMLHttpRequest(); 
-    req.open("GET","music/Ten Feet Tall (Elephante Remix).mp3",true);//Forever (Pt. II) Feat. Kaleem Taylor
+    var req = new XMLHttpRequest(); //Ten Feet Tall (Elephante Remix)
+    req.open("GET","music/Forever (Pt. II) Feat. Kaleem Taylor.mp3",true);//
     //we can't use jquery because we need the arraybuffer type 
     req.responseType = "arraybuffer"; 
     req.onload = function() { 
@@ -85,16 +85,17 @@ window.onload = function() {
     var value1 = cmd.value1 || -0.4;
     var value2 = cmd.value2 || 0.6;
         
-    var value = [value1, value2];
+    var value = [parseFloat(value1), parseFloat(value2)];
     var height = cmd.height || window.innerHeight;//600;
     var width  = cmd.width  || window.innerWidth;//600;
         
-    var animated= cmd.animated || 0;
+    var animated= parseInt(cmd.animated) || 0;
+
     var paused = false;
     var debug = cmd.debug||false;
 
-    Raytracer.init(height, width, debug);
-    createScene(batchCMD,value);
+    Raytracer.init(height, width, debug, value);
+    createScene(batchCMD);
     
     if ( animated ) init();
     drawScene();
@@ -102,8 +103,8 @@ window.onload = function() {
     Student.updateHTML();
     
 
-    function createScene ( sceneID, value ) {
-        Scene[sceneID.toString()](value);
+    function createScene ( sceneID ) {
+        Scene[sceneID.toString()]();
     }
 
     function drawScene() {
@@ -149,9 +150,31 @@ window.onload = function() {
     window.addEventListener( 'keydown', function( event ) {
         // only respond to 'I' key
         if (event.which == 38) {
-        	Raytracer.handleZoom(1.0);	
+            // up arrow key
+        	Raytracer.handleZoom(0.0,0.0,1.0);	
         }else if (event.which == 40) {
-        	Raytracer.handleZoom(-1.0);	
+            // down arrow key
+        	Raytracer.handleZoom(0.0,0.0,-1.0);	
+        }else if (event.which == 37) {
+            // left arrow key pressed
+            Raytracer.handleZoom(1.0,0.0,0.0);
+        }else if (event.which == 39) {
+            // right arrow key pressed
+            Raytracer.handleZoom(-1.0,0.0,0.0);
+        }
+
+    /*  d = 68; f = 70
+        j = 74; k = 75  */
+        if (!animated) {
+            if (event.which == 68) {
+                Raytracer.handleValue(-1.0,0.0);
+            } else if (event.which == 70) {
+                Raytracer.handleValue(1.0,0.0);
+            } else if (event.which == 74) {
+                Raytracer.handleValue(0.0,-1.0);
+            } else if (event.which == 75) {
+                Raytracer.handleValue(0.0,1.0);
+            } 
         }
     });
 }

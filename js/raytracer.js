@@ -47,11 +47,22 @@ Raytracer.handleMouseUp = function(event) {
 	Raytracer.mouseDown = false;
 };
 
-Raytracer.handleZoom = function(delta)
+Raytracer.handleZoom = function(deltaX,deltaY,deltaZ)
 {
-	mat4.translate(Raytracer.RotationMatrix, [0.0, 0.0, 0.5 * delta]);
+    var scale = 0.3;
+	mat4.translate(Raytracer.RotationMatrix, [scale * deltaX, scale * deltaY, scale * deltaZ]);
+
     Raytracer.needsToDraw = true;
 };
+
+Raytracer.handleValue = function(dv1,dv2) {
+    var scale = 0.001;
+
+    Raytracer.value[0] += dv1 * scale;
+    Raytracer.value[1] += dv2 * scale;
+
+    Raytracer.needsToDraw = true;
+}
 
 Raytracer.handleMouseMove = function(event) {
 	var newX   = event.clientX;
@@ -95,7 +106,7 @@ Raytracer.initShader = function ( program, shaderType, src, debug) {
     return shader;
 };
 
-Raytracer.init = function (height, width, debug) {
+Raytracer.init = function (height, width, debug, value) {
 	canvas = document.getElementById('canvas');
 
 	this.gl = canvas.getContext( 'experimental-webgl', {preserveDrawingBuffer: true} );
@@ -153,6 +164,8 @@ Raytracer.init = function (height, width, debug) {
 	mat4.rotate(newRotationMatrix, -0.05 * Math.PI, [0, 1, 0]);
 	mat4.multiply(newRotationMatrix, Raytracer.RotationMatrix, Raytracer.RotationMatrix);
 	
+    Raytracer.value = value;
+
 	canvas.onmousedown = Raytracer.handleMouseDown;
 	document.onmouseup = Raytracer.handleMouseUp;
 	document.onmousemove = Raytracer.handleMouseMove;
@@ -191,6 +204,13 @@ Raytracer.setUniformShape = function ( shapeType, rad, u0, u1, u2, w0, w1, w2 ) 
     this.objectID++;
     this.copyMaterialToNextID();
 
+};
+
+Raytracer.setBound = function ( rad, u0, u1, u2 ) {
+    var bID = "bound.";
+    this.setUniform('1f', bID + "rad", rad);
+    this.setUniform('3f', bID + "center");
+    this.setUniform('1i', bID + "shapeType", this.SPHERE);
 };
 
 Raytracer.copyMaterialToNextID = function() {
@@ -319,6 +339,9 @@ Raytracer.render = function( animated, typeddata ) {
 	//rotation matrix
     this.setUniform('Matrix4fv', 'uMVMatrix', false, this.RotationMatrix );
     
+    // values for Julia 2d
+    this.setUniform('2f','value',this.value[0],this.value[1]);
+
     if (this.needsToDraw || animated) {
 	    this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
         this.needsToDraw = false;

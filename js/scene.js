@@ -53,7 +53,7 @@ Scene.menger = function () {
 };
 
 
-Scene.julia = function ( value ) {
+Scene.julia = function ( ) {
     //Raytracer.setUniform('3f', 'camera' ,-3.29277, 0.499087, -0.896598 - 15);    
      Raytracer.setUniform('3f', 'camera' ,0.0, 0.0, -16); 
     // Matte Sphere
@@ -65,10 +65,10 @@ Scene.julia = function ( value ) {
     Raytracer.setUniformMaterial( '3f','specular', 0.8, 0.8, 0.8 ); 
     Raytracer.setUniformMaterial( '1f','shininess', 200 ); 
     Raytracer.setUniformMaterial( '3f','color', 0.2, 0.4, 0.5 );
-    //Raytracer.addSphere( 0.0, 0.0, 0.0, 1.0 );
+
     Raytracer.addJulia(); // recursion level
 
-    Raytracer.setUniform('2f','value',value[0],value[1]);
+    Raytracer.setBound( 2.0, 0.0, 0.0, 0.0 );
 
     Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);
     

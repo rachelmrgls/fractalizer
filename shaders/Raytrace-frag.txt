@@ -78,6 +78,7 @@ uniform vec3 camera;
 uniform int numObjects;
 uniform int numLights;
 uniform Object objects[MAX_OBJECTS];
+uniform Shape bound;
 uniform Light lights[MAX_LIGHTS];
 uniform vec3 objectNorm;
 
@@ -89,6 +90,7 @@ float maxiter;
 struct Ray {
     vec3 origin;
     vec3 direction;
+    float init;
 };
 
 struct Intersection {
@@ -609,7 +611,7 @@ float findIntersection( vec3 pos, Shape shape, out Intersection intersect ) {
 float rayIntersectScene( Ray ray, out Object obj, out Intersection out_intersect ) {
     
     // initialize distance along ray to 0
-    float t = 0.0;
+    float t = ray.init;//0.0;
 
     for ( int i = 0; i < MAX_STEPS; i++ )
     {
@@ -665,6 +667,38 @@ vec3 marchRay( Ray ray ) {
     //return resColor;
 }
 
+// Sphere - copied from Assignment 3
+float findBoundWithSphere(Ray ray, Shape shape, out Intersection intersect) {
+    vec3  cen = getShapeCenter(shape);
+    float rad = getShapeRadius(shape);
+    
+    // ----------- STUDENT CODE BEGIN ------------
+
+    vec3 raydir = ray.direction;
+    vec3 el = cen - ray.origin;
+
+    // algebraic method
+    float a = dot(raydir,raydir);
+    float b = 2.0 * dot(raydir,ray.origin - cen);
+    float c = dot(ray.origin - cen,ray.origin - cen) - rad * rad;
+
+    float deter = b * b - 4.0 * a * c;
+    if (deter < EPS) {return INFINITY;}
+
+    float t1 = (-b - sqrt(deter))/(2.0 * a);
+    float t2 = (-b + sqrt(deter))/(2.0 * a);
+
+    float len = t1;
+    if (len < EPS) len = t2;
+    if (len < EPS) return INFINITY;
+
+    intersect.position = rayGetOffset( ray, len );
+
+    intersect.normal   = normalize(intersect.position - cen);
+    return len;
+    // ----------- STUDENT CODE END ------------
+}
+
 void main() {
     float cameraFOV = 0.1;
     vec3 direction = vec3(v_position.x * cameraFOV * width/height, v_position.y * cameraFOV, 1.0);
@@ -673,9 +707,23 @@ void main() {
 	ray.origin    = vec3( uMVMatrix * vec4(camera, 1.0) );
     ray.direction = vec3( uMVMatrix * vec4(direction, 0.0) );
 
-    // march the ray for this pixel
-    vec3 res = marchRay( ray );
-    
-    // paint the resulting color into this pixel
-    gl_FragColor = vec4( res.x, res.y, res.z, 1.0 );
+    // check if ray will intersect the bounding volume
+    // if it does, then shoot the ray using the intersection for the ray.origin 
+    Intersection bounds_intersection;
+    float dist = findBoundWithSphere(ray, bound, bounds_intersection);
+
+    ray.init = 0.0;//dist;
+    if (dist < INFINITY) {        
+        //ray.origin = bounds_intersection.position;
+
+        // march the ray for this pixel
+        vec3 res = marchRay( ray );
+        
+        // paint the resulting color into this pixel
+        gl_FragColor = vec4( res.x, res.y, res.z, 1.0 );
+    }
+    // else set the frag color to default black
+    else {
+        gl_FragColor = vec4( vec3(0.0), 1.0 );
+    }
 }
