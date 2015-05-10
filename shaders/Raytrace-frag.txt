@@ -71,6 +71,7 @@ struct Light {
 
 uniform vec2 value;
 uniform sampler2D audio;
+uniform bool isAnimated;
 uniform int frame;        
 uniform float height;
 uniform float width;
@@ -87,6 +88,7 @@ varying vec2 v_position;
 float iter;
 float miniter;
 float maxiter;
+vec2 julia_shift;
 
 struct Ray {
     vec3 origin;
@@ -194,7 +196,7 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
 
     if (shape.shapeType == MANDELBROT) {
 
-        float aud = getAudio( 15 ); // change this to see how it looks
+        float aud = getAudio( 8 ); // change this to see how it looks
 
         float shift = oneToZero(-0.2,0.0,1.0 - aud);
         miniter = 0.29 +shift;
@@ -207,7 +209,7 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
     } 
     else if (shape.shapeType == JULIA) {
 
-        float aud = getAudio( 15 ); // change this to see how it looks
+        float aud = getAudio( 4 ); // change this to see how it looks
 
         float shift = oneToZero(-0.2,0.0,1.0 - aud);
         miniter = 0.29 + shift;
@@ -395,12 +397,11 @@ float mandelbrot_de( vec3 p ) {
     float m2;
     for( int i=0; i<MAX_MANDEL_ITER; i++ )
     {
-
         dz = 2.0 * complexMult(z,dz) + vec2(1.0,0.0);
         z = complexMult(z,z) + c;
 
         m2 = complexModSquared(z);
-        if( m2>1e20 ) { /// fix me fix me the 2d thang
+        if( m2>1e20  ) { /// fix me fix me the 2d thang
             iter = float(i)/float(MAX_MANDEL_ITER);
             
             if (iter < miniter) miniter = iter;
@@ -417,11 +418,19 @@ float mandelbrot_de( vec3 p ) {
 
 float julia_de( vec3 p )
 {
+    // PASS IS ANIMATED
     // julia_de
-    float aud1 = getAudio( 10 ); // [0,1]
-    float aud2 = getAudio( 7 ); // [0,1]
+    
+    vec2 shift; 
 
-    vec2 shift = vec2(oneToZero(-2.0,2.0,aud1),oneToZero(0.0,0.1,aud2));
+    if (isAnimated) {
+        float aud1 = getAudio( 10 ); // [0,1]
+        float aud2 = getAudio( 7 ); // [0,1]
+        shift = vec2(oneToZero(-2.0,2.0,aud1),oneToZero(0.0,0.1,aud2));
+    }
+    else {
+        shift = vec2(0.0,0.0);
+    }
 
     vec2 c = value + shift;//vec2( p.x, p.y );
     vec2 z = vec2( p.x, p.y );//vec2( p.z, value );//0.0f, 0.0f );

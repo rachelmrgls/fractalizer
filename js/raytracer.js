@@ -341,6 +341,7 @@ Raytracer.render = function( animated, typeddata ) {
     
     // values for Julia 2d
     this.setUniform('2f','value',this.value[0],this.value[1]);
+    this.setUniform('1i', 'isAnimated', animated);
 
     if (this.needsToDraw || animated) {
 	    this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
