@@ -40,7 +40,7 @@ Scene.menger = function () {
     Raytracer.setUniformMaterial( '1f','shininess', 200 ); 
     Raytracer.setUniformMaterial( '3f','color', 0.2, 0.4, 0.5 );
     //Raytracer.addSphere( 0.0, 0.0, 0.0, 1.0 );
-    Raytracer.addMenger( 6. ); // recursion level
+    Raytracer.addMenger( 1. ); // recursion level
 
     
     Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);

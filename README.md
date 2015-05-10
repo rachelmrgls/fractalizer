@@ -23,6 +23,8 @@ http://www.iquilezles.org/www/material/nvscene2008/nvscene2008.htm
 (frames per second) https://documentation.apple.com/en/finalcutpro/usermanual/index.html#chapter=D%26section=3%26tasks=true
 
 
+(apollonian gasket - code) https://www.shadertoy.com/view/4ds3zn
+
 Bugs
 Controls
 	-make the distance estimation only look at part of the thing/make recursion level depend on the amount you're zoomed in
@@ -32,3 +34,4 @@ Controls
 -put julia/mandelbrot into actual 2d
 
 -apollonian gasket, with translucency (bubbles + random bubbly colors); look at assignment 3 refraction stuff; colored based on bubble size, smaller bubbles more translucent
+

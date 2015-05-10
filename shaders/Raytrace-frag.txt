@@ -176,7 +176,7 @@ float getAudio( int raddir ) {
 
 // squares around spheres
 float bounceShape( vec3 pos, float rad ) {
-    int xdir = int(abs(pos.x) / (2.0 * rad));
+    int xdir = int(abs(pos.x) / (2.0 * rad)); // mod(pos.x,2.0 * rad) - rad
     int zdir = int(abs(pos.z) / (2.0 * rad));
     int raddir = xdir + zdir; //int(1.5 * sqrt(float(xdir * xdir + zdir * zdir)));
 
@@ -209,8 +209,6 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
         maxiter = 0.5;
 
         diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
-
-        
 
         /*miniter = 0.29;
         maxiter = 0.5;
@@ -253,7 +251,13 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
         float miniter = 0.3; float maxiter = 0.85;
         diffuseColor = HSLtoRGB(oneToZero(miniter,maxiter,fb),1.0,0.4);
     }
-    else {
+    else if (shape.shapeType == MENGER) {
+        // distance from the origin - ranges from [0, sqrt(2)]
+        float dist = zeroToOne(0.0,sqrt(2.0),dot(pos,pos));
+        float aud = getAudio( int(dist * 15.0) );
+        diffuseColor = HSLtoRGB(aud,1.0,0.5);
+
+    } else {
         diffuseColor = obj.material.color;
     }
 
