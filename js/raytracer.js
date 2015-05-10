@@ -177,7 +177,7 @@ Raytracer.init = function (height, width, debug, value, scene ) {
     } else {
         var newRotationMatrix = mat4.create();
         mat4.identity(newRotationMatrix);
-        mat4.rotate(newRotationMatrix, 0.10 * Math.PI, [1, 0, 0]);
+        mat4.rotate(newRotationMatrix, 0.15 * Math.PI, [1, 0, 0]);
         mat4.rotate(newRotationMatrix, -0.05 * Math.PI, [0, 1, 0]);
         mat4.multiply(newRotationMatrix, Raytracer.RotationMatrix, Raytracer.RotationMatrix);
     }

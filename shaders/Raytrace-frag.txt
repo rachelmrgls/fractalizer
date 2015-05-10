@@ -199,29 +199,26 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
 
     if (shape.shapeType == MANDELBROT) {
 
-        //if (!isAnimated) {
-            // shift color interval based on single audio
-           /*  // change this to see how it looks
+        
+        // shift color interval based on single audio
 
-            
-            miniter = 0.29 +shift;
-            maxiter = 0.5;
+        float aud = getAudio( 10 ); // change this to see how it looks
 
-            diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
-*/
-        /*} else {*/
-        float aud1 = getAudio( 10 );
-        float shift = oneToZero(-0.2,0.0,1.0 - aud1);
+        float shift = oneToZero(-0.2,0.0,1.0 - aud);
+        miniter = 0.29 +shift;
+        maxiter = 0.5;
 
+        diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
 
-        miniter = 0.29 + shift;
+        
+
+        /*miniter = 0.29;
         maxiter = 0.5;
         float fb = zeroToOne(miniter,maxiter,iter);
-        float aud = getAudio(int(fb * 13.0));
 
-        diffuseColor = HSLtoRGB(aud,1.0,.5);
-        /*}*/
-        
+        float aud =getAudio(int(fb * 13.0));
+
+        diffuseColor = HSLtoRGB(fb,1.0,.5);*/
         // reset values
         iter = 0.0;
     } 
