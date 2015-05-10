@@ -165,7 +165,7 @@ window.onload = function() {
 
     /*  d = 68; f = 70
         j = 74; k = 75  */
-        if (!animated) {
+        //if (!animated) {
             if (event.which == 68) {
                 Raytracer.handleValue(-1.0,0.0);
             } else if (event.which == 70) {
@@ -175,6 +175,6 @@ window.onload = function() {
             } else if (event.which == 75) {
                 Raytracer.handleValue(0.0,1.0);
             } 
-        }
+        //}
     });
 }

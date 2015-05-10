@@ -31,6 +31,4 @@ Controls
 -inf spheres : why are they breaking :(
 -put julia/mandelbrot into actual 2d
 
--white flashes <<- i haven't seen any on the nice computer so I think we can delete this
-
 -apollonian gasket, with translucency (bubbles + random bubbly colors); look at assignment 3 refraction stuff; colored based on bubble size, smaller bubbles more translucent
