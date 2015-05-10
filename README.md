@@ -35,6 +35,7 @@ Controls
 -julia: make less tempermental
 -put julia/mandelbrot into actual 2d
 
-
+-email adam about using his 16gb ram
+-white flashes
 
 -apollonian gasket, with translucency (bubbles + random bubbly colors); look at assignment 3 refraction stuff; colored based on bubble size, smaller bubbles more translucent
