@@ -419,9 +419,9 @@ float julia_de( vec3 p )
 {
     // julia_de
     float aud1 = getAudio( 10 ); // [0,1]
-    float aud2 = getAudio( 17 ); // [0,1]
+    float aud2 = getAudio( 7 ); // [0,1]
 
-    vec2 shift = vec2(oneToZero(0.0,0.3,aud1),oneToZero(0.0,0.3,aud2));
+    vec2 shift = vec2(oneToZero(-2.0,2.0,aud1),oneToZero(0.0,0.1,aud2));
 
     vec2 c = value + shift;//vec2( p.x, p.y );
     vec2 z = vec2( p.x, p.y );//vec2( p.z, value );//0.0f, 0.0f );
