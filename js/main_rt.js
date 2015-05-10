@@ -94,7 +94,7 @@ window.onload = function() {
     var paused = false;
     var debug = cmd.debug||false;
 
-    Raytracer.init(height, width, debug, value);
+    Raytracer.init(height, width, debug, value, batchCMD );
     createScene(batchCMD);
     
     if ( animated ) init();

@@ -1,6 +1,5 @@
 var Scene = Scene || {};
 
-
 Scene.default = function () {
     Raytracer.setUniform('3f', 'camera' ,0.0, 0.0, -150.0);    
     

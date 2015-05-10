@@ -52,7 +52,7 @@ Raytracer.handleMouseUp = function(event) {
     var poop;
     poop = Raytracer.gl.getUniform(Raytracer.program, whatever, poop);
    console.log(poop)*/
-   //console.log(Raytracer.RotationMatrix);
+   console.log(Raytracer.RotationMatrix);
     //console.log(whatever);
 };  
 
@@ -117,7 +117,7 @@ Raytracer.initShader = function ( program, shaderType, src, debug) {
     return shader;
 };
 
-Raytracer.init = function (height, width, debug, value) {
+Raytracer.init = function (height, width, debug, value, scene ) {
 	canvas = document.getElementById('canvas');
 
 	this.gl = canvas.getContext( 'experimental-webgl', {preserveDrawingBuffer: true} );
@@ -165,18 +165,28 @@ Raytracer.init = function (height, width, debug, value) {
     this.gl.vertexAttribPointer(positionLocation, 2, this.gl.FLOAT, false, 0, 0);
 
     this.gl.uniform1i( this.gl.getUniformLocation(this.program,"frame"), this.frame );
-	
-	Raytracer.RotationMatrix = mat4.create();
-	mat4.identity(Raytracer.RotationMatrix);
-	
-	var newRotationMatrix = mat4.create();
-	mat4.identity(newRotationMatrix);
-    mat4.rotate(newRotationMatrix, 0.15 * Math.PI, [1, 0, 0]);
-	mat4.rotate(newRotationMatrix, -0.05 * Math.PI, [0, 1, 0]);
-	mat4.multiply(newRotationMatrix, Raytracer.RotationMatrix, Raytracer.RotationMatrix);
+
+
+    var julia_default = new Float32Array([0.56428, -0.04487374, -0.82436, 0, 0.73668, 0.478091, 0.47824, 0, 0.37265, -0.87716, 0.302836, 0, -0.28108, 0.2766, 0.156457, 1]);
+    
+
+    Raytracer.RotationMatrix = mat4.create();
+    mat4.identity(Raytracer.RotationMatrix);
+    
+    if (scene == "julia3d") {
+        mat4.multiply(julia_default,Raytracer.RotationMatrix, Raytracer.RotationMatrix);
+    } else {
+        var newRotationMatrix = mat4.create();
+        mat4.identity(newRotationMatrix);
+        mat4.rotate(newRotationMatrix, 0.15 * Math.PI, [1, 0, 0]);
+        mat4.rotate(newRotationMatrix, -0.05 * Math.PI, [0, 1, 0]);
+        mat4.multiply(newRotationMatrix, Raytracer.RotationMatrix, Raytracer.RotationMatrix);
+    }
+
+    console.log(Raytracer.RotationMatrix);
+    
 	
     Raytracer.value = value;
-    //Raytracer.direction = [0.0,0.0,0.0];
 
 	canvas.onmousedown = Raytracer.handleMouseDown;
 	document.onmouseup = Raytracer.handleMouseUp;
