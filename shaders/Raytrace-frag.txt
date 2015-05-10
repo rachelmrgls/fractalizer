@@ -201,21 +201,25 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
 
         //if (!isAnimated) {
             // shift color interval based on single audio
-           /* float aud = getAudio( 10 ); // change this to see how it looks
+           /*  // change this to see how it looks
 
-            float shift = oneToZero(-0.2,0.0,1.0 - aud);
+            
             miniter = 0.29 +shift;
             maxiter = 0.5;
 
             diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
 */
         /*} else {*/
-            miniter = 0.29;
-            maxiter = 0.5;
-            float fb = zeroToOne(miniter,maxiter,iter);
-            float aud = getAudio(int(fb * 13.0));
+        float aud1 = getAudio( 10 );
+        float shift = oneToZero(-0.2,0.0,1.0 - aud1);
 
-            diffuseColor = HSLtoRGB(aud,1.0,.5);
+
+        miniter = 0.29 + shift;
+        maxiter = 0.5;
+        float fb = zeroToOne(miniter,maxiter,iter);
+        float aud = getAudio(int(fb * 13.0));
+
+        diffuseColor = HSLtoRGB(aud,1.0,.5);
         /*}*/
         
         // reset values
