@@ -92,7 +92,7 @@ varying vec2 v_position;
 float iter;
 float miniter;
 float maxiter;
-vec2 julia_shift;
+vec2 julia_shift = vec2(0.,0.);
 
 struct Ray {
     vec3 origin;
@@ -436,18 +436,18 @@ float julia_de( vec3 p )
     // PASS IS ANIMATED
     // julia_de
     
-    vec2 shift; 
-
+    //vec2 shift; 
     if (isAnimated) {
+
         float aud1 = getAudio( 10 ); // [0,1]
         float aud2 = getAudio( 7 ); // [0,1]
-        shift = vec2(oneToZero(-2.0,2.0,aud1),oneToZero(0.0,0.1,aud2));
+        julia_shift = vec2(oneToZero(-2.,2.,aud1),oneToZero(-0.1,0.1,aud2));
     }
     else {
-        shift = vec2(0.0,0.0);
+        julia_shift = vec2(0.0,0.0);
     }
 
-    vec2 c = value + shift;//vec2( p.x, p.y );
+    vec2 c = value + julia_shift;//vec2( p.x, p.y );
     vec2 z = vec2( p.x, p.y );//vec2( p.z, value );//0.0f, 0.0f );
     vec2 dz = vec2( 1.0, 0.0 ); // Complex dz( 1.0f, 0.0f );
 
