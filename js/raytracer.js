@@ -168,12 +168,15 @@ Raytracer.init = function (height, width, debug, value, scene ) {
 
     //var julia_default = new Float32Array([0.56428, -0.04487374, -0.82436, 0, 0.73668, 0.478091, 0.47824, 0, 0.37265, -0.87716, 0.302836, 0, -0.28108, 0.2766, 0.156457, 1]);
     var julia_default = new Float32Array([-0.05297758802771568, -0.1217767670750618, -0.9911374449729919, 0, 0.8391594886779785, 0.5325657725334167, -0.11028649657964706, 0, 0.5412726998329163, -0.8375768661499023, 0.0739828571677208, 0, 1.461436152458191, -2.261467695236206, 0.19975492358207703, 1]);
+    var mandelbrot_default = new Float32Array([0.9881693124771118, -0.07077638059854507, 0.13605934381484985, 0, 0.0015792918857187033, 0.8917974829673767, 0.45243194699287415, 0, -0.15335887670516968, -0.4468644857406616, 0.8813587427139282, 0, -0.5008862614631653, 0.31058448553085327, -0.610450804233551, 1]);
 
     Raytracer.RotationMatrix = mat4.create();
     mat4.identity(Raytracer.RotationMatrix);
     
     if (scene == "julia3d") {
         mat4.multiply(julia_default,Raytracer.RotationMatrix, Raytracer.RotationMatrix);
+    } else if (scene == "mandelbrot") {
+        mat4.multiply(mandelbrot_default,Raytracer.RotationMatrix, Raytracer.RotationMatrix);
     } else {
         var newRotationMatrix = mat4.create();
         mat4.identity(newRotationMatrix);

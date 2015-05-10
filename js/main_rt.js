@@ -24,7 +24,7 @@ function init() {
 //load the mp3 file 
 function loadFile() { 
     var req = new XMLHttpRequest(); //Forever (Pt. II) Feat. Kaleem Taylor.mp3
-    req.open("GET","music/Ten Feet Tall (Elephante Remix).mp3",true);//
+    req.open("GET","music/Compass (Louis The Child Remix).mp3",true);//"Ten Feet Tall (Elephante Remix)
     //we can't use jquery because we need the arraybuffer type 
     req.responseType = "arraybuffer"; 
     req.onload = function() { 
@@ -157,10 +157,10 @@ window.onload = function() {
         	Raytracer.handleZoom(0.0,0.0,-1.0);	
         }else if (event.which == 37) {
             // left arrow key pressed
-            Raytracer.handleZoom(1.0,0.0,0.0);
+            Raytracer.handleZoom(-1.0,0.0,0.0);
         }else if (event.which == 39) {
             // right arrow key pressed
-            Raytracer.handleZoom(-1.0,0.0,0.0);
+            Raytracer.handleZoom(1.0,0.0,0.0);
         }
 
     /*  d = 68; f = 70
