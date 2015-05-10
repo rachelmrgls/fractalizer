@@ -1,6 +1,10 @@
 # fractalizer
 final project cos426
 
+julia - good view rotation matrix
+[[0.56428, -0.04487374, -0.82436, 0], [0.73668, 0.478091, 0.47824, 0], [0.37265, -0.87716, 0.302836, 0], [-0.28108, 0.2766, 0.156457, 1]] * [0,0,-16,1]
+
+(13.1898, -7.65184, -4.84538, -1.50331)
 
 Sources
 
@@ -23,18 +27,14 @@ http://www.iquilezles.org/www/material/nvscene2008/nvscene2008.htm
 
 Bugs
 Controls
-	-make the distance estimation only look at part of the thing/make recursion level depend on the amount you're zoomed in (???da fuck!?)
+	-make the distance estimation only look at part of the thing/make recursion level depend on the amount you're zoomed in
 	-make arrows translate in x and y directions, make mouse zoom
 	-fix controls/add dropdown thingy (thomas)
-
 -inf spheres : why are they breaking :(
+-how to render stuff overnight/make a video of higher quality?
+-julia: make less tempermental
+-put julia/mandelbrot into actual 2d
+
+
 
 -apollonian gasket, with translucency (bubbles + random bubbly colors); look at assignment 3 refraction stuff; colored based on bubble size, smaller bubbles more translucent
--how to render stuff overnight/make a video of higher quality?
-
-
--julia: bounding volume/possibly revisit 3d version
-bounding thing: do in main before you shoot ray,
-intersect it with the bounding volume, if it hits then shoot ray, if doesn't hit just black --> try for julia set in 3d (not 2d) to contain it
-
--put julia/mandelbrot into actual 2d

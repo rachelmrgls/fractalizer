@@ -10,6 +10,7 @@ Raytracer.SPHERE   = 2;
 Raytracer.MENGER  = 3;
 Raytracer.JULIA = 4;
 Raytracer.MANDELBROT     = 5;
+Raytracer.JULIA3D = 6;
 
 // material types - how to light the surface
 Raytracer.BASICMATERIAL   = 1;
@@ -45,12 +46,22 @@ Raytracer.handleMouseDown = function(event) {
 
 Raytracer.handleMouseUp = function(event) {
 	Raytracer.mouseDown = false;
-};
+
+    //console.log(Raytracer.program);
+    /*var whatever = Raytracer.gl.getUniformLocation(Raytracer.program,"camera" );
+    var poop;
+    poop = Raytracer.gl.getUniform(Raytracer.program, whatever, poop);
+   console.log(poop)*/
+   //console.log(Raytracer.RotationMatrix);
+    //console.log(whatever);
+};  
 
 Raytracer.handleZoom = function(deltaX,deltaY,deltaZ)
 {
     var scale = 0.3;
 	mat4.translate(Raytracer.RotationMatrix, [scale * deltaX, scale * deltaY, scale * deltaZ]);
+
+
 
     Raytracer.needsToDraw = true;
 };
@@ -165,6 +176,7 @@ Raytracer.init = function (height, width, debug, value) {
 	mat4.multiply(newRotationMatrix, Raytracer.RotationMatrix, Raytracer.RotationMatrix);
 	
     Raytracer.value = value;
+    //Raytracer.direction = [0.0,0.0,0.0];
 
 	canvas.onmousedown = Raytracer.handleMouseDown;
 	document.onmouseup = Raytracer.handleMouseUp;
@@ -243,6 +255,10 @@ Raytracer.addMenger = function( level ) {
 
 Raytracer.addJulia = function() {
     this.setUniformShape( this.JULIA, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 );
+};
+
+Raytracer.addJulia3d = function() {
+    this.setUniformShape( this.JULIA3D, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 );
 };
 
 Raytracer.addMandelbrot = function() {
@@ -338,10 +354,11 @@ Raytracer.render = function( animated, typeddata ) {
     }
 	//rotation matrix
     this.setUniform('Matrix4fv', 'uMVMatrix', false, this.RotationMatrix );
-    
+
     // values for Julia 2d
     this.setUniform('2f','value',this.value[0],this.value[1]);
     this.setUniform('1i', 'isAnimated', animated);
+
 
     if (this.needsToDraw || animated) {
 	    this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);

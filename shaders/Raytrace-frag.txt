@@ -6,6 +6,8 @@ precision mediump float;
 precision mediump int;
 uniform mat4 uMVMatrix;
 
+uniform vec3 direction;
+
 uniform float iGlobalTime;
 
 // some constant        
@@ -24,6 +26,8 @@ uniform float iGlobalTime;
 #define MENGER 3
 #define JULIA 4
 #define MANDELBROT 5
+#define JULIA3D 6
+
 
 struct Shape {
     int shapeType;
@@ -93,7 +97,6 @@ vec2 julia_shift;
 struct Ray {
     vec3 origin;
     vec3 direction;
-    float init;
 };
 
 struct Intersection {
@@ -196,7 +199,7 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
 
     if (shape.shapeType == MANDELBROT) {
 
-        float aud = getAudio( 8 ); // change this to see how it looks
+        float aud = getAudio( 10 ); // change this to see how it looks
 
         float shift = oneToZero(-0.2,0.0,1.0 - aud);
         miniter = 0.29 +shift;
@@ -208,6 +211,18 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
         iter = 0.0;
     } 
     else if (shape.shapeType == JULIA) {
+
+        float aud = getAudio( 4 ); // change this to see how it looks
+
+        float shift = oneToZero(-0.2,0.0,1.0 - aud);
+        miniter = 0.29 + shift;
+        maxiter = 0.5;
+
+        diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
+        // reset values
+        iter = 0.0;
+    }
+    else if (shape.shapeType == JULIA3D) {
 
         float aud = getAudio( 4 ); // change this to see how it looks
 
@@ -404,8 +419,8 @@ float mandelbrot_de( vec3 p ) {
         if( m2>1e20  ) { /// fix me fix me the 2d thang
             iter = float(i)/float(MAX_MANDEL_ITER);
             
-            if (iter < miniter) miniter = iter;
-            if (iter > maxiter) maxiter = iter;
+            /*if (iter < miniter) miniter = iter;
+            if (iter > maxiter) maxiter = iter;*/
             break;
         }
     }
@@ -434,6 +449,45 @@ float julia_de( vec3 p )
 
     vec2 c = value + shift;//vec2( p.x, p.y );
     vec2 z = vec2( p.x, p.y );//vec2( p.z, value );//0.0f, 0.0f );
+    vec2 dz = vec2( 1.0, 0.0 ); // Complex dz( 1.0f, 0.0f );
+
+    float m2;
+    for( int i=0; i<MAX_MANDEL_ITER; i++ )
+    {
+        dz = 2.0 * complexMult(z,dz);
+        z = complexMult(z,z) + c;
+
+        m2 = complexModSquared(z);
+        if( m2>1e20 ) {
+            iter = float(i)/float(MAX_MANDEL_ITER);
+            break;
+        }
+    }
+
+    // distance estimation: G/|G'|
+    return sqrt( m2/complexModSquared(dz) )*0.5*log(m2);
+
+}
+
+
+float julia3d_de( vec3 p )
+{
+    // PASS IS ANIMATED
+    // julia_de
+    
+    vec2 shift; 
+
+    if (isAnimated) {
+        float aud1 = getAudio( 10 ); // [0,1]
+        float aud2 = getAudio( 7 ); // [0,1]
+        shift = vec2(oneToZero(-2.0,2.0,aud1),oneToZero(0.0,0.1,aud2));
+    }
+    else {
+        shift = vec2(0.0,0.0);
+    }
+    shift = vec2(0.0,0.0);
+    vec2 c = vec2( p.x, p.y );
+    vec2 z = vec2( p.z, value.y );//0.0f, 0.0f );
     vec2 dz = vec2( 1.0, 0.0 ); // Complex dz( 1.0f, 0.0f );
 
     float m2;
@@ -533,6 +587,15 @@ vec3 fDiff_mandelbrot(vec3 pos) {
             mandelbrot_de(pos + dx.yyx) - mandelbrot_de(pos - dx.yyx)));
 }
 
+vec3 fDiff_julia3d(vec3 pos) {
+
+    vec3 dx = vec3(EPS,0.0,0.0);
+
+    return normalize(vec3(julia3d_de(pos + dx.xyy) - julia3d_de(pos - dx.xyy),
+            julia3d_de(pos + dx.yxy) - julia3d_de(pos - dx.yxy),
+            julia3d_de(pos + dx.yyx) - julia3d_de(pos - dx.yyx)));
+}
+
 float findIntersectionWithMenger( vec3 pos, Shape shape, out Intersection intersect) {
     int level = int(shape.v1.x);
 
@@ -552,7 +615,14 @@ float findIntersectionWithJulia( vec3 pos, Shape shape, out Intersection interse
     return dist;
 }
 
+float findIntersectionWithJulia3d( vec3 pos, Shape shape, out Intersection intersect) {
+    
+    float dist = julia3d_de(pos);
 
+    intersect.position = pos;
+    intersect.normal = fDiff_julia3d(pos);//vec3(0.0);//
+    return dist;
+}
 
 float findIntersectionWithMandelbrot( vec3 pos, Shape shape, out Intersection intersect) {
     
@@ -613,6 +683,9 @@ float findIntersection( vec3 pos, Shape shape, out Intersection intersect ) {
     if( shape.shapeType == MANDELBROT) {
         return findIntersectionWithMandelbrot(pos, shape, intersect);
     }
+    if( shape.shapeType == JULIA3D) {
+        return findIntersectionWithJulia3d(pos, shape, intersect);
+    }
     
     return INFINITY;
 }
@@ -621,7 +694,7 @@ float findIntersection( vec3 pos, Shape shape, out Intersection intersect ) {
 float rayIntersectScene( Ray ray, out Object obj, out Intersection out_intersect ) {
     
     // initialize distance along ray to 0
-    float t = ray.init;//0.0;
+    float t = 0.0;
 
     for ( int i = 0; i < MAX_STEPS; i++ )
     {
@@ -723,9 +796,7 @@ void main() {
     
     float dist = findBoundWithSphere(ray, bound, bounds_intersection);
 
-    ray.init = 0.0;//dist;
     if (dist < INFINITY || ! isBounded ) {        
-        //ray.origin = bounds_intersection.position;
 
         // march the ray for this pixel
         vec3 res = marchRay( ray );
