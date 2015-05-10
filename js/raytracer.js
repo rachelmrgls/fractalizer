@@ -166,7 +166,6 @@ Raytracer.init = function (height, width, debug, value, scene ) {
 
     this.gl.uniform1i( this.gl.getUniformLocation(this.program,"frame"), this.frame );
 
-
     //var julia_default = new Float32Array([0.56428, -0.04487374, -0.82436, 0, 0.73668, 0.478091, 0.47824, 0, 0.37265, -0.87716, 0.302836, 0, -0.28108, 0.2766, 0.156457, 1]);
     var julia_default = new Float32Array([-0.05297758802771568, -0.1217767670750618, -0.9911374449729919, 0, 0.8391594886779785, 0.5325657725334167, -0.11028649657964706, 0, 0.5412726998329163, -0.8375768661499023, 0.0739828571677208, 0, 1.461436152458191, -2.261467695236206, 0.19975492358207703, 1]);
 
@@ -178,8 +177,8 @@ Raytracer.init = function (height, width, debug, value, scene ) {
     } else {
         var newRotationMatrix = mat4.create();
         mat4.identity(newRotationMatrix);
-        mat4.rotate(newRotationMatrix, 0.15 * Math.PI, [1, 0, 0]);
-        mat4.rotate(newRotationMatrix, -0.05 * Math.PI, [0, 1, 0]);
+        //mat4.rotate(newRotationMatrix, 0.15 * Math.PI, [1, 0, 0]);
+        //mat4.rotate(newRotationMatrix, -0.05 * Math.PI, [0, 1, 0]);
         mat4.multiply(newRotationMatrix, Raytracer.RotationMatrix, Raytracer.RotationMatrix);
     }
 

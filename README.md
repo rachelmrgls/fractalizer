@@ -1,13 +1,8 @@
 # fractalizer
 final project cos426
 
-julia - good view rotation matrix
-[[0.56428, -0.04487374, -0.82436, 0], [0.73668, 0.478091, 0.47824, 0], [0.37265, -0.87716, 0.302836, 0], [-0.28108, 0.2766, 0.156457, 1]] * [0,0,-16,1]
-
-
-
-
-(13.1898, -7.65184, -4.84538, -1.50331)
+julia3d good view:
+[-0.05297758802771568, -0.1217767670750618, -0.9911374449729919, 0, 0.8391594886779785, 0.5325657725334167, -0.11028649657964706, 0, 0.5412726998329163, -0.8375768661499023, 0.0739828571677208, 0, 1.461436152458191, -2.261467695236206, 0.19975492358207703, 1]
 
 Sources
 
@@ -31,14 +26,11 @@ http://www.iquilezles.org/www/material/nvscene2008/nvscene2008.htm
 Bugs
 Controls
 	-make the distance estimation only look at part of the thing/make recursion level depend on the amount you're zoomed in
-	-make arrows translate in x and y directions, make mouse zoom
+	-make mouse zoom, change up/down keys to deltaY
 	-fix controls/add dropdown thingy (thomas)
 -inf spheres : why are they breaking :(
--how to render stuff overnight/make a video of higher quality?
--julia: make less tempermental
 -put julia/mandelbrot into actual 2d
 
--email adam about using his 16gb ram
 -white flashes
 
 -apollonian gasket, with translucency (bubbles + random bubbly colors); look at assignment 3 refraction stuff; colored based on bubble size, smaller bubbles more translucent
