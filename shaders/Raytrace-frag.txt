@@ -92,6 +92,8 @@ varying vec2 v_position;
 float iter;
 float miniter;
 float maxiter;
+float apoll_rad;
+
 vec2 julia_shift = vec2(0.,0.);
 
 struct Ray {
@@ -273,7 +275,8 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
 
     } 
     else if (shape.shapeType == APOLLONIAN && isAnimated) {
-        diffuseColor = HSLtoRGB(getAudio( 10 ),1.0,0.5);
+        // trying to make it overall brighter
+        diffuseColor = HSLtoRGB(getAudio( int(apoll_rad * 10.0) ),1.0,0.7); 
     }
     else {
         diffuseColor = obj.material.color;
@@ -411,6 +414,8 @@ float apollonian_de( vec3 p, int level, float s ) {
         p     *= k;
         scale *= k;
     }
+
+    apoll_rad = r2;
     
     return 0.25*abs(p.y)/scale;
 }
@@ -482,8 +487,6 @@ float mandelbrot_de( vec3 p ) {
         if( m2>1e20  ) { /// fix me fix me the 2d thang
             iter = float(i)/float(MAX_MANDEL_ITER);
             
-            /*if (iter < miniter) miniter = iter;
-            if (iter > maxiter) maxiter = iter;*/
             break;
         }
     }

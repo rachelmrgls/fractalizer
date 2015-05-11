@@ -33,7 +33,8 @@ Controls
 a light that moves with the camera
 
 -find screen recording software thats free + records mac audio
-displace along normals to music, based on recursion level (apollonian)
+
+
 apollonian coloring
 fix index page/do writeup
 -maybe try switching back the mandelbrot colors in anim mode?
