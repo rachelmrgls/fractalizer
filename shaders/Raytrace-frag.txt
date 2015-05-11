@@ -226,21 +226,23 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
     if (shape.shapeType == MANDELBROT) {
         // shift color interval based on single audio
 
-        float aud = getAudio( 10 ); // change this to see how it looks
+        if (isAnimated) {
+            float aud = getAudio( 10 );
+    
+            float shift = oneToZero(-0.2,0.0,1.0 - aud);
+            miniter = 0.29 +shift;
+            maxiter = 0.5;
+    
+            diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
+        } else {
+            miniter = 0.29;
+            maxiter = 0.5;
+            float fb = zeroToOne(miniter,maxiter,iter);
 
-        float shift = oneToZero(-0.2,0.0,1.0 - aud);
-        miniter = 0.29 +shift;
-        maxiter = 0.5;
+            float aud =getAudio(int(fb * 13.0));
 
-        diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
-
-        /*miniter = 0.29;
-        maxiter = 0.5;
-        float fb = zeroToOne(miniter,maxiter,iter);
-
-        float aud =getAudio(int(fb * 13.0));
-
-        diffuseColor = HSLtoRGB(fb,1.0,.5);*/
+            diffuseColor = HSLtoRGB(fb,1.0,.5);
+        }
         // reset values
         iter = 0.0;
     } 
@@ -420,7 +422,7 @@ float apollonian_de( vec3 p, int level, float s ) {
         p     *= k;
         scale *= k;
 
-        apoll_rad = scale;
+        apoll_rad = r2; // fixme : how to get the radius?
     }
     
     return 0.25*abs(p.y)/scale;
@@ -465,17 +467,6 @@ vec2 complexMult( vec2 a, vec2 b ) {
 float complexModSquared( vec2 a ) {
     return a.x * a.x + a.y * a.y;
 }
-/*
-bool inBounds(Object obj, vec3 pos ) {
-    if (obj.shape.shapeType == MANDELBROT) {
-        if (pos.z <= -.5) {
-            return false;
-        }
-    }
-
-    return true;
-}
-*/
 
 // http://iquilezles.org/www/articles/distancefractals/distancefractals.htm
 float mandelbrot_de( vec3 p ) {
