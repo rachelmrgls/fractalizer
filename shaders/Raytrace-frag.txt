@@ -195,7 +195,7 @@ float oneToZero( float mini, float maxi, float val ) {
 
 float menger_aud_based(vec3 pos) {
     // distance from the origin - ranges from [0, sqrt(2)]
-    float dist = zeroToOne(0.0,sqrt(3.0),dot(pos,pos));
+    float dist = zeroToOne(0.0,sqrt(2.0),dot(pos,pos));
 
     float tmp = dist * 10.0;
 
@@ -675,7 +675,7 @@ vec3 fDiff_julia3d(vec3 pos) {
 float findIntersectionWithMenger( vec3 pos, Shape shape, out Intersection intersect) {
     if (isAnimated) {
         float aud = menger_aud_based(pos);// getAudio(7); // currently in range [0,1]
-        pos += aud * oneToZero(0.1,0.3,dot(pos,pos)/3.0) * normalize(pos);
+        pos += aud * oneToZero(0.1,0.3,dot(pos,pos)/2.0) * normalize(pos);
     }
 
     int level = int(shape.v1.x);
