@@ -254,8 +254,20 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
     else if (shape.shapeType == MENGER) {
         // distance from the origin - ranges from [0, sqrt(2)]
         float dist = zeroToOne(0.0,sqrt(2.0),dot(pos,pos));
-        float aud = getAudio( int(dist * 15.0) );
-        diffuseColor = HSLtoRGB(1.0 - aud,1.0,0.5);
+
+        float tmp = dist * 20.0;
+
+        float fl = floor(tmp);
+        float ce = ceil(tmp);
+
+        float aud1 = getAudio( fl );
+        float aud2 = getAudio( ce );
+        float interp = zeroToOne(fl,ce,tmp);
+
+
+//interp * aud1 + (1 - interp) * aud2
+
+        diffuseColor = HSLtoRGB(1.0 - ((aud2 - aud1) * interp + aud1),1.0,0.5);
 
     } else {
         diffuseColor = obj.material.color;
