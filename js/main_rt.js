@@ -161,6 +161,7 @@ window.onload = function() {
         }
     });
     window.addEventListener( 'keydown', function( event ) {
+        var zoom = this.zoom;
         // only respond to 'I' key
         if (event.which == 38) {
             // up arrow key
@@ -177,11 +178,11 @@ window.onload = function() {
         } else if (event.which == 188) {
             // left carat
             Raytracer.handleZoom(0.0,0.0,-zoom);
-            zoom = zoom * 2;
+            this.zoom = zoom * 2;
         } else if (event.which == 190) {
             // right carat
             Raytracer.handleZoom(0.0,0.0,zoom);
-            zoom = zoom/2;
+            this.zoom = zoom/2;
         } 
 
         /*  d = 68; f = 70
