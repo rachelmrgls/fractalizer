@@ -1,9 +1,6 @@
 # fractalizer
 final project cos426
 
-julia3d good view:
-[-0.05297758802771568, -0.1217767670750618, -0.9911374449729919, 0, 0.8391594886779785, 0.5325657725334167, -0.11028649657964706, 0, 0.5412726998329163, -0.8375768661499023, 0.0739828571677208, 0, 1.461436152458191, -2.261467695236206, 0.19975492358207703, 1]
-
 Sources
 
 (controls) http://www.javascriptkit.com/javatutors/javascriptkey2.shtml
@@ -33,6 +30,18 @@ Controls
 -inf spheres : why are they breaking :(
 -put julia/mandelbrot into actual 2d
 
--apollonian gasket, with translucency (bubbles + random bubbly colors); look at assignment 3 refraction stuff; colored based on bubble size, smaller bubbles more translucent
+-apollonian gasket, with translucency (bubbles + random bubbly colors); look at assignment 3 refraction stuff; colored based on bubble size, smaller bubbles more translucent;
+a light that moves with the camera
 
--
+-verify that key controls work to control 4th dimension in julia3d
+-find screen recording software thats free + records mac audio
+
+
+displace along normals to music, based on recursion level (apollonian, menger)
+julia3d make 4th dim move w/ music in animated mode
+
+apollonian coloring
+
+make enter key rotate julia 2d defaults
+
+fix index page

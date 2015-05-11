@@ -24,7 +24,7 @@ function init() {
 //load the mp3 file 
 function loadFile() { 
     var req = new XMLHttpRequest(); //
-    req.open("GET","music/Rather Be (Elephante Remix).mp3",true);//"Ten Feet Tall (Elephante Remix)
+    req.open("GET","music/Forever (Pt. II) Feat. Kaleem Taylor.mp3",true);//"Ten Feet Tall (Elephante Remix)
     //we can't use jquery because we need the arraybuffer type 
     req.responseType = "arraybuffer"; 
     req.onload = function() { 
@@ -91,7 +91,7 @@ window.onload = function() {
     var height = cmd.height || window.innerHeight;//600;
     var width  = cmd.width  || window.innerWidth;//600;
         
-    var animated= parseInt(cmd.animated) || 0;
+    var animated = parseInt(cmd.animated) || 0;
 
     var paused = false;
     var debug = cmd.debug||false;
