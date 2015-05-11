@@ -33,12 +33,15 @@ Controls
 a light that moves with the camera
 
 -find screen recording software thats free + records mac audio
-
-displace along normals to music, based on recursion level (apollonian, menger)
-
-initial frame for animated versions has all 0s for audio
+displace along normals to music, based on recursion level (apollonian)
 apollonian coloring
-fix index page
+fix index page/do writeup
+-maybe try switching back the mandelbrot colors in anim mode?
+
+
+
+
+
 
 -tuning:
 parameter for how much julia3d dances in 4th dim according to audio
