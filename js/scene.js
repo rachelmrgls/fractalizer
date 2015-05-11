@@ -27,7 +27,7 @@ Scene.default = function () {
 };
 
 
-Scene.menger = function () {
+Scene.menger = function (level) {
     Raytracer.setUniform('3f', 'camera' ,0.0, 0.0, -15.0);    
     
     // Matte Sphere
@@ -40,7 +40,7 @@ Scene.menger = function () {
     Raytracer.setUniformMaterial( '1f','shininess', 200 ); 
     Raytracer.setUniformMaterial( '3f','color', 0.2, 0.4, 0.5 );
     //Raytracer.addSphere( 0.0, 0.0, 0.0, 1.0 );
-    Raytracer.addMenger( 1. ); // recursion level
+    Raytracer.addMenger( level ); // recursion level
 
     
     Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);

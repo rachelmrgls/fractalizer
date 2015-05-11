@@ -24,7 +24,7 @@ function init() {
 //load the mp3 file 
 function loadFile() { 
     var req = new XMLHttpRequest(); //
-    req.open("GET","music/All Too Well.m4a",true);//"Ten Feet Tall (Elephante Remix)
+    req.open("GET","music/Rather Be (Elephante Remix).mp3",true);//"Ten Feet Tall (Elephante Remix)
     //we can't use jquery because we need the arraybuffer type 
     req.responseType = "arraybuffer"; 
     req.onload = function() { 
@@ -84,6 +84,8 @@ window.onload = function() {
 
     var value1 = cmd.value1 || -0.4;
     var value2 = cmd.value2 || 0.6;
+
+    var level = parseFloat(cmd.level) || 4.
         
     var value = [parseFloat(value1), parseFloat(value2)];
     var height = cmd.height || window.innerHeight;//600;
@@ -104,7 +106,7 @@ window.onload = function() {
     
 
     function createScene ( sceneID ) {
-        Scene[sceneID.toString()]();
+        Scene[sceneID.toString()](level);
     }
 
     function drawScene() {
