@@ -533,7 +533,7 @@ float julia3d_de( vec3 p )
     // PASS IS ANIMATED
     // julia_de
     
-    vec2 shift; 
+    float shift; 
 
     if (isAnimated) {
         float aud = getAudio( 7 ); // [0,1]
