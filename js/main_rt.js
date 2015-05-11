@@ -145,7 +145,6 @@ window.onload = function() {
             } else {
                 pause();
             }
-
             paused = !paused;
         }
     });
