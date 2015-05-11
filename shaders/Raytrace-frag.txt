@@ -387,8 +387,7 @@ vec3 menger_normal( vec3 p, int level ) {
 
 vec4 orb;
 
-float apollonian_de( vec3 p, int level ) {
-    float s = 1.0;
+float apollonian_de( vec3 p, int level, float s ) {
 
     // apollonian gasket
     // source: https://www.shadertoy.com/view/4ds3zn
@@ -638,13 +637,13 @@ vec3 fDiff_tetra(vec3 pos, int level) {
             menger_de(pos + dx.yyx,level) - menger_de(pos - dx.yyx,level)));
 }
 
-vec3 fDiff_apollonian(vec3 pos, int level) {
+vec3 fDiff_apollonian(vec3 pos, int level, float s) {
 
     vec3 dx = vec3(EPS,0.0,0.0);
 
-    return normalize(vec3(apollonian_de(pos + dx.xyy,level) - apollonian_de(pos - dx.xyy,level),
-            apollonian_de(pos + dx.yxy,level) - apollonian_de(pos - dx.yxy,level),
-            apollonian_de(pos + dx.yyx,level) - apollonian_de(pos - dx.yyx,level)));
+    return normalize(vec3(apollonian_de(pos + dx.xyy,level,s) - apollonian_de(pos - dx.xyy,level,s),
+            apollonian_de(pos + dx.yxy,level,s) - apollonian_de(pos - dx.yxy,level,s),
+            apollonian_de(pos + dx.yyx,level,s) - apollonian_de(pos - dx.yyx,level,s)));
 }
 
 vec3 fDiff_julia(vec3 pos) {
@@ -675,10 +674,10 @@ vec3 fDiff_julia3d(vec3 pos) {
 }
 
 float findIntersectionWithMenger( vec3 pos, Shape shape, out Intersection intersect) {
-    /*if (isAnimated) {
+    if (isAnimated) {
         float aud = menger_aud_based(pos);
         pos += aud * 0.1 * normalize(pos);
-    }*/
+    }
 
     int level = int(shape.v1.x);
 
@@ -687,12 +686,12 @@ float findIntersectionWithMenger( vec3 pos, Shape shape, out Intersection inters
     intersect.position = pos;
     intersect.normal = fDiff_menger(pos,level);
 
-    if (isAnimated) {
+    /*if (isAnimated) {
         float aud = menger_aud_based(pos);
         pos += aud * 0.01 * intersect.normal;
     }
 
-    dist = menger_de(pos,level);
+    dist = menger_de(pos,level);*/
 
     return dist;
 }
@@ -700,10 +699,17 @@ float findIntersectionWithMenger( vec3 pos, Shape shape, out Intersection inters
 float findIntersectionWithApollonian( vec3 pos, Shape shape, out Intersection intersect) {
     int level = int(shape.v1.x);
 
-    float dist = apollonian_de(pos,level);
+    float s = 1.0;
+
+    if (isAnimated) {
+        s += 0.03 * getAudio( 7 );
+    }
+
+    float dist = apollonian_de(pos,level,s);
 
     intersect.position = pos;
-    intersect.normal = fDiff_apollonian(pos,level);
+    intersect.normal = fDiff_apollonian(pos,level,s);
+
     return dist;
 }
 
