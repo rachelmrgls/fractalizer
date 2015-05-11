@@ -195,11 +195,9 @@ float oneToZero( float mini, float maxi, float val ) {
     return val * (maxi - mini) + mini;
 }
 
-float menger_aud_based(vec3 pos) {
-    // distance from the origin - ranges from [0, sqrt(2)]
-    float dist = zeroToOne(0.0,sqrt(2.0),dot(pos,pos));
-
-    float tmp = dist * 10.0;
+// takes a value in [0,1], calculates interpolated audio value
+float interpAudio( float val ) {
+    float tmp = val * 10.0;
 
     float fl = floor(tmp);
     float ce = ceil(tmp);
@@ -207,7 +205,15 @@ float menger_aud_based(vec3 pos) {
     float aud1 = getAudio( int(fl) );
     float aud2 = getAudio( int(ce) );
     float interp = zeroToOne(fl,ce,tmp);
+
     return 1.0 - ((aud2 - aud1) * interp + aud1);
+}
+
+float menger_aud_based(vec3 pos) {
+    // distance from the origin - ranges from [0, sqrt(2)]
+    float dist = zeroToOne(0.0,sqrt(2.0),dot(pos,pos));
+
+    return interpAudio(dist);
 }
 
 vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, bool phongOnly) {
@@ -276,7 +282,7 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
     } 
     else if (shape.shapeType == APOLLONIAN && isAnimated) {
         // trying to make it overall brighter
-        diffuseColor = HSLtoRGB(getAudio( int(apoll_rad * 10.0) ),1.0,0.7); 
+        diffuseColor = HSLtoRGB(interpAudio(apoll_rad),1.0,0.7); 
     }
     else {
         diffuseColor = obj.material.color;
