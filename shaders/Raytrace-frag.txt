@@ -216,8 +216,6 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
     vec3 diffuseColor;
 
     if (shape.shapeType == MANDELBROT) {
-
-        
         // shift color interval based on single audio
 
         float aud = getAudio( 10 ); // change this to see how it looks
@@ -273,7 +271,11 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
         
         diffuseColor = HSLtoRGB(menger_aud_based(pos),1.0,0.5);
 
-    } else {
+    } 
+    else if (shape.shapeType == APOLLONIAN && isAnimated) {
+        diffuseColor = HSLtoRGB(getAudio( 10.0 ),1.0,0.5);
+    }
+    else {
         diffuseColor = obj.material.color;
     }
 
@@ -702,7 +704,7 @@ float findIntersectionWithApollonian( vec3 pos, Shape shape, out Intersection in
     float s = 1.0;
 
     if (isAnimated) {
-        s += 0.03 * getAudio( 7 );
+        s += 0.1 * getAudio( 7 );
     }
 
     float dist = apollonian_de(pos,level,s);
