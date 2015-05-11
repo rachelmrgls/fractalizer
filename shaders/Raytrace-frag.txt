@@ -273,7 +273,7 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
 
     } 
     else if (shape.shapeType == APOLLONIAN && isAnimated) {
-        diffuseColor = HSLtoRGB(getAudio( 10.0 ),1.0,0.5);
+        diffuseColor = HSLtoRGB(getAudio( 10 ),1.0,0.5);
     }
     else {
         diffuseColor = obj.material.color;

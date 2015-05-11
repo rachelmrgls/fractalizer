@@ -40,7 +40,8 @@ fix index page/do writeup
 
 
 
-
+apollonian translucency!!! (http://www.fractalforums.com/3d-fractal-generation/escape-time-version-of-the-tetrahedral-apollonian-gasket/)
+how the f did they do this
 
 
 -tuning:
