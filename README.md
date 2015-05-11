@@ -37,9 +37,6 @@ a light that moves with the camera
 
 apollonian coloring
 fix index page/do writeup
--maybe try switching back the mandelbrot colors in anim mode?
-
-
 
 apollonian translucency!!! (http://www.fractalforums.com/3d-fractal-generation/escape-time-version-of-the-tetrahedral-apollonian-gasket/)
 how the f did they do this

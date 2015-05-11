@@ -234,7 +234,7 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
             maxiter = 0.5;
     
             diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
-        /*} else {
+        } else {
             miniter = 0.29;
             maxiter = 0.5;
             float fb = zeroToOne(miniter,maxiter,iter);
@@ -242,7 +242,7 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
             float aud =getAudio(int(fb * 13.0));
 
             diffuseColor = HSLtoRGB(fb,1.0,.5);
-        }*/
+        }
         // reset values
         iter = 0.0;
     } 
@@ -748,7 +748,7 @@ float findIntersectionWithInfSphere( vec3 pos, Shape shape, out Intersection int
     
     float fb = bounceShape( pos, rad );
 
-    vec3 modpos = vec3(mod(pos.x,2.0 * rad) - rad,pos.y - fb * 7.0,mod(pos.z,2.0 * rad) - rad); 
+    vec3 modpos = vec3(mod(pos.x,2.0 * rad) - rad,pos.y + fb * 7.0,mod(pos.z,2.0 * rad) - rad); 
     
     float dist = sphere_de( modpos, rad );
 
