@@ -38,7 +38,4 @@ a light that moves with the camera
 displace along normals to music, based on recursion level (apollonian, menger)
 
 apollonian coloring
-
-make enter key rotate julia 2d defaults
-
 fix index page

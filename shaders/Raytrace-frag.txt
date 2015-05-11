@@ -192,6 +192,21 @@ float oneToZero( float mini, float maxi, float val ) {
     return val * (maxi - mini) + mini;
 }
 
+float menger_aud_based(vec3 pos) {
+    // distance from the origin - ranges from [0, sqrt(2)]
+    float dist = zeroToOne(0.0,sqrt(2.0),dot(pos,pos));
+
+    float tmp = dist * 10.0;
+
+    float fl = floor(tmp);
+    float ce = ceil(tmp);
+
+    float aud1 = getAudio( int(fl) );
+    float aud2 = getAudio( int(ce) );
+    float interp = zeroToOne(fl,ce,tmp);
+    return 1.0 - ((aud2 - aud1) * interp + aud1);
+}
+
 vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, bool phongOnly) {
 	
     Shape shape = obj.shape;
@@ -244,7 +259,7 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
         // reset values
         iter = 0.0;
     }
-    else if (shape.shapeType == INFSPHERE) {
+    else if (shape.shapeType == INFSPHERE && isAnimated) {
         float rad = getShapeRadius(shape);
         float fb = bounceShape( pos, rad );
 
@@ -253,22 +268,7 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
     }
     else if (shape.shapeType == MENGER && isAnimated) {
         
-        // distance from the origin - ranges from [0, sqrt(2)]
-        float dist = zeroToOne(0.0,sqrt(2.0),dot(pos,pos));
-
-        float tmp = dist * 10.0;
-
-        float fl = floor(tmp);
-        float ce = ceil(tmp);
-
-        float aud1 = getAudio( int(fl) );
-        float aud2 = getAudio( int(ce) );
-        float interp = zeroToOne(fl,ce,tmp);
-
-
-//interp * aud1 + (1 - interp) * aud2
-
-        diffuseColor = HSLtoRGB(1.0 - ((aud2 - aud1) * interp + aud1),1.0,0.5);
+        diffuseColor = HSLtoRGB(menger_aud_based(pos),1.0,0.5);
 
     } else {
         diffuseColor = obj.material.color;
@@ -682,7 +682,15 @@ float findIntersectionWithMenger( vec3 pos, Shape shape, out Intersection inters
     float dist = menger_de(pos,level);
 
     intersect.position = pos;
-    intersect.normal = fDiff_menger(pos,level);//vec3(0.0);//menger_normal(pos,level);//
+    intersect.normal = fDiff_menger(pos,level);
+
+    if (isAnimated) {
+
+        float aud = menger_aud_based(pos); // currently in range [0,1]
+        intersect.position += aud * 0.01 * intersect.normal;
+    }
+
+
     return dist;
 }
 
