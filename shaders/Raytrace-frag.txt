@@ -748,7 +748,7 @@ float findIntersectionWithInfSphere( vec3 pos, Shape shape, out Intersection int
     
     float fb = bounceShape( pos, rad );
 
-    vec3 modpos = vec3(mod(pos.x,2.0 * rad) - rad,pos.y - fb * 15.0,mod(pos.z,2.0 * rad) - rad); 
+    vec3 modpos = vec3(mod(pos.x,2.0 * rad) - rad,pos.y - fb * 3.0,mod(pos.z,2.0 * rad) - rad); 
     
     float dist = sphere_de( modpos, rad );
 
