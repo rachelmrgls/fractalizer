@@ -187,14 +187,15 @@ float zeroToOne( float mini, float maxi, float val ) {
     return (val - mini)/(maxi - mini);
 }
 
-// inverse of zero to 1
+// inverse of zero to 1 (takes something thats in the range 0 to 1 and puts it
+//    in the range mini to maxi)
 float oneToZero( float mini, float maxi, float val ) {
     return val * (maxi - mini) + mini;
 }
 
 float menger_aud_based(vec3 pos) {
     // distance from the origin - ranges from [0, sqrt(2)]
-    float dist = zeroToOne(0.0,sqrt(2.0),dot(pos,pos));
+    float dist = zeroToOne(0.0,sqrt(3.0),dot(pos,pos));
 
     float tmp = dist * 10.0;
 
@@ -673,8 +674,8 @@ vec3 fDiff_julia3d(vec3 pos) {
 
 float findIntersectionWithMenger( vec3 pos, Shape shape, out Intersection intersect) {
     if (isAnimated) {
-        float aud = getAudio(7);//menger_aud_based(pos); // currently in range [0,1]
-        pos += aud * 0.1 * normalize(pos);
+        float aud = menger_aud_based(pos);// getAudio(7); // currently in range [0,1]
+        pos += aud * oneToZero(0.1,0.3,dot(pos)/3.0) * normalize(pos);
     }
 
     int level = int(shape.v1.x);

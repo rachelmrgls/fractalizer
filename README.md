@@ -37,5 +37,6 @@ a light that moves with the camera
 
 displace along normals to music, based on recursion level (apollonian, menger)
 
+initial frame for animated versions has all 0s for audio
 apollonian coloring
 fix index page
