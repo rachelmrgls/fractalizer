@@ -61,9 +61,6 @@ Raytracer.handleZoom = function(deltaX,deltaY,deltaZ)
 {
     var scale = 0.3;
 	mat4.translate(Raytracer.RotationMatrix, [scale * deltaX, scale * deltaY, scale * deltaZ]);
-
-
-
     Raytracer.needsToDraw = true;
 };
 

@@ -191,6 +191,9 @@ window.onload = function() {
         else if (event.which == 13) {
             // rotate defaults for julia
             julia_idx = (julia_idx + 1) % julia_def.length;
+            Raytracer.value[0] = julia_def[julia_idx][0];
+            Raytracer.value[1] = julia_def[julia_idx][1];
+            Raytracer.needsToDraw = true;
         }
 
     });

@@ -251,7 +251,8 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
         float miniter = 0.3; float maxiter = 0.85;
         diffuseColor = HSLtoRGB(oneToZero(miniter,maxiter,fb),1.0,0.4);
     }
-    else if (shape.shapeType == MENGER) {
+    else if (shape.shapeType == MENGER && isAnimated) {
+        
         // distance from the origin - ranges from [0, sqrt(2)]
         float dist = zeroToOne(0.0,sqrt(2.0),dot(pos,pos));
 
