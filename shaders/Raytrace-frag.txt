@@ -420,7 +420,7 @@ float apollonian_de( vec3 p, int level, float s ) {
         p     *= k;
         scale *= k;
 
-        apoll_rad = r2;
+        apoll_rad = scale;
     }
     
     return 0.25*abs(p.y)/scale;
