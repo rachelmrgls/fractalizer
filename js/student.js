@@ -6,6 +6,8 @@ var Student = {
 };
 
 Student.updateHTML = function( ) {
-    var studentInfo = this.name + ' &lt;' + this.netID + '&gt;';
+    var studentInfo = 'Rachel Margulies' + ' &lt;' + 'rachelbm' + '&gt;' + '<br>' +
+    				  'Sonia Skoularikis' + ' &lt;' + 'sskoular' + '&gt;' + '<br>' +
+    				  'Thomas Greenspan' + ' &lt;' + 'tgreensp' + '&gt;';
     document.getElementById('student').innerHTML = studentInfo;
 }
