@@ -228,7 +228,7 @@ vec3 findDiffuseColor( float iter ) {
         miniter += shift;
     }
 
-    diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
+    vec3 diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
 
     // reset values
     iter = 0.0;
