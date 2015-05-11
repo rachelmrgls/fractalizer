@@ -27,7 +27,6 @@ Controls
 	-make the distance estimation only look at part of the thing/make recursion level depend on the amount you're zoomed in
 	-make mouse zoom, change up/down keys to deltaY
 	-fix controls/add dropdown thingy (thomas)
--inf spheres : why are they breaking :(
 
 -apollonian gasket, with translucency (bubbles + random bubbly colors); look at assignment 3 refraction stuff; colored based on bubble size, smaller bubbles more translucent;
 a light that moves with the camera
@@ -41,6 +40,7 @@ fix index page/do writeup
 apollonian translucency!!! (http://www.fractalforums.com/3d-fractal-generation/escape-time-version-of-the-tetrahedral-apollonian-gasket/)
 how the f did they do this
 
+-make file uploader for music
 
 -tuning:
 parameter for how much julia3d dances in 4th dim according to audio
@@ -48,3 +48,4 @@ menger normals displacement - yea or nay?
 
 stuff i don't think we'll have time for
 -put julia/mandelbrot into actual 2d
+

@@ -676,10 +676,10 @@ vec3 fDiff_julia3d(vec3 pos) {
 }
 
 float findIntersectionWithMenger( vec3 pos, Shape shape, out Intersection intersect) {
-    if (isAnimated) {
+    /*if (isAnimated) {
         float aud = menger_aud_based(pos);
         pos += aud * 0.1 * normalize(pos);
-    }
+    }*/
 
     int level = int(shape.v1.x);
 
