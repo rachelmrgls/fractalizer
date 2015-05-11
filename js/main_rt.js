@@ -9,6 +9,7 @@ var setup = false; //indicate if audio is set up yet
 var src;
 var startOffset = 0;
 var startTime = 0;
+var zoom = 1.0;
 
 //init the sound system 
 function init() { 
@@ -163,22 +164,24 @@ window.onload = function() {
         // only respond to 'I' key
         if (event.which == 38) {
             // up arrow key
-        	Raytracer.handleZoom(0.0,1.0,0.0);	
+        	Raytracer.handleZoom(0.0,zoom,0.0);	
         } else if (event.which == 40) {
             // down arrow key
-        	Raytracer.handleZoom(0.0,-1.0,0.0);	
+        	Raytracer.handleZoom(0.0,-zoom,0.0);	
         } else if (event.which == 37) {
             // left arrow key pressed
-            Raytracer.handleZoom(-1.0,0.0,0.0);
+            Raytracer.handleZoom(-zoom,0.0,0.0);
         } else if (event.which == 39) {
             // right arrow key pressed
-            Raytracer.handleZoom(1.0,0.0,0.0);
+            Raytracer.handleZoom(zoom,0.0,0.0);
         } else if (event.which == 188) {
             // left carat
-            Raytracer.handleZoom(0.0,0.0,-1.0);
+            Raytracer.handleZoom(0.0,0.0,-zoom);
+            zoom = zoom * 2;
         } else if (event.which == 190) {
             // right carat
-            Raytracer.handleZoom(0.0,0.0,1.0);
+            Raytracer.handleZoom(0.0,0.0,zoom);
+            zoom = zoom/2;
         } 
 
         /*  d = 68; f = 70

@@ -27,9 +27,10 @@ http://www.iquilezles.org/www/material/nvscene2008/nvscene2008.htm
 a light that moves with the camera
 fix index page/do writeup
 
-!!!!make smaller and then scale so that people can play at shitty resolutions on shitty computers/find screen recording software thats free + records mac audio
+!!!!-make smaller and then scale so that people can play at shitty resolutions on shitty computers/find screen recording software thats free + records mac audio
 
--make file uploader for music
+!!!!-make file uploader for music
+!!!!-less zoom
 
 stuff i don't think we'll have time for
 -put julia/mandelbrot into actual 2d
