@@ -260,8 +260,8 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
         float fl = floor(tmp);
         float ce = ceil(tmp);
 
-        float aud1 = getAudio( fl );
-        float aud2 = getAudio( ce );
+        float aud1 = getAudio( int(fl) );
+        float aud2 = getAudio( int(ce) );
         float interp = zeroToOne(fl,ce,tmp);
 
 
