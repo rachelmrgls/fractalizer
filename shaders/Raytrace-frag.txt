@@ -689,7 +689,7 @@ float findIntersectionWithMenger( vec3 pos, Shape shape, out Intersection inters
 
     if (isAnimated) {
         float aud = menger_aud_based(pos);
-        pos += aud * 0.1 * intersect.normal;
+        pos += aud * 0.01 * intersect.normal;
     }
 
     dist = menger_de(pos,level);
