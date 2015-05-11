@@ -210,7 +210,7 @@ float menger_aud_based(vec3 pos) {
 
 vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, bool phongOnly) {
 	
-    if (isAnimated && getAudio(1) < EPS) return vec3(0.0);
+    if (isAnimated && frame == 0) return vec3(0.0);
 
     Shape shape = obj.shape;
     vec3 diffuseColor;
