@@ -25,10 +25,9 @@ http://www.iquilezles.org/www/material/nvscene2008/nvscene2008.htm
 -fix controls/add dropdown thingy (thomas)
 -apollonian gasket, with translucency (bubbles + random bubbly colors); look at assignment 3 refraction stuff; colored based on bubble size, smaller bubbles more translucent;
 a light that moves with the camera
--make julia2d + 3d color like mandelbrot (all indices instead of just 1)
 fix index page/do writeup
 
--make smaller and then scale so that people can play at shitty resolutions on shitty computers/find screen recording software thats free + records mac audio
+!!!!make smaller and then scale so that people can play at shitty resolutions on shitty computers/find screen recording software thats free + records mac audio
 
 -make file uploader for music
 
