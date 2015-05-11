@@ -27,7 +27,7 @@ uniform float iGlobalTime;
 #define JULIA 4
 #define MANDELBROT 5
 #define JULIA3D 6
-
+#define APOLLONIAN 7
 
 struct Shape {
     int shapeType;
@@ -381,6 +381,36 @@ vec3 menger_normal( vec3 p, int level ) {
     return normalize(normal);
 }
 
+vec4 orb;
+
+float apollonian_de( vec3 p, int level ) {
+    float s = 1.0;
+
+    // apollonian gasket
+    // source: https://www.shadertoy.com/view/4ds3zn
+    float scale = 1.0;
+
+    orb = vec4(1000.0); 
+    
+    for( int i=0; i<MAX_RECURSION;i++ )
+    {
+        if (i >= level) break;
+
+        p = -1.0 + 2.0*fract(0.5*p+0.5);
+
+        float r2 = dot(p,p);
+        
+        orb = min( orb, vec4(abs(p),r2) );
+        
+        float k = max(s/r2,0.1);
+        p     *= k;
+        scale *= k;
+    }
+    
+    return 0.25*abs(p.y)/scale;
+}
+
+
 float menger_de( vec3 p, int level ) {
 
     // menger sponge
@@ -597,6 +627,15 @@ vec3 fDiff_menger(vec3 pos, int level) {
             menger_de(pos + dx.yyx,level) - menger_de(pos - dx.yyx,level)));
 }
 
+vec3 fDiff_apollonian(vec3 pos, int level) {
+
+    vec3 dx = vec3(EPS,0.0,0.0);
+
+    return normalize(vec3(apollonian_de(pos + dx.xyy,level) - apollonian_de(pos - dx.xyy,level),
+            apollonian_de(pos + dx.yxy,level) - apollonian_de(pos - dx.yxy,level),
+            apollonian_de(pos + dx.yyx,level) - apollonian_de(pos - dx.yyx,level)));
+}
+
 vec3 fDiff_julia(vec3 pos) {
 
     vec3 dx = vec3(EPS,0.0,0.0);
@@ -631,6 +670,16 @@ float findIntersectionWithMenger( vec3 pos, Shape shape, out Intersection inters
 
     intersect.position = pos;
     intersect.normal = fDiff_menger(pos,level);//vec3(0.0);//menger_normal(pos,level);//
+    return dist;
+}
+
+float findIntersectionWithApollonian( vec3 pos, Shape shape, out Intersection intersect) {
+    int level = int(shape.v1.x);
+
+    float dist = apollonian_de(pos,level);
+
+    intersect.position = pos;
+    intersect.normal = fDiff_apollonian(pos,level);
     return dist;
 }
 
@@ -713,6 +762,9 @@ float findIntersection( vec3 pos, Shape shape, out Intersection intersect ) {
     }
     if( shape.shapeType == JULIA3D) {
         return findIntersectionWithJulia3d(pos, shape, intersect);
+    }
+    if( shape.shapeType == APOLLONIAN) {
+        return findIntersectionWithApollonian(pos, shape, intersect);
     }
     
     return INFINITY;

@@ -11,6 +11,7 @@ Raytracer.MENGER  = 3;
 Raytracer.JULIA = 4;
 Raytracer.MANDELBROT     = 5;
 Raytracer.JULIA3D = 6;
+Raytracer.APOLLONIAN = 7;
 
 // material types - how to light the surface
 Raytracer.BASICMATERIAL   = 1;
@@ -263,6 +264,10 @@ Raytracer.addInfSphere = function( radius ) {
 
 Raytracer.addMenger = function( level ) {
     this.setUniformShape( this.MENGER, 0.0, level, 0.0, 0.0, 0.0, 0.0, 0.0 );
+};
+
+Raytracer.addApollonian = function( level ) {
+    this.setUniformShape( this.APOLLONIAN, 0.0, level, 0.0, 0.0, 0.0, 0.0, 0.0 );
 };
 
 Raytracer.addJulia = function() {
