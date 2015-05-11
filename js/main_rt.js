@@ -164,16 +164,22 @@ window.onload = function() {
         if (event.which == 38) {
             // up arrow key
         	Raytracer.handleZoom(0.0,0.0,1.0);	
-        }else if (event.which == 40) {
+        } else if (event.which == 40) {
             // down arrow key
         	Raytracer.handleZoom(0.0,0.0,-1.0);	
-        }else if (event.which == 37) {
+        } else if (event.which == 37) {
             // left arrow key pressed
             Raytracer.handleZoom(-1.0,0.0,0.0);
-        }else if (event.which == 39) {
+        } else if (event.which == 39) {
             // right arrow key pressed
             Raytracer.handleZoom(1.0,0.0,0.0);
-        }
+        } else if (event.which == 188) {
+            // left carat
+            Raytracer.handleZoom(0.0,-1.0,0.0);
+        } else if (event.which == 190) {
+            // right carat
+            Raytracer.handleZoom(0.0,1.0,0.0);
+        } 
 
         /*  d = 68; f = 70
         j = 74; k = 75  */
