@@ -216,6 +216,26 @@ float menger_aud_based(vec3 pos) {
     return interpAudio(dist);
 }
 
+vec3 findDiffuseColor( float iter ) {
+    miniter = 0.29;
+    maxiter = 0.5;
+    if (isAnimated) {
+        float fb = zeroToOne(miniter,maxiter,iter);
+
+        float aud = getAudio( int(fb * 13.0) );
+
+        float shift = oneToZero(-0.2,0.0,1.0 - aud);
+        miniter += shift;
+    }
+
+    diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
+
+    // reset values
+    iter = 0.0;
+
+    return diffuseColor;
+}
+
 vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, bool phongOnly) {
 	
     if (isAnimated && getAudio(0) < EPS) return vec3(0.0);
@@ -226,38 +246,11 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
     if (shape.shapeType == MANDELBROT) {
         // shift color interval based on single audio
 
-        if (isAnimated) {
-            miniter = 0.29;
-            maxiter = 0.5;
-            float fb = zeroToOne(miniter,maxiter,iter);
-
-            float aud = getAudio( int(fb * 13.0) );
-    
-            float shift = oneToZero(-0.2,0.0,1.0 - aud);
-            miniter = 0.29 +shift;
-            maxiter = 0.5;
-    
-            diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
-        } else {
-            miniter = 0.29;
-            maxiter = 0.5;
-    
-            diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
-
-            /*miniter = 0.29;
-            maxiter = 0.5;
-            float fb = zeroToOne(miniter,maxiter,iter);
-
-            float aud =getAudio(int(fb * 13.0));
-
-            diffuseColor = HSLtoRGB(fb,1.0,.5);*/
-        }
-        // reset values
-        iter = 0.0;
+        diffuseColor = findDiffuseColor( iter );
     } 
     else if (shape.shapeType == JULIA) {
 
-        float aud = getAudio( 4 ); // change this to see how it looks
+        /*float aud = getAudio( 4 ); // change this to see how it looks
 
         float shift = oneToZero(-0.2,0.0,1.0 - aud);
         miniter = 0.29 + shift;
@@ -265,11 +258,12 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
 
         diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
         // reset values
-        iter = 0.0;
+        iter = 0.0;*/
+        diffuseColor = findDiffuseColor( iter );
     }
     else if (shape.shapeType == JULIA3D) {
 
-        float aud = getAudio( 4 ); // change this to see how it looks
+        /*float aud = getAudio( 4 ); // change this to see how it looks
 
         float shift = oneToZero(-0.2,0.0,1.0 - aud);
         miniter = 0.29 + shift;
@@ -277,7 +271,9 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
 
         diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
         // reset values
-        iter = 0.0;
+        iter = 0.0;*/
+
+        diffuseColor = findDiffuseColor( iter );
     }
     else if (shape.shapeType == INFSPHERE && isAnimated) {
         float rad = getShapeRadius(shape);
