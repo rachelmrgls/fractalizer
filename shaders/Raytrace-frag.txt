@@ -342,8 +342,9 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
 	return outputColor;
 }
 
-float sphere_de( vec3 p, float r ) {
-    return sqrt( dot( p, p ) ) - r;
+float sphere_de( vec3 p, float r, float deltaY ) {
+    vec3 q = vec3(p.x,p.y + deltaY,p.z);
+    return sqrt( dot( q, q ) ) - r;
 }
 
 // Created by inigo quilez - iq/2013
@@ -617,9 +618,9 @@ vec3 fDiff_infSpheres(vec3 pos, float rad) {
 
     vec3 dx = vec3(EPS,0.0,0.0);
     
-    return normalize(vec3(sphere_de(pos + dx.xyy,rad) - sphere_de(pos - dx.xyy,rad),
-            sphere_de(pos + dx.yxy,rad) - sphere_de(pos - dx.yxy,rad),
-            sphere_de(pos + dx.yyx,rad) - sphere_de(pos - dx.yyx,rad)));
+    return normalize(vec3(sphere_de(pos + dx.xyy,rad,0.0) - sphere_de(pos - dx.xyy,rad,0.0),
+            sphere_de(pos + dx.yxy,rad,0.0) - sphere_de(pos - dx.yxy,rad,0.0),
+            sphere_de(pos + dx.yyx,rad,0.0) - sphere_de(pos - dx.yyx,rad,0.0)));
 }
 
 vec3 fDiff_menger(vec3 pos, int level) {
@@ -748,9 +749,9 @@ float findIntersectionWithInfSphere( vec3 pos, Shape shape, out Intersection int
     
     float fb = bounceShape( pos, rad );
 
-    vec3 modpos = vec3(mod(pos.x,2.0 * rad) - rad,pos.y + fb * 7.0,mod(pos.z,2.0 * rad) - rad); 
+    vec3 modpos = vec3(mod(pos.x,2.0 * rad) - rad,pos.y,mod(pos.z,2.0 * rad) - rad); 
     
-    float dist = sphere_de( modpos, rad );
+    float dist = sphere_de( modpos, rad, fb * 7.0 );
 
     intersect.position = pos;
 
@@ -768,7 +769,7 @@ float findIntersectionWithSphere( vec3 pos, Shape shape, out Intersection inters
     //pos.y += float(audio[0]) * 10.0/255.0;
 
     vec3 tmp = pos - cen;
-    float dist = sphere_de(tmp,rad);
+    float dist = sphere_de(tmp,rad,0.0);
 
     intersect.position = pos;
     intersect.normal = normalize(tmp);
