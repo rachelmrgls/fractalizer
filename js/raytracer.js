@@ -53,7 +53,7 @@ Raytracer.handleMouseUp = function(event) {
     var poop;
     poop = Raytracer.gl.getUniform(Raytracer.program, whatever, poop);
    console.log(poop)*/
-   console.log(Raytracer.RotationMatrix);
+   //console.log(Raytracer.RotationMatrix);
     //console.log(whatever);
 };  
 
@@ -185,8 +185,7 @@ Raytracer.init = function (height, width, debug, value, scene ) {
         mat4.multiply(newRotationMatrix, Raytracer.RotationMatrix, Raytracer.RotationMatrix);
     }
 
-    console.log(Raytracer.RotationMatrix);
-    
+    //console.log(Raytracer.RotationMatrix);
 	
     Raytracer.value = value;
 

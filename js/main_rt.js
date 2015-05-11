@@ -163,10 +163,10 @@ window.onload = function() {
         // only respond to 'I' key
         if (event.which == 38) {
             // up arrow key
-        	Raytracer.handleZoom(0.0,0.0,1.0);	
+        	Raytracer.handleZoom(0.0,1.0,0.0);	
         } else if (event.which == 40) {
             // down arrow key
-        	Raytracer.handleZoom(0.0,0.0,-1.0);	
+        	Raytracer.handleZoom(0.0,-1.0,0.0);	
         } else if (event.which == 37) {
             // left arrow key pressed
             Raytracer.handleZoom(-1.0,0.0,0.0);
@@ -175,10 +175,10 @@ window.onload = function() {
             Raytracer.handleZoom(1.0,0.0,0.0);
         } else if (event.which == 188) {
             // left carat
-            Raytracer.handleZoom(0.0,-1.0,0.0);
+            Raytracer.handleZoom(0.0,0.0,-1.0);
         } else if (event.which == 190) {
             // right carat
-            Raytracer.handleZoom(0.0,1.0,0.0);
+            Raytracer.handleZoom(0.0,0.0,1.0);
         } 
 
         /*  d = 68; f = 70
