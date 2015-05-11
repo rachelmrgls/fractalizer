@@ -255,7 +255,7 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
         // distance from the origin - ranges from [0, sqrt(2)]
         float dist = zeroToOne(0.0,sqrt(2.0),dot(pos,pos));
 
-        float tmp = dist * 20.0;
+        float tmp = dist * 10.0;
 
         float fl = floor(tmp);
         float ce = ceil(tmp);
