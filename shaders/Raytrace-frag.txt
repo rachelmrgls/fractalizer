@@ -255,7 +255,7 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
         // distance from the origin - ranges from [0, sqrt(2)]
         float dist = zeroToOne(0.0,sqrt(2.0),dot(pos,pos));
         float aud = getAudio( int(dist * 15.0) );
-        diffuseColor = HSLtoRGB(aud,1.0,0.5);
+        diffuseColor = HSLtoRGB(1.0 - aud,1.0,0.5);
 
     } else {
         diffuseColor = obj.material.color;
