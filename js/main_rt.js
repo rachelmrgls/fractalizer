@@ -76,16 +76,26 @@ function pause() {
     startOffset += ctx.currentTime - startTime;
 }
 
+var julia_def = [[-0.4,0.6],[0.285,0.01],[0.45,0.1428],[-0.70176,-0.3842],[-0.835,-0.2321],[-0.8,0.156]];
+var julia_idx;
+
+
 window.onload = function() {
     
     var cmd = Parser.getCommands(document.URL)[0];
 
     var batchCMD = cmd.scene || "default";
 
-    var value1 = cmd.value1 || -0.4;
-    var value2 = cmd.value2 || 0.6;
+    julia_idx = 0;
 
-    var level = parseFloat(cmd.level) || 4.
+    var value1 = cmd.value1 || julia_def[julia_idx][0];
+    var value2 = cmd.value2 || julia_def[julia_idx][1];
+
+    var default_level;
+    if (batchCMD == "menger") {default_level = 4.;}
+    else {default_level = 8.;}
+
+    var level = parseFloat(cmd.level) || default_level;
         
     var value = [parseFloat(value1), parseFloat(value2)];
     var height = cmd.height || window.innerHeight;//600;
@@ -164,18 +174,24 @@ window.onload = function() {
             Raytracer.handleZoom(1.0,0.0,0.0);
         }
 
-    /*  d = 68; f = 70
+        /*  d = 68; f = 70
         j = 74; k = 75  */
-        //if (!animated) {
-            if (event.which == 68) {
-                Raytracer.handleValue(-1.0,0.0);
-            } else if (event.which == 70) {
-                Raytracer.handleValue(1.0,0.0);
-            } else if (event.which == 74) {
-                Raytracer.handleValue(0.0,-1.0);
-            } else if (event.which == 75) {
-                Raytracer.handleValue(0.0,1.0);
-            } 
-        //}
+        
+        else if (event.which == 68) {
+            Raytracer.handleValue(-1.0,0.0);
+        } else if (event.which == 70) {
+            Raytracer.handleValue(1.0,0.0);
+        } else if (event.which == 74) {
+            Raytracer.handleValue(0.0,-1.0);
+        } else if (event.which == 75) {
+            Raytracer.handleValue(0.0,1.0);
+        } 
+
+        // user pressed the enter key
+        else if (event.which == 13) {
+            // rotate defaults for julia
+            julia_idx = (julia_idx + 1) % julia_def.length;
+        }
+
     });
 }

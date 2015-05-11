@@ -537,7 +537,7 @@ float julia3d_de( vec3 p )
 
     if (isAnimated) {
         float aud = getAudio( 7 ); // [0,1]
-        shift = oneToZero(-2.0,2.0,aud) * 0.01;
+        shift = oneToZero(-2.0,2.0,aud) * 0.03; // RACHEL: play with .03?? see what you like
     }
     else {
         shift = 0.0;

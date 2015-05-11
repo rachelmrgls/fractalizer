@@ -33,12 +33,9 @@ Controls
 -apollonian gasket, with translucency (bubbles + random bubbly colors); look at assignment 3 refraction stuff; colored based on bubble size, smaller bubbles more translucent;
 a light that moves with the camera
 
--verify that key controls work to control 4th dimension in julia3d
 -find screen recording software thats free + records mac audio
 
-
 displace along normals to music, based on recursion level (apollonian, menger)
-julia3d make 4th dim move w/ music in animated mode
 
 apollonian coloring
 
