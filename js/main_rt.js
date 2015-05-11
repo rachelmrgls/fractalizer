@@ -90,13 +90,13 @@ window.onload = function() {
     var value1 = cmd.value1 || julia_def[julia_idx][0];
     var value2 = cmd.value2 || julia_def[julia_idx][1];
 
+    var batchCMD = cmd.scene || "menger";
+
     var default_level;
     if (batchCMD == "menger") {default_level = 4.;}
     else {default_level = 8.;}
 
     var level = parseFloat(cmd.level) || default_level;
-
-    var batchCMD = cmd.scene || "menger";
         
     var value = [parseFloat(value1), parseFloat(value2)];
     var height = cmd.height || window.innerHeight;//600;
