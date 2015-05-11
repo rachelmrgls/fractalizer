@@ -226,7 +226,7 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
     if (shape.shapeType == MANDELBROT) {
         // shift color interval based on single audio
 
-        //if (isAnimated) {
+        if (isAnimated) {
             float aud = getAudio( 10 );
     
             float shift = oneToZero(-0.2,0.0,1.0 - aud);
