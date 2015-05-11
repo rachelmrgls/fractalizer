@@ -421,7 +421,7 @@ float menger_de( vec3 p, int level ) {
     float off = 1.5*sin( 0.01*iGlobalTime );
     
     float s = 1.0;
-    for( int m=0; m< MAX_RECURSION; m++ )
+    for( int m = 0; m < MAX_RECURSION; m++ )
     {
         if (m >= level) break;
 
@@ -587,9 +587,14 @@ float tetra_de( vec3 p ) {
         d = length(z-a3); if (d < dist) { c = a3; dist=d; }
         d = length(z-a4); if (d < dist) { c = a4; dist=d; }
         z = Scale*z-c*(Scale-1.0);
+<<<<<<< Updated upstream
     }*/
  
     //return length(z) * pow(Scale, float(-n));
+=======
+    }
+    return length(z) * pow(Scale, float(-n));*/
+>>>>>>> Stashed changes
 
 /*  , int level, float scale, float offset
     for ( int i = 0; i < MAX_RECURSION; i++ ) {
@@ -619,6 +624,14 @@ vec3 fDiff_infSpheres(vec3 pos, float rad) {
 }
 
 vec3 fDiff_menger(vec3 pos, int level) {
+
+    vec3 dx = vec3(EPS,0.0,0.0);
+
+    return normalize(vec3(menger_de(pos + dx.xyy,level) - menger_de(pos - dx.xyy,level),
+            menger_de(pos + dx.yxy,level) - menger_de(pos - dx.yxy,level),
+            menger_de(pos + dx.yyx,level) - menger_de(pos - dx.yyx,level)));
+}
+vec3 fDiff_tetra(vec3 pos, int level) {
 
     vec3 dx = vec3(EPS,0.0,0.0);
 

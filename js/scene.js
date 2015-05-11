@@ -13,8 +13,9 @@ Scene.default = function () {
     Raytracer.setUniformMaterial( '1f','shininess', 200 ); 
     Raytracer.setUniformMaterial( '3f','color', 0.2, 0.4, 0.5 );
     
-    //Raytracer.addSphere( 0.0, 0.0, 0.0, 5.0 );
+    //Raytracer.addSphere( -2.0, -4.0, 0.0, 1.0 );
     Raytracer.addInfSphere( 1.0 ); // radius
+    // Raytracer.addMenger( 1.0, 4.0 ); // recursion level, scale
 
     Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);
     Raytracer.setUniform('1i', 'isBounded', 0);

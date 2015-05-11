@@ -83,8 +83,7 @@ var julia_idx;
 window.onload = function() {
     
     var cmd = Parser.getCommands(document.URL)[0];
-
-    var batchCMD = cmd.scene || "default";
+    // var batchCMD = cmd.scene || "default";
 
     julia_idx = 0;
 
@@ -96,6 +95,8 @@ window.onload = function() {
     else {default_level = 8.;}
 
     var level = parseFloat(cmd.level) || default_level;
+
+    var batchCMD = cmd.scene || "menger";
         
     var value = [parseFloat(value1), parseFloat(value2)];
     var height = cmd.height || window.innerHeight;//600;
