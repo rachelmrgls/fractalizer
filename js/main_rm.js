@@ -270,7 +270,8 @@ window.onload = function() {
         if ( event.which == 73 ) {
             snapShot();
         }
-        else if ( event.which == 32 ) {
+        //space.32 ..> p.80
+        else if ( event.which == 80 ) {
             if (paused) {
                 play();
             } else {
