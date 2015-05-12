@@ -25,7 +25,11 @@ function init() {
 //load the mp3 file 
 function loadFile() { 
     var req = new XMLHttpRequest(); //
-    req.open("GET","music/Forever (Pt. II) Feat. Kaleem Taylor.mp3",true);//"Ten Feet Tall (Elephante Remix)
+    var music = document.getElementById("music").value;
+    if (music == "") {
+        music = "music/Forever (Pt. II) Feat. Kaleem Taylor.mp3";
+    }
+    req.open("GET",music,true);//"Ten Feet Tall (Elephante Remix)
     //we can't use jquery because we need the arraybuffer type 
     req.responseType = "arraybuffer"; 
     req.onload = function() { 
@@ -178,11 +182,11 @@ window.onload = function() {
         } else if (event.which == 188) {
             // left carat
             Raytracer.handleZoom(0.0,0.0,-zoom);
-            this.zoom = zoom * 2;
+            this.zoom = zoom * 1.02;
         } else if (event.which == 190) {
             // right carat
             Raytracer.handleZoom(0.0,0.0,zoom);
-            this.zoom = zoom/2;
+            this.zoom = zoom/1.02;
         } 
 
         /*  d = 68; f = 70
