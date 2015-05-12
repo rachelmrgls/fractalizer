@@ -109,6 +109,7 @@ window.onload = function() {
                 Gui.values.value1 = -0.4;
                 Gui.values.value2 = 0.6;
             }
+            Gui.values.song = "dummy"
         }
 
 
