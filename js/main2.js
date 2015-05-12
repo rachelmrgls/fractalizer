@@ -14,10 +14,10 @@ window.requestAnimationFrame = window.requestAnimationFrame || ( function() {
 })();
 
 var controlsChangeCallback = function() {
-	Raymarcher.mu.cur[0] = Gui.values.r;
-	Raymarcher.mu.cur[1] = Gui.values.i;
-	Raymarcher.mu.cur[2] = Gui.values.j;
-	Raymarcher.mu.cur[3] = Gui.values.k;
+	Raymarcher.mu.cur[0] = Gui.values.mu1;
+	Raymarcher.mu.cur[1] = Gui.values.mu2;
+	Raymarcher.mu.cur[2] = Gui.values.mu3;
+	Raymarcher.mu.cur[3] = Gui.values.mu4;
 }
 
 // when HTML is finished loading, do this
@@ -28,6 +28,30 @@ window.onload = function() {
 
 	Raymarcher.init('julia3D');
 	Raymarcher.update();
+
+	window.addEventListener( 'keydown', function( event ) {
+        // user pressed the enter key
+        console.log(event.which)
+        if (event.which == 189) {
+        	Raymarcher.translate[2] += 0.1;
+        }
+        else if (event.which == 187) {
+        	Raymarcher.translate[2] -= 0.1;
+        }
+        else if (event.which == 37) {
+        	Raymarcher.translate[1] += 0.1;
+        }
+        else if (event.which == 38) {
+        	Raymarcher.translate[0] -= 0.1;
+        }
+        else if (event.which == 39) {
+        	Raymarcher.translate[1] -= 0.1;
+        }
+        else if (event.which == 40) {
+        	Raymarcher.translate[0] += 0.1;
+        }
+
+    });
 
 };
 

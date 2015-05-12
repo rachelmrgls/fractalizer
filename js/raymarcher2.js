@@ -29,7 +29,6 @@ Raymarcher.handleMouseUp = function(event) {
 
 Raymarcher.handleZoom = function(delta) {
 	mat4.translate(Raymarcher.RotationMatrix, [0.0, 0.0, 0.5 * delta]);
-    Raymarcher.needsToDraw = true;
 };
 
 Raymarcher.handleMouseMove = function(event) {
@@ -131,6 +130,13 @@ Raymarcher.init = function (shapeName, debug) {
 
     this.mainShader = this.getShader(shapeName,debug);
     this.shader2    = this.getShader2(debug);
+
+    Raymarcher.RotationMatrix = mat4.create();
+    mat4.identity(Raymarcher.RotationMatrix);
+
+    canvas.onmousedown = Raymarcher.handleMouseDown;
+    document.onmouseup = Raymarcher.handleMouseUp;
+    document.onmousemove = Raymarcher.handleMouseMove;
 };
 
 
@@ -391,14 +397,13 @@ var B = [ 0.0, 0.0, 0.0 ];
 // light parameters ----------
 var light = [ 0.0, 0.0, 0.0, 0.0 ];    // point light location
 
-var translate = [ 0.0, 0.0 ];
-var zoom = 1.3;    // this whole set up needs to change (also it's counter intuitive: + is farther away)
-var curRotation = [
-    1.0, 0.0, 0.0, 0.0,
-    0.0, 1.0, 0.0, 0.0,
-    0.0, 0.0, 1.0, 0.0,
-    0.0, 0.0, 0.0, 0.0
-];
+Raymarcher.translate = [ 0.0, 0.0, 1.3 ];
+// Raymarcher.RotationMatrix = [
+//     1.0, 0.0, 0.0, 0.0,
+//     0.0, 1.0, 0.0, 0.0,
+//     0.0, 0.0, 1.0, 0.0,
+//     0.0, 0.0, 0.0, 1.0
+// ];
 
 Raymarcher.mu = {
     cur: [ 0.0, 0.0, 0.0, 0.0 ]
@@ -417,13 +422,18 @@ Raymarcher.calculateView = function () {
     // var upStart =     [ 0.0, 1.0, 0.0, 0.0 ];    // up is initially along the y-axis
 
     // translate the eye and look at points
-    eyeStart[0] += translate[0];
-    eyeStart[1] += translate[1];
-    eyeStart[2] += zoom;
-    lookatStart[0] += translate[0];
-    lookatStart[1] += translate[1];
-    lookatStart[2] += zoom;
+    eyeStart[0] += Raymarcher.translate[0];
+    eyeStart[1] += Raymarcher.translate[1];
+    eyeStart[2] += Raymarcher.translate[2];
+    lookatStart[0] += Raymarcher.translate[0];
+    lookatStart[1] += Raymarcher.translate[1];
+    lookatStart[2] += Raymarcher.translate[2];
 
+
+    // var newRotationMatrix = mat4.create();
+    // mat4.identity(newRotationMatrix);
+    // console.log(Raymarcher.RotationMatrix)
+    // console.log(newRotationMatrix)
 
     // rotate eye, lookat, and up by multiplying them with the current rotation matrix
     for( var i=0; i < 4; i++ ) {
@@ -432,9 +442,9 @@ Raymarcher.calculateView = function () {
         up[i]     = 0.0;
 
         for( var j=0; j<4; j++ ) {
-            eye[i]    += curRotation[i*4+j] * eyeStart[j];
-            lookAt[i] += curRotation[i*4+j] * lookatStart[j];
-            up[i]     += curRotation[i*4+j] * upStart[j];
+            eye[i]    += Raymarcher.RotationMatrix[i*4+j] * eyeStart[j];
+            lookAt[i] += Raymarcher.RotationMatrix[i*4+j] * lookatStart[j];
+            up[i]     += Raymarcher.RotationMatrix[i*4+j] * upStart[j];
         }
     }
 
@@ -443,7 +453,7 @@ Raymarcher.calculateView = function () {
 
     // var rotationMatrix = new THREE.Matrix4();
     // var eyeStart2 = new THREE.Vector4(0.0, 0.0, 1.0, 1.0);
-    // var translate2 = new THREE.Vector4(translate[0], translate[1], zoom, 0.0);
+    // var translate2 = new THREE.Vector4(Raymarcher.translate[0], Raymarcher.translate[1], Raymarcher.translate[2], 0.0);
     // eyeStart2.add(translate2)
     // eyeStart2.setAxisAngleFromRotationMatrix(rotationMatrix)
     // // console.log(eyeStart2)

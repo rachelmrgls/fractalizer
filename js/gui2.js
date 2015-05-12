@@ -52,10 +52,10 @@ Gui.values = {
 	//Shading Model
 	// shadingModel : Gui.shadingList[0],
     // muVals : [0.0, 0.0, 0.0, 0.0]
-    r : 1.0,
-    i : 1.0,
-    j : 1.0,
-    k : 1.0,
+    mu1 : 1.0,
+    mu2 : 1.0,
+    mu3 : 1.0,
+    mu4 : 1.0,
 	// texture : Gui.textureList[0],
 	// ambient: "#252137",
 	// diffuse: "#705d5d",
@@ -65,10 +65,10 @@ Gui.values = {
 
 // defaults only hold actual mesh modifiers, no display
 Gui.defaults = {
-    r: 0.0,
-    i: 0.0,
-    j: 0.0,
-    k: 0.0,
+    mu1: 0.0,
+    mu2: 0.0,
+    mu3: 0.0,
+    mu4: 0.0,
 };
 
 Gui.selection_possible = true;
@@ -99,16 +99,10 @@ Gui.init = function (controlsChangeCallback ) {
     // var shading = gui.add( Gui.values, "shadingModel", Gui.shadingList );
 
     var gc = {};
-    gc.r = gui.add( Gui.values,'r',-2.0,2.0).step(0.05).setValue(  Gui.defaults.r );
-    gc.i = gui.add( Gui.values,'i',-2.0,2.0).step(0.05).setValue(  Gui.defaults.i );
-    gc.j = gui.add( Gui.values,'j',-2.0,2.0).step(0.05).setValue(  Gui.defaults.j );
-    gc.k = gui.add( Gui.values,'k',-1.15,1.15).step(0.05).setValue(  Gui.defaults.k );
-	// gc.texture = gui.add( Gui.values,'texture', Gui.textureList);
-	// gc.ambient = gui.addColor( Gui.values, 'ambient' );
-	// gc.diffuse = gui.addColor( Gui.values, 'diffuse' );
-	// gc.specular = gui.addColor( Gui.values, 'specular' );
-	
-	// gc.shininess = gui.add( Gui.values, 'shininess', 0.0,100.0 ).step(5.0).setValue( Gui.defaults.inflate );
+    gc.mu1 = gui.add( Gui.values,'mu1',-2.0,2.0).step(0.05).name('r').setValue(  Gui.defaults.mu1 );
+    gc.mu2 = gui.add( Gui.values,'mu2',-2.0,2.0).step(0.05).name('i').setValue(  Gui.defaults.mu2 );
+    gc.mu3 = gui.add( Gui.values,'mu3',-2.0,2.0).step(0.05).name('j').setValue(  Gui.defaults.mu3 );
+    gc.mu4 = gui.add( Gui.values,'mu4',-1.15,1.15).step(0.05).name('k').setValue(  Gui.defaults.mu4 );
 	
     // Helper functions
     var inReset = false;
