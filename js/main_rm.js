@@ -145,17 +145,16 @@ window.onload = function() {
 
 
 
-        batchCMD = Gui.values.scene
+        batchCMD = Gui.values.scene;
         createScene(Gui.values.scene, Gui.values.level);
 
         if ( Gui.values.animated ) {
             animated = 1;
             if ("music/" + Gui.values.song !== music || songNeedsChange) {
-                src = undefined;
-                pause();
-                init(Gui.values.song);
+                this.pause();
+                this.init(Gui.values.song);
             } else {
-                play();
+                this.play();
             }
         } else {
             pause();
