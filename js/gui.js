@@ -40,7 +40,7 @@ Gui.values = {
     'Fractals' : function () {},
 
     value1    : 0.37,
-    level : 0,
+    level     : 0,
     value2    : 0.1428,
     animated  : false,
 };
@@ -50,7 +50,7 @@ Gui.values = {
 Gui.defaults = {
 
     value1    : 0.37,
-    level : 0,
+    level     : 0,
     value2    : 0.1428,
 
     animated : false,
@@ -103,7 +103,7 @@ Gui.init = function ( controlsChangeCallback ) {
     gc.featL   = folderFT.add( Gui.values, 'scene', Gui.sceneList ).name("Feature");
     gc.animated = folderFT.add( Gui.values, "animated" ).name( "Animated" );
 
-    gc.level     = folderFT.add( Gui.values, "level", 0, 15 ).name( "Recursion level" ).step( 1 ).setValue( Gui.defaults.level );
+    gc.level     = folderFT.add( Gui.values, "level", 0, 15 ).name( "Recursion level" ).step( 1 ).setValue( Gui.defaults.level ).listen();
     gc.value1    = folderFT.add( Gui.values, "value1", -1.0, 1.0 ).name( "Value 1" ).step( 0.001 ).setValue( Gui.defaults.value1 ).listen();
     gc.value2   = folderFT.add( Gui.values, "value2", -1.0, 1.0 ).name( "Value 2" ).step( 0.001 ).setValue( Gui.defaults.value2 ).listen();
 

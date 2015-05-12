@@ -93,7 +93,6 @@ window.onload = function() {
 
         Raytracer.needsToDraw = true
 
-        Raytracer.value = [Gui.values.value1,Gui.values.value2];
 
         height = cmd.height || window.innerHeight;
         width  = cmd.width  || window.innerWidth;
@@ -102,19 +101,29 @@ window.onload = function() {
             width  = parseInt(parts[0]);
             height = parseInt(parts[1]);
         }
+
+
+        if (batchCMD !== Gui.values.scene) {
+            if (Gui.values.scene === "menger") {Gui.values.level = 4.;}
+            else {Gui.values.level = 8.;}
+
+            if (Gui.values.scene === "julia3d" || Gui.values.scene === "julia") {
+                Gui.values.value1 = -0.4;
+                Gui.values.value2 = 0.6;
+            }
+        }
+
+
+        Raytracer.value = [Gui.values.value1,Gui.values.value2];
         Raytracer.init(height, width, debug, Raytracer.value, Gui.values.scene );
 
         Raytracer.objectID = 0;
         Raytracer.lightID = 0;
+
+
+
+        batchCMD = Gui.values.scene
         createScene(Gui.values.scene, Gui.values.level);
-
-
-        // if (Gui.values.song === "none") {
-        //     pause();
-        // } else if (Gui.values.song !== music) {
-        //     pause();
-        //     init(Gui.values.song);
-        // }
 
         if ( Gui.values.animated ) {
             animated = 1;
@@ -143,11 +152,10 @@ window.onload = function() {
 
     var batchCMD = cmd.scene || "menger";
 
-    var default_level;
-    if (batchCMD == "menger") {default_level = 0.;}
-    else {default_level = 8.;}
+    if (batchCMD == "menger") {Gui.values.level = 4.;}
+    else {Gui.values.level = 8.;}
 
-    var level = parseFloat(cmd.level) || default_level;
+    var level = parseFloat(cmd.level) || Gui.values.level;
         
     var value = [parseFloat(value1), parseFloat(value2)];
     Gui.values.value1 = value[0];
