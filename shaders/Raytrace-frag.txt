@@ -236,7 +236,7 @@ vec3 findDiffuseColor( float iter ) {
     return diffuseColor;
 }
 
-vec3 calcDiffuseColor(Object obj) {
+vec3 calcDiffuseColor(Object obj, vec3 pos) {
     Shape shape = obj.shape;
     vec3 diffuseColor;
 
@@ -316,7 +316,7 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
 	
     if (isAnimated && getAudio(0) < EPS) return vec3(0.0);
 
-    vec3 diffuseColor = calcDiffuseColor(obj);
+    vec3 diffuseColor = calcDiffuseColor(obj,pos);
 
 	vec3 outputColor = vec3( 0.0, 0.0, 0.0 ); // color defaults to black	
 	
