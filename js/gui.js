@@ -5,7 +5,7 @@ var Gui = Gui || {};
 // list of meshes available in the GUI
 Gui.sceneList = [
     "menger",
-    "default",
+    "spheres",
     "mandelbrot",
     "julia",
     "julia3d",
@@ -17,7 +17,7 @@ Gui.musicList = [
     "Forever (Pt. II) Feat. Kaleem Taylor.mp3",
     "Compass (Louis The Child Remix).mp3",
     "All Too Well.m4a",
-    "Rather Be.mp4",
+    "Rather Be (Elephante Remix).mp3",
 ];
 
 Gui.windowSizes = [ "full","400x400","600x400","600x600","800x600","800x800" ];

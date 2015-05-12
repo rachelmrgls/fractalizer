@@ -81,8 +81,8 @@ function pause() {
     // Measure how much time passed since the last pause.
     startOffset += ctx.currentTime - startTime;
 }
-
-var julia_def = [[-0.4,0.6],[0.285,0.01],[0.45,0.1428],[0.37,0.1428],[-0.70176,-0.3842],[-0.835,-0.2321],[-0.8,0.156]];
+// defining the julia presets
+var julia_def = [[-0.4,0.6],[0.285,0.01],[0.37,0.1428],[-0.70176,-0.3842],[-0.8,0.156]];
 var julia_idx;
 
 

@@ -1,6 +1,6 @@
 var Scene = Scene || {};
 
-Scene.default = function () {
+Scene.spheres = function () {
     Raytracer.setUniform('3f', 'camera' ,0.0, 0.0, -150.0);    
     
     // Matte Sphere
