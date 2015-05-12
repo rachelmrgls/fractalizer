@@ -330,8 +330,8 @@ vec3 calcSpecularColor(vec3 rayOrigin, Object obj, vec3 pos, vec3 normalVector, 
     Light cameraLight;
     cameraLight.position = rayOrigin;
     cameraLight.color = vec3(1.0);
-    cameraLight.intensity = 30.0;
-    cameraLight.attenuate = 1.0;
+    cameraLight.intensity = 7.0;
+    cameraLight.attenuate = 3.0;
 
     outputColor += addLight(cameraLight,diffuseColor,obj,pos,normalVector,eyeVector,phongOnly);
 

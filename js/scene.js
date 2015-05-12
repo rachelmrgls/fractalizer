@@ -11,18 +11,13 @@ Scene.default = function () {
     Raytracer.setUniformMaterial( '1i','materialReflectType', Raytracer.NONEREFLECT); 
     Raytracer.setUniformMaterial( '3f','specular', 0.8, 0.8, 0.8 ); 
     Raytracer.setUniformMaterial( '1f','shininess', 200 ); 
-    Raytracer.setUniformMaterial( '3f','color', 0.2, 0.4, 0.5 );
-    
-    //Raytracer.addSphere( -2.0, -4.0, 0.0, 1.0 );
+    Raytracer.setUniformMaterial( '3f','color', 0.2, 0.4, 0.5 );    
     Raytracer.addInfSphere( 1.0 ); // radius
-    // Raytracer.addMenger( 1.0, 4.0 ); // recursion level, scale
 
     Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);
     Raytracer.setUniform('1i', 'isBounded', 0);
 
-    //Raytracer.addLight(-20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 10.0, 1.5);
     Raytracer.addLight( 20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 10.0, 1);
-    //Raytracer.addLight(-10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 20.0, 1);
     Raytracer.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 30.0, 1);
     Raytracer.setUniform('1i', 'numLights', Raytracer.lightID);
 };
@@ -32,7 +27,7 @@ Scene.apollonian = function (level) {
     
     // Matte Sphere
     Raytracer.resetMaterial();
-        Raytracer.setUniformMaterial( '1i','materialType', Raytracer.PHONGMATERIAL);
+    Raytracer.setUniformMaterial( '1i','materialType', Raytracer.PHONGMATERIAL);
     Raytracer.setUniformMaterial( '1i','materialReflectType', Raytracer.NONEREFLECT); 
     Raytracer.setUniformMaterial( '3f','specular', 0.8, 0.8, 0.8 ); 
     Raytracer.setUniformMaterial( '1f','shininess', 200 ); 
@@ -42,10 +37,8 @@ Scene.apollonian = function (level) {
     
     Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);
     
-    //Raytracer.addLight(-20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 10.0, 1.5);
     Raytracer.addLight( 20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 40.0, 2);
-    //Raytracer.addLight(-10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 20.0, 1);
-    Raytracer.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 40.0, 1);
+    //Raytracer.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 40.0, 1);
     Raytracer.setUniform('1i', 'numLights', Raytracer.lightID);
     Raytracer.setUniform('1i', 'isBounded', 0);
 };
