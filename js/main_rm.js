@@ -85,13 +85,11 @@ function pause() {
 var julia_def = [[-0.4,0.6],[0.285,0.01],[0.37,0.1428],[-0.70176,-0.3842],[-0.8,0.156]];
 var julia_idx;
 
-
-
 window.onload = function() {
  
     var controlsChangeCallback = function() {
 
-        Raytracer.needsToDraw = true
+        Raymarcher.needsToDraw = true
 
 
         height = cmd.height || window.innerHeight;
@@ -105,7 +103,8 @@ window.onload = function() {
 
         if (batchCMD !== Gui.values.scene) {
             if (Gui.values.scene === "menger") {Gui.values.level = 4.;}
-            else {Gui.values.level = 8.;}
+            else if (Gui.values.scene === "apollonian") {Gui.values.level = 8.;}
+            else {Gui.values.level = 0.;}
 
             if (Gui.values.scene === "julia3d" || Gui.values.scene === "julia") {
                 Gui.values.value1 = -0.4;
@@ -114,11 +113,11 @@ window.onload = function() {
         }
 
 
-        Raytracer.value = [Gui.values.value1,Gui.values.value2];
-        Raytracer.init(height, width, debug, Raytracer.value, Gui.values.scene );
+        Raymarcher.value = [Gui.values.value1,Gui.values.value2];
+        Raymarcher.init(height, width, debug, Raymarcher.value, Gui.values.scene );
 
-        Raytracer.objectID = 0;
-        Raytracer.lightID = 0;
+        Raymarcher.objectID = 0;
+        Raymarcher.lightID = 0;
 
 
 
@@ -152,8 +151,10 @@ window.onload = function() {
 
     var batchCMD = cmd.scene || "menger";
 
-    if (batchCMD == "menger") {Gui.values.level = 4.;}
-    else {Gui.values.level = 8.;}
+
+    if (batchCMD === "menger") {Gui.values.level = 4.;}
+    else if (batchCMD === "apollonian") {Gui.values.level = 8.;}
+    else {Gui.values.level = 0.;}
 
     var level = parseFloat(cmd.level) || Gui.values.level;
         
@@ -168,7 +169,7 @@ window.onload = function() {
     var paused = false;
     var debug = cmd.debug||false;
 
-    Raytracer.init(height, width, debug, value, batchCMD );
+    Raymarcher.init(height, width, debug, value, batchCMD );
     createScene(batchCMD, level);
     
     // if ( Gui.values.song !== "none" ) init(Gui.default.song);
@@ -186,7 +187,7 @@ window.onload = function() {
         var data = new Uint8Array(samples); 
         if (setup) fft.getByteFrequencyData(data); 
 
-        if (!animated || !paused) Raytracer.render(animated,data);
+        if (!animated || !paused) Raymarcher.render(animated,data);
         
         requestAnimationFrame(drawScene);
     }
@@ -226,23 +227,23 @@ window.onload = function() {
         // only respond to 'I' key
         if (event.which == 38) {
             // up arrow key
-        	Raytracer.handleZoom(0.0,-zoom,0.0);	
+        	Raymarcher.handleZoom(0.0,-zoom,0.0);	
         } else if (event.which == 40) {
             // down arrow key
-        	Raytracer.handleZoom(0.0,zoom,0.0);	
+        	Raymarcher.handleZoom(0.0,zoom,0.0);	
         } else if (event.which == 37) {
             // left arrow key pressed
-            Raytracer.handleZoom(zoom,0.0,0.0);
+            Raymarcher.handleZoom(zoom,0.0,0.0);
         } else if (event.which == 39) {
             // right arrow key pressed
-            Raytracer.handleZoom(-zoom,0.0,0.0);
+            Raymarcher.handleZoom(-zoom,0.0,0.0);
         } else if (event.which == 188) {
             // left carat
-            Raytracer.handleZoom(0.0,0.0,-zoom);
+            Raymarcher.handleZoom(0.0,0.0,-zoom);
             this.zoom = zoom * 1.02;
         } else if (event.which == 190) {
             // right carat
-            Raytracer.handleZoom(0.0,0.0,zoom);
+            Raymarcher.handleZoom(0.0,0.0,zoom);
             this.zoom = zoom/1.02;
         } 
 
@@ -250,28 +251,28 @@ window.onload = function() {
         j = 74; k = 75  */
         
         else if (event.which == 68) {
-            Raytracer.handleValue(-1.0,0.0);
-            Gui.values.value1 = Raytracer.value[0];
+            Raymarcher.handleValue(-1.0,0.0);
+            Gui.values.value1 = Raymarcher.value[0];
         } else if (event.which == 70) {
-            Raytracer.handleValue(1.0,0.0);
-            Gui.values.value1 = Raytracer.value[0];
+            Raymarcher.handleValue(1.0,0.0);
+            Gui.values.value1 = Raymarcher.value[0];
         } else if (event.which == 74) {
-            Raytracer.handleValue(0.0,-1.0);
-            Gui.values.value2 = Raytracer.value[1];
+            Raymarcher.handleValue(0.0,-1.0);
+            Gui.values.value2 = Raymarcher.value[1];
         } else if (event.which == 75) {
-            Raytracer.handleValue(0.0,1.0);
-            Gui.values.value2 = Raytracer.value[1];
+            Raymarcher.handleValue(0.0,1.0);
+            Gui.values.value2 = Raymarcher.value[1];
         } 
 
         // user pressed the enter key
         else if (event.which == 13) {
             // rotate defaults for julia
             julia_idx = (julia_idx + 1) % julia_def.length;
-            Raytracer.value[0] = julia_def[julia_idx][0];
-            Raytracer.value[1] = julia_def[julia_idx][1];
-            Gui.values.value1 = Raytracer.value[0];
-            Gui.values.value2 = Raytracer.value[1];
-            Raytracer.needsToDraw = true;
+            Raymarcher.value[0] = julia_def[julia_idx][0];
+            Raymarcher.value[1] = julia_def[julia_idx][1];
+            Gui.values.value1 = Raymarcher.value[0];
+            Gui.values.value2 = Raymarcher.value[1];
+            Raymarcher.needsToDraw = true;
         }
 
     });

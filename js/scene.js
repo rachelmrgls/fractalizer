@@ -1,134 +1,134 @@
 var Scene = Scene || {};
 
 Scene.spheres = function () {
-    Raytracer.setUniform('3f', 'camera' ,0.0, 0.0, -150.0);    
+    Raymarcher.setUniform('3f', 'camera' ,0.0, 0.0, -150.0);    
     
     // Matte Sphere
-    Raytracer.resetMaterial();
-    // I dunno what is wrong but when I put Raytracer.BASICMATERIAL instead of PHONG
+    Raymarcher.resetMaterial();
+    // I dunno what is wrong but when I put Raymarcher.BASICMATERIAL instead of PHONG
     // its just white?? idk why so i will not fix but someone else can if they feel inclined.
-    Raytracer.setUniformMaterial( '1i','materialType', Raytracer.PHONGMATERIAL);
-    Raytracer.setUniformMaterial( '1i','materialReflectType', Raytracer.NONEREFLECT); 
-    Raytracer.setUniformMaterial( '3f','specular', 0.8, 0.8, 0.8 ); 
-    Raytracer.setUniformMaterial( '1f','shininess', 200 ); 
-    Raytracer.setUniformMaterial( '3f','color', 0.2, 0.4, 0.5 );    
-    Raytracer.addInfSphere( 1.0 ); // radius
+    Raymarcher.setUniformMaterial( '1i','materialType', Raymarcher.PHONGMATERIAL);
+    Raymarcher.setUniformMaterial( '1i','materialReflectType', Raymarcher.NONEREFLECT); 
+    Raymarcher.setUniformMaterial( '3f','specular', 0.8, 0.8, 0.8 ); 
+    Raymarcher.setUniformMaterial( '1f','shininess', 200 ); 
+    Raymarcher.setUniformMaterial( '3f','color', 0.2, 0.4, 0.5 );    
+    Raymarcher.addInfSphere( 1.0 ); // radius
 
-    Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);
-    Raytracer.setUniform('1i', 'isBounded', 0);
+    Raymarcher.setUniform('1i', 'numObjects', Raymarcher.objectID);
+    Raymarcher.setUniform('1i', 'isBounded', 0);
 
-    Raytracer.addLight( 20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 10.0, 1);
-    Raytracer.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 30.0, 1);
-    Raytracer.setUniform('1i', 'numLights', Raytracer.lightID);
+    Raymarcher.addLight( 20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 10.0, 1);
+    Raymarcher.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 30.0, 1);
+    Raymarcher.setUniform('1i', 'numLights', Raymarcher.lightID);
 };
 
 Scene.apollonian = function (level) {
-    Raytracer.setUniform('3f', 'camera' ,0.0, 0.0, -15.0);    
+    Raymarcher.setUniform('3f', 'camera' ,0.0, 0.0, -15.0);    
     
     // Matte Sphere
-    Raytracer.resetMaterial();
-    Raytracer.setUniformMaterial( '1i','materialType', Raytracer.PHONGMATERIAL);
-    Raytracer.setUniformMaterial( '1i','materialReflectType', Raytracer.NONEREFLECT); 
-    Raytracer.setUniformMaterial( '3f','specular', 0.8, 0.8, 0.8 ); 
-    Raytracer.setUniformMaterial( '1f','shininess', 200 ); 
-    Raytracer.setUniformMaterial( '3f','color', 0.2, 0.4, 0.5 );
-    //Raytracer.addSphere( 0.0, 0.0, 0.0, 1.0 );
+    Raymarcher.resetMaterial();
+    Raymarcher.setUniformMaterial( '1i','materialType', Raymarcher.PHONGMATERIAL);
+    Raymarcher.setUniformMaterial( '1i','materialReflectType', Raymarcher.NONEREFLECT); 
+    Raymarcher.setUniformMaterial( '3f','specular', 0.8, 0.8, 0.8 ); 
+    Raymarcher.setUniformMaterial( '1f','shininess', 200 ); 
+    Raymarcher.setUniformMaterial( '3f','color', 0.2, 0.4, 0.5 );
+    //Raymarcher.addSphere( 0.0, 0.0, 0.0, 1.0 );
 
     console.log(level);
-    Raytracer.addApollonian( level ); // recursion level
+    Raymarcher.addApollonian( level ); // recursion level
     
-    Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);
+    Raymarcher.setUniform('1i', 'numObjects', Raymarcher.objectID);
     
-    Raytracer.addLight( 20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 40.0, 2);
-    // Raytracer.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 40.0, 1);
-    Raytracer.setUniform('1i', 'numLights', Raytracer.lightID);
-    Raytracer.setUniform('1i', 'isBounded', 0);
+    Raymarcher.addLight( 20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 40.0, 2);
+    // Raymarcher.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 40.0, 1);
+    Raymarcher.setUniform('1i', 'numLights', Raymarcher.lightID);
+    Raymarcher.setUniform('1i', 'isBounded', 0);
 
     console.log("here")
 
 };
 
 Scene.menger = function (level) {
-    Raytracer.setUniform('3f', 'camera' ,0.0, 0.0, -15.0);    
+    Raymarcher.setUniform('3f', 'camera' ,0.0, 0.0, -15.0);    
     
     // Matte Sphere
-    Raytracer.resetMaterial();
-    // I dunno what is wrong but when I put Raytracer.BASICMATERIAL instead of PHONG
+    Raymarcher.resetMaterial();
+    // I dunno what is wrong but when I put Raymarcher.BASICMATERIAL instead of PHONG
     // its just white?? idk why so i will not fix but someone else can if they feel inclined.
-    Raytracer.setUniformMaterial( '1i','materialType', Raytracer.PHONGMATERIAL);
-    Raytracer.setUniformMaterial( '1i','materialReflectType', Raytracer.NONEREFLECT); 
-    Raytracer.setUniformMaterial( '3f','specular', 0.8, 0.8, 0.8 ); 
-    Raytracer.setUniformMaterial( '1f','shininess', 200 ); 
-    Raytracer.setUniformMaterial( '3f','color', 0.2, 0.4, 0.5 );
-    //Raytracer.addSphere( 0.0, 0.0, 0.0, 1.0 );
-    Raytracer.addMenger( level ); // recursion level
+    Raymarcher.setUniformMaterial( '1i','materialType', Raymarcher.PHONGMATERIAL);
+    Raymarcher.setUniformMaterial( '1i','materialReflectType', Raymarcher.NONEREFLECT); 
+    Raymarcher.setUniformMaterial( '3f','specular', 0.8, 0.8, 0.8 ); 
+    Raymarcher.setUniformMaterial( '1f','shininess', 200 ); 
+    Raymarcher.setUniformMaterial( '3f','color', 0.2, 0.4, 0.5 );
+    //Raymarcher.addSphere( 0.0, 0.0, 0.0, 1.0 );
+    Raymarcher.addMenger( level ); // recursion level
 
     
-    Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);
+    Raymarcher.setUniform('1i', 'numObjects', Raymarcher.objectID);
     
-    //Raytracer.addLight(-20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 10.0, 1.5);
-    Raytracer.addLight( 20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 40.0, 2);
-    //Raytracer.addLight(-10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 20.0, 1);
-    Raytracer.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 40.0, 1);
-    Raytracer.setUniform('1i', 'numLights', Raytracer.lightID);
-    Raytracer.setUniform('1i', 'isBounded', 0);
+    //Raymarcher.addLight(-20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 10.0, 1.5);
+    Raymarcher.addLight( 20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 40.0, 2);
+    //Raymarcher.addLight(-10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 20.0, 1);
+    Raymarcher.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 40.0, 1);
+    Raymarcher.setUniform('1i', 'numLights', Raymarcher.lightID);
+    Raymarcher.setUniform('1i', 'isBounded', 0);
 };
 
 Scene.julia3d = function ( ) {
-    //Raytracer.setUniform('3f', 'camera' ,-3.29277, 0.499087, -0.896598 - 15);    
-    Raytracer.setUniform('3f', 'camera' ,0.0,0.0,-16.0); 
+    //Raymarcher.setUniform('3f', 'camera' ,-3.29277, 0.499087, -0.896598 - 15);    
+    Raymarcher.setUniform('3f', 'camera' ,0.0,0.0,-16.0); 
     // Matte Sphere
-    Raytracer.resetMaterial();
-    // I dunno what is wrong but when I put Raytracer.BASICMATERIAL instead of PHONG
+    Raymarcher.resetMaterial();
+    // I dunno what is wrong but when I put Raymarcher.BASICMATERIAL instead of PHONG
     // its just white?? idk why so i will not fix but someone else can if they feel inclined.
-    Raytracer.setUniformMaterial( '1i','materialType', Raytracer.PHONGMATERIAL);
-    Raytracer.setUniformMaterial( '1i','materialReflectType', Raytracer.NONEREFLECT); 
-    Raytracer.setUniformMaterial( '3f','specular', 0.8, 0.8, 0.8 ); 
-    Raytracer.setUniformMaterial( '1f','shininess', 200 ); 
-    Raytracer.setUniformMaterial( '3f','color', 0.92, 0.0, 0.5  );
+    Raymarcher.setUniformMaterial( '1i','materialType', Raymarcher.PHONGMATERIAL);
+    Raymarcher.setUniformMaterial( '1i','materialReflectType', Raymarcher.NONEREFLECT); 
+    Raymarcher.setUniformMaterial( '3f','specular', 0.8, 0.8, 0.8 ); 
+    Raymarcher.setUniformMaterial( '1f','shininess', 200 ); 
+    Raymarcher.setUniformMaterial( '3f','color', 0.92, 0.0, 0.5  );
 
-    Raytracer.addJulia3d(); // recursion level
+    Raymarcher.addJulia3d(); // recursion level
 
-    // Raytracer.setBound( 2.0, 0.0, 0.0, 0.0 );
-    Raytracer.setUniform('1i', 'isBounded', 0);
+    // Raymarcher.setBound( 2.0, 0.0, 0.0, 0.0 );
+    Raymarcher.setUniform('1i', 'isBounded', 0);
 
-    Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);
+    Raymarcher.setUniform('1i', 'numObjects', Raymarcher.objectID);
     
-    //Raytracer.addLight(-20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 10.0, 1.5);
-    Raytracer.addLight( 20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 40.0, 2);
-    //Raytracer.addLight(-10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 20.0, 1);
-    Raytracer.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 40.0, 1);
-    Raytracer.setUniform('1i', 'numLights', Raytracer.lightID);
+    //Raymarcher.addLight(-20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 10.0, 1.5);
+    Raymarcher.addLight( 20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 40.0, 2);
+    //Raymarcher.addLight(-10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 20.0, 1);
+    Raymarcher.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 40.0, 1);
+    Raymarcher.setUniform('1i', 'numLights', Raymarcher.lightID);
 
 
 };
 
 Scene.julia = function ( ) {
-    //Raytracer.setUniform('3f', 'camera' ,-3.29277, 0.499087, -0.896598 - 15);    
-     Raytracer.setUniform('3f', 'camera' ,0.0, 0.0, -16); 
-     //Raytracer.setUniform('3f','direction',0.0,0.0,0.0);
+    //Raymarcher.setUniform('3f', 'camera' ,-3.29277, 0.499087, -0.896598 - 15);    
+     Raymarcher.setUniform('3f', 'camera' ,0.0, 0.0, -16); 
+     //Raymarcher.setUniform('3f','direction',0.0,0.0,0.0);
     // Matte Sphere
-    Raytracer.resetMaterial();
-    // I dunno what is wrong but when I put Raytracer.BASICMATERIAL instead of PHONG
+    Raymarcher.resetMaterial();
+    // I dunno what is wrong but when I put Raymarcher.BASICMATERIAL instead of PHONG
     // its just white?? idk why so i will not fix but someone else can if they feel inclined.
-    Raytracer.setUniformMaterial( '1i','materialType', Raytracer.PHONGMATERIAL);
-    Raytracer.setUniformMaterial( '1i','materialReflectType', Raytracer.NONEREFLECT); 
-    Raytracer.setUniformMaterial( '3f','specular', 0.8, 0.8, 0.8 ); 
-    Raytracer.setUniformMaterial( '1f','shininess', 200 ); 
-    Raytracer.setUniformMaterial( '3f','color', 0.2, 0.4, 0.5 );
+    Raymarcher.setUniformMaterial( '1i','materialType', Raymarcher.PHONGMATERIAL);
+    Raymarcher.setUniformMaterial( '1i','materialReflectType', Raymarcher.NONEREFLECT); 
+    Raymarcher.setUniformMaterial( '3f','specular', 0.8, 0.8, 0.8 ); 
+    Raymarcher.setUniformMaterial( '1f','shininess', 200 ); 
+    Raymarcher.setUniformMaterial( '3f','color', 0.2, 0.4, 0.5 );
 
-    Raytracer.addJulia(); // recursion level
+    Raymarcher.addJulia(); // recursion level
 
-    // Raytracer.setBound( 2.0, 0.0, 0.0, 0.0 );
-    Raytracer.setUniform('1i', 'isBounded', 0);
+    // Raymarcher.setBound( 2.0, 0.0, 0.0, 0.0 );
+    Raymarcher.setUniform('1i', 'isBounded', 0);
 
-    Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);
+    Raymarcher.setUniform('1i', 'numObjects', Raymarcher.objectID);
     
-    //Raytracer.addLight(-20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 10.0, 1.5);
-    Raytracer.addLight( 20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 40.0, 2);
-    //Raytracer.addLight(-10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 20.0, 1);
-    Raytracer.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 40.0, 1);
-    Raytracer.setUniform('1i', 'numLights', Raytracer.lightID);
+    //Raymarcher.addLight(-20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 10.0, 1.5);
+    Raymarcher.addLight( 20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 40.0, 2);
+    //Raymarcher.addLight(-10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 20.0, 1);
+    Raymarcher.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 40.0, 1);
+    Raymarcher.setUniform('1i', 'numLights', Raymarcher.lightID);
 
 
 };
@@ -136,28 +136,28 @@ Scene.julia = function ( ) {
 
 
 Scene.mandelbrot = function () {
-    Raytracer.setUniform('3f', 'camera' ,0.0, 0.0, -16);//0.0, 0.0, -10.0);    
+    Raymarcher.setUniform('3f', 'camera' ,0.0, 0.0, -16);//0.0, 0.0, -10.0);    
 
     // Matte Sphere
-    Raytracer.resetMaterial();
-    // I dunno what is wrong but when I put Raytracer.BASICMATERIAL instead of PHONG
+    Raymarcher.resetMaterial();
+    // I dunno what is wrong but when I put Raymarcher.BASICMATERIAL instead of PHONG
     // its just white?? idk why so i will not fix but someone else can if they feel inclined.
-    Raytracer.setUniformMaterial( '1i','materialType', Raytracer.PHONGMATERIAL);//BASICMATERIAL);
-    Raytracer.setUniformMaterial( '1i','materialReflectType', Raytracer.NONEREFLECT); 
-    Raytracer.setUniformMaterial( '3f','specular', 0.8, 0.8, 0.8 ); 
-    Raytracer.setUniformMaterial( '1f','shininess', 200 ); 
-    Raytracer.setUniformMaterial( '3f','color', 0.2, 0.4, 0.5 );
-    //Raytracer.addSphere( 0.0, 0.0, 0.0, 1.0 );
-    Raytracer.addMandelbrot(); // recursion level
+    Raymarcher.setUniformMaterial( '1i','materialType', Raymarcher.PHONGMATERIAL);//BASICMATERIAL);
+    Raymarcher.setUniformMaterial( '1i','materialReflectType', Raymarcher.NONEREFLECT); 
+    Raymarcher.setUniformMaterial( '3f','specular', 0.8, 0.8, 0.8 ); 
+    Raymarcher.setUniformMaterial( '1f','shininess', 200 ); 
+    Raymarcher.setUniformMaterial( '3f','color', 0.2, 0.4, 0.5 );
+    //Raymarcher.addSphere( 0.0, 0.0, 0.0, 1.0 );
+    Raymarcher.addMandelbrot(); // recursion level
 
-    Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);
+    Raymarcher.setUniform('1i', 'numObjects', Raymarcher.objectID);
     
-    //Raytracer.addLight(-20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 10.0, 1.5);
-    Raytracer.addLight( 20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 40.0, 2);
-    //Raytracer.addLight(-10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 20.0, 1);
-    Raytracer.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 40.0, 1);
-    Raytracer.setUniform('1i', 'numLights', Raytracer.lightID);
+    //Raymarcher.addLight(-20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 10.0, 1.5);
+    Raymarcher.addLight( 20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 40.0, 2);
+    //Raymarcher.addLight(-10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 20.0, 1);
+    Raymarcher.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 40.0, 1);
+    Raymarcher.setUniform('1i', 'numLights', Raymarcher.lightID);
 
-    Raytracer.setUniform('1i', 'isBounded', 0);
+    Raymarcher.setUniform('1i', 'isBounded', 0);
 };
 
