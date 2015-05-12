@@ -103,9 +103,31 @@ window.onload = function() {
 
 
         if (batchCMD !== Gui.values.scene) {
-            if (Gui.values.scene === "menger") {Gui.values.level = 4.;}
-            else if (Gui.values.scene === "apollonian") {Gui.values.level = 8.;}
-            else {Gui.values.level = 0.;}
+            if (Gui.values.scene === "menger") {
+                Gui.values.level = 4.;
+                Gui.values.song = "Float (TheFatRat Remix).mp3";
+            }
+            else if (Gui.values.scene === "spheres") {
+                Gui.values.level = 0.;
+                Gui.values.song = "Wonder (feat. The Kite String Tangle).mp3";
+            }
+            else if (Gui.values.scene === "mandelbrot") {
+                Gui.values.level = 0.;
+                Gui.values.song = "Rather Be (Elephante Remix).mp3";
+            }
+            else if (Gui.values.scene === "julia2d") {
+                Gui.values.level = 0.;
+                Gui.values.song = "Forever (Pt. II) Feat. Kaleem Taylor.mp3";
+            }
+            else if (Gui.values.scene === "julia3d") {
+                Gui.values.level = 0.;
+                Gui.values.song = "Borderline.mp3";
+            }
+            else if (Gui.values.scene === "apollonian") {
+                Gui.values.level = 8.;
+                Gui.values.song = "Kanye (Ookay Remix).mp3";
+            }
+            else { console.log('unknown scene')}
 
             if (Gui.values.scene === "julia3d" || Gui.values.scene === "julia2d") {
                 Gui.values.value1 = -0.4;
@@ -157,10 +179,36 @@ window.onload = function() {
 
     var batchCMD = cmd.scene || "menger";
 
+    if (batchCMD === "menger") {
+        Gui.values.level = 4.;
+        Gui.values.song = "Float (TheFatRat Remix).mp3";
+    }
+    else if (batchCMD === "spheres") {
+        Gui.values.level = 0.;
+        Gui.values.song = "Wonder (feat. The Kite String Tangle).mp3";
+    }
+    else if (batchCMD === "mandelbrot") {
+        Gui.values.level = 0.;
+        Gui.values.song = "Rather Be (Elephante Remix).mp3";
+    }
+    else if (batchCMD === "julia2d") {
+        Gui.values.level = 0.;
+        Gui.values.song = "Forever (Pt. II) Feat. Kaleem Taylor.mp3";
+    }
+    else if (batchCMD === "julia3d") {
+        Gui.values.level = 0.;
+        Gui.values.song = "Borderline.mp3";
+    }
+    else if (batchCMD === "apollonian") {
+        Gui.values.level = 8.;
+        Gui.values.song = "Kanye (Ookay Remix).mp3";
+    }
+    else { console.log('unknown scene')}
 
-    if (batchCMD === "menger") {Gui.values.level = 4.;}
-    else if (batchCMD === "apollonian") {Gui.values.level = 8.;}
-    else {Gui.values.level = 0.;}
+    if (Gui.values.scene === "julia3d" || Gui.values.scene === "julia2d") {
+        Gui.values.value1 = -0.4;
+        Gui.values.value2 = 0.6;
+    }
 
     var level = parseFloat(cmd.level) || Gui.values.level;
         
@@ -180,7 +228,7 @@ window.onload = function() {
     createScene(batchCMD, level);
     
     // if ( Gui.values.song !== "none" ) init(Gui.default.song);
-    if ( animated ) init(Gui.default.song);
+    if ( animated ) init(Gui.values.song);
     drawScene();
     
 
@@ -283,6 +331,7 @@ window.onload = function() {
         Gui.gc.value2.updateDisplay()
 
     });
+    Gui.gc.song.updateDisplay()
     Gui.gc.level.updateDisplay()
     Gui.gc.value1.updateDisplay()
     Gui.gc.value2.updateDisplay()
