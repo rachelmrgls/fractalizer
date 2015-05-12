@@ -88,6 +88,8 @@ window.onload = function() {
  
     var controlsChangeCallback = function() {
 
+        var songNeedsChange = false
+
         Raymarcher.needsToDraw = true
 
 
@@ -105,11 +107,11 @@ window.onload = function() {
             else if (Gui.values.scene === "apollonian") {Gui.values.level = 8.;}
             else {Gui.values.level = 0.;}
 
-            if (Gui.values.scene === "julia3d" || Gui.values.scene === "julia") {
+            if (Gui.values.scene === "julia3d" || Gui.values.scene === "julia2d") {
                 Gui.values.value1 = -0.4;
                 Gui.values.value2 = 0.6;
             }
-            Gui.values.song = "dummy"
+            songNeedsChange = true
         }
 
 
@@ -126,7 +128,7 @@ window.onload = function() {
 
         if ( Gui.values.animated ) {
             animated = 1;
-            if ("music/" + Gui.values.song !== music) {
+            if ("music/" + Gui.values.song !== music || songNeedsChange) {
                 pause();
                 init(Gui.values.song);
             } else {

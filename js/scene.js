@@ -103,7 +103,7 @@ Scene.julia3d = function ( ) {
 
 };
 
-Scene.julia = function ( ) {
+Scene.julia2d = function ( ) {
     //Raymarcher.setUniform('3f', 'camera' ,-3.29277, 0.499087, -0.896598 - 15);    
      Raymarcher.setUniform('3f', 'camera' ,0.0, 0.0, -16); 
      //Raymarcher.setUniform('3f','direction',0.0,0.0,0.0);

@@ -13,7 +13,6 @@ window.requestAnimationFrame = window.requestAnimationFrame || ( function() {
 
 })();
 
-
 var controlsChangeCallback = function() {
 	Raymarcher.mu.cur[0] = Gui.values.r;
 	Raymarcher.mu.cur[1] = Gui.values.i;
