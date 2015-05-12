@@ -266,10 +266,10 @@ vec3 calcDiffuseColor(Object obj, vec3 pos) {
     return diffuseColor;
 }
 
-vec3 addLight( int i, vec3 diffuseColor, Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, bool phongOnly ) {
+vec3 addLight( Light light, vec3 diffuseColor, Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, bool phongOnly ) {
     vec3 outputColor = vec3( 0.0, 0.0, 0.0 ); // color defaults to black
 
-    vec3 lightVector = lights[i].position - pos;
+    vec3 lightVector = light.position - pos;
     //if ( pointInShadow( lights[i].position, lightVector ) ) continue;
 
     // add color to output color for each light, based on material type
@@ -280,13 +280,13 @@ vec3 addLight( int i, vec3 diffuseColor, Object obj, vec3 pos, vec3 normalVector
              obj.material.materialType == LAMBERTMATERIAL) {
         // get light attenuation
         float dist = length(lightVector);
-        float attenuation = lights[i].attenuate * dist * dist;
+        float attenuation = light.attenuate * dist * dist;
 
-        float diffuseIntensity = max(0.0, dot(normalVector, lightVector)) * lights[i].intensity;
+        float diffuseIntensity = max(0.0, dot(normalVector, lightVector)) * light.intensity;
         
         // glass and mirror objects have specular highlights but no diffuse lighting
         if (!phongOnly) {
-            outputColor += (diffuseColor * lights[i].color) * diffuseIntensity / attenuation; 
+            outputColor += (diffuseColor * light.color) * diffuseIntensity / attenuation; 
         }
         
         if (obj.material.materialType == PHONGMATERIAL) {
@@ -301,7 +301,7 @@ vec3 addLight( int i, vec3 diffuseColor, Object obj, vec3 pos, vec3 normalVector
 
                 float tmp = dot(Rhat,Vhat);
                 if (tmp > EPS) {
-                    phongTerm += obj.material.specular * pow(tmp,obj.material.shininess) * lights[i].intensity / (attenuation / 50.0);
+                    phongTerm += obj.material.specular * pow(tmp,obj.material.shininess) * light.intensity / (attenuation / 50.0);
                 }
             }
             // ----------- STUDENT CODE END ------------
@@ -324,7 +324,7 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
 
         if(i>=numLights) break; // because GLSL will not allow looping to numLights
 		
-        outputColor += addLight(i,diffuseColor,obj,pos,normalVector,eyeVector,phongOnly);
+        outputColor += addLight(lights[i],diffuseColor,obj,pos,normalVector,eyeVector,phongOnly);
 	}
 	
 	return outputColor;
