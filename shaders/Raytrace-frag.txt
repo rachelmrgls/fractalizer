@@ -312,7 +312,7 @@ vec3 addLight( Light light, vec3 diffuseColor, Object obj, vec3 pos, vec3 normal
     return outputColor;
 }
 
-vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, bool phongOnly) {
+vec3 calcSpecularColor(vec3 rayOrigin, Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, bool phongOnly) {
 	
     if (isAnimated && getAudio(0) < EPS) return vec3(0.0);
 
@@ -327,6 +327,14 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
         outputColor += addLight(lights[i],diffuseColor,obj,pos,normalVector,eyeVector,phongOnly);
 	}
 	
+    Light cameraLight;
+    cameraLight.position = rayOrigin;
+    cameraLight.color = vec3(1.0);
+    cameraLight.intensity = 30.0;
+    cameraLight.attenuate = 1.0;
+
+    outputColor += addLight(cameraLight,diffuseColor,obj,pos,normalVector,eyeVector,phongOnly);
+
 	return outputColor;
 }
 
@@ -841,9 +849,9 @@ vec3 marchRay( Ray ray ) {
     vec3 eyeVector = normalize(ray.origin - intersect.position);           
     if (dot(eyeVector, intersect.normal) < 0.0) { intersect.normal = -intersect.normal; }
 
-    vec3 resColor = calcSpecularColor(obj, intersect.position, intersect.normal, eyeVector, false);
+    vec3 resColor = calcSpecularColor(ray.origin, obj, intersect.position, intersect.normal, eyeVector, false);
     
-    // ambient occlusion (???)
+    // ambient occlusion
     return (1.0 - float(intersect.steps)/float(MAX_STEPS)) * resColor;
   
     // no ambient occlusion

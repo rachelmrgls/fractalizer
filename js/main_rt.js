@@ -25,10 +25,8 @@ function init() {
 //load the mp3 file 
 function loadFile() { 
     var req = new XMLHttpRequest(); //
-    var music = document.getElementById("music").value;
-    if (music == "") {
-        music = "music/Forever (Pt. II) Feat. Kaleem Taylor.mp3";
-    }
+    var music;
+    music = "music/Forever (Pt. II) Feat. Kaleem Taylor.mp3";
     req.open("GET",music,true);//"Ten Feet Tall (Elephante Remix)
     //we can't use jquery because we need the arraybuffer type 
     req.responseType = "arraybuffer"; 
