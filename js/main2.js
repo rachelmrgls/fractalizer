@@ -15,10 +15,10 @@ window.requestAnimationFrame = window.requestAnimationFrame || ( function() {
 
 
 var controlsChangeCallback = function() {
-	mu.cur[0] = Gui.values.r;
-	mu.cur[1] = Gui.values.i;
-	mu.cur[2] = Gui.values.j;
-	mu.cur[3] = Gui.values.k;
+	Raymarcher.mu.cur[0] = Gui.values.r;
+	Raymarcher.mu.cur[1] = Gui.values.i;
+	Raymarcher.mu.cur[2] = Gui.values.j;
+	Raymarcher.mu.cur[3] = Gui.values.k;
 }
 
 // when HTML is finished loading, do this
@@ -32,8 +32,4 @@ window.onload = function() {
 
 };
 
-
-var mu = {
-	cur: [ 0.0, 0.0, 0.0, 0.0 ]
-}
 

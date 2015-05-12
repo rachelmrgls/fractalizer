@@ -305,7 +305,7 @@ Raymarcher.render = function () {
     this.gl.useProgram(this.mainShader.program);
 
     // this.gl.uniform4f(this.mainShader.uniforms.mu, mu.cur.x, mu.cur.y, mu.cur.z, mu.cur.w);
-    this.gl.uniform4f(this.mainShader.uniforms.mu, mu.cur[0], mu.cur[1], mu.cur[2], mu.cur[3]);
+    this.gl.uniform4f(this.mainShader.uniforms.mu, Raymarcher.mu.cur[0], Raymarcher.mu.cur[1], Raymarcher.mu.cur[2], Raymarcher.mu.cur[3]);
     this.gl.uniform1i(this.mainShader.uniforms.maxIterations, 20);    // bounds precision
     this.gl.uniform1f(this.mainShader.uniforms.epsilon, 0.003);       // bounds precision
     this.gl.uniform3f(this.mainShader.uniforms.eye, eye[0], eye[1], eye[2]);
@@ -399,6 +399,10 @@ var curRotation = [
     0.0, 0.0, 1.0, 0.0,
     0.0, 0.0, 0.0, 0.0
 ];
+
+Raymarcher.mu = {
+    cur: [ 0.0, 0.0, 0.0, 0.0 ]
+}
 
 Raymarcher.calculateView = function () {
     // First apply the view transformations to the initial eye, look at, and
