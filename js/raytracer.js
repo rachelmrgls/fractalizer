@@ -34,9 +34,6 @@ Raytracer.curMaterial = {};
 Raytracer.frame = 0;
 Raytracer.needsToDraw = true;
 
-Raytracer.MAX_ZOOM = 20;
-Raytracer.howZoomed = Raytracer.MAX_ZOOM/2;
-
 Raytracer.mouseDown = false;
 Raytracer.lastMouseX = null;
 Raytracer.lastMouseY = null;
@@ -50,37 +47,20 @@ Raytracer.handleMouseDown = function(event) {
 
 Raytracer.handleMouseUp = function(event) {
 	Raytracer.mouseDown = false;
-};
 
-distance = function(a,b) {
-    var tmp = 0;
-    for (var i = 0; i < a.length; i++) {
-        tmp += Math.pow(a[i] - b[i],2);
-    }
-    return Math.sqrt(tmp);
-}
+    //console.log(Raytracer.program);
+    /*var whatever = Raytracer.gl.getUniformLocation(Raytracer.program,"camera" );
+    var poop;
+    poop = Raytracer.gl.getUniform(Raytracer.program, whatever, poop);
+   console.log(poop)*/
+   //console.log(Raytracer.RotationMatrix);
+    //console.log(whatever);
+};  
 
 Raytracer.handleZoom = function(deltaX,deltaY,deltaZ)
 {
     var scale = 0.3;
-
-    var camOrig_loc = Raytracer.gl.getUniformLocation(Raytracer.program,"camera" );
-    var camOrig = Raytracer.gl.getUniform(Raytracer.program, camOrig_loc, camOrig);
-
-    console.log(camOrig_loc);
-    console.log(camOrig);
-
-    var rotationMatrix = mat4.create();
-    mat4.identity(rotationMatrix);
-
-    var camPos;
-    camPos = mat4.multiplyVec4(rotationMatrix,camOrig,camPos);
-    console.log(camPos);
-
-    var zScale = distance(camPos,camPos) / 4.0;
-    console.log(zScale);
-
-	mat4.translate(Raytracer.RotationMatrix, [scale * deltaX, scale * deltaY, scale * deltaZ ]);
+	mat4.translate(Raytracer.RotationMatrix, [scale * deltaX, scale * deltaY, scale * deltaZ]);
     Raytracer.needsToDraw = true;
 };
 
@@ -91,7 +71,7 @@ Raytracer.handleValue = function(dv1,dv2) {
     Raytracer.value[1] += dv2 * scale;
 
     Raytracer.needsToDraw = true;
-};
+}
 
 Raytracer.handleMouseMove = function(event) {
 	var newX   = event.clientX;
@@ -206,6 +186,7 @@ Raytracer.init = function (height, width, debug, value, scene ) {
     }
 
     //console.log(Raytracer.RotationMatrix);
+    
 	
     Raytracer.value = value;
 
