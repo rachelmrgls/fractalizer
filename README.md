@@ -20,12 +20,13 @@ http://www.iquilezles.org/www/material/nvscene2008/nvscene2008.htm
 (frames per second) https://documentation.apple.com/en/finalcutpro/usermanual/index.html#chapter=D%26section=3%26tasks=true
 (apollonian gasket - code) https://www.shadertoy.com/view/4ds3zn
 
--make the distance estimation only look at part of the thing/make recursion level depend on the amount you're zoomed in
--make mouse zoom, change up/down keys to deltaY
--fix controls/add dropdown thingy (thomas)
--apollonian gasket, with translucency (bubbles + random bubbly colors); look at assignment 3 refraction stuff; colored based on bubble size, smaller bubbles more translucent;
+
 a light that moves with the camera
 fix index page/do writeup
+
+-fix controls/add dropdown thingy (thomas)
+-apollonian gasket, with translucency (bubbles + random bubbly colors); look at assignment 3 refraction stuff; colored based on bubble size, smaller bubbles more translucent;
+
 
 !!!!-make smaller and then scale so that people can play at shitty resolutions on shitty computers/find screen recording software thats free + records mac audio
 
@@ -34,8 +35,5 @@ fix index page/do writeup
 stuff i don't think we'll have time for
 -put julia/mandelbrot into actual 2d
 -apollonian translucency!!! (http://www.fractalforums.com/3d-fractal-generation/escape-time-version-of-the-tetrahedral-apollonian-gasket/)
-
-
-Rachel Fixed:
-	less zoom
+-make the distance estimation only look at part of the thing/make recursion level depend on the amount you're zoomed in
 	
