@@ -41,13 +41,6 @@ Gui.values = {
     reset      : function () {},
     guiToBatch : function() {},
 
-    // dummy variables
-    'COS 426 Project' : function () {},
-    'Rachel Marguiles' : function () {},
-    'Sonia Skoularikis' : function () {},
-    'Thomas Greenspan' : function () {},
-    'Fractals' : function () {},
-
     value1    : 0.37,
     level     : 0,
     value2    : 0.1428,
@@ -95,13 +88,6 @@ Gui.init = function ( controlsChangeCallback ) {
 
     var gc = {};
 
-    var folderTI = gui.addFolder('TITLE');
-    folderTI.add( Gui.values, 'COS 426 Project' );
-    folderTI.add( Gui.values, 'Fractals' );
-    folderTI.add( Gui.values, 'Rachel Marguiles' );
-    folderTI.add( Gui.values, 'Sonia Skoularikis' );
-    folderTI.add( Gui.values, 'Thomas Greenspan' );
-    
 
     var size    = gui.add( Gui.values, 'windowSize', Gui.windowSizes ).name("Window Size");
     // var reset   = gui.add( Gui.values, 'reset' ).name("Reset");
