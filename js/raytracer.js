@@ -67,11 +67,18 @@ Raytracer.handleZoom = function(deltaX,deltaY,deltaZ)
     var camOrig_loc = Raytracer.gl.getUniformLocation(Raytracer.program,"camera" );
     var camOrig = Raytracer.gl.getUniform(Raytracer.program, camOrig_loc, camOrig);
 
-    var camPos;
-    camPos = mat4.multiplyVec4(Raytracer.RotationMatrix,camOrig,camPos);
+    console.log(camOrig_loc);
+    console.log(camOrig);
 
+    var rotationMatrix = mat4.create();
+    mat4.identity(rotationMatrix);
+
+    var camPos;
+    camPos = mat4.multiplyVec4(rotationMatrix,camOrig,camPos);
+    console.log(camPos);
 
     var zScale = distance(camPos,camPos) / 4.0;
+    console.log(zScale);
 
 	mat4.translate(Raytracer.RotationMatrix, [scale * deltaX, scale * deltaY, scale * deltaZ ]);
     Raytracer.needsToDraw = true;
