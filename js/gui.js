@@ -15,13 +15,19 @@ Gui.sceneList = [
 // list of meshes available in the GUI
 Gui.musicList = [
     "Forever (Pt. II) Feat. Kaleem Taylor.mp3",
-    "Compass (Louis The Child Remix).mp3",
-    "All Too Well.m4a",
     "Rather Be (Elephante Remix).mp3",
-<<<<<<< Updated upstream
-=======
     "Ten Feet Tall (Elephante Remix).mp3",
->>>>>>> Stashed changes
+    "Borderline.mp3",
+    "Float (TheFatRat Remix).mp3",
+    "Lost At Sea.mp3",
+    "Kanye (Ookay Remix).mp3",
+    "Habits (Hippie Sabotage Remix).mp3",
+    "Runaway (U & I).mp3",
+    "Rock Wit U (Snakehips).mp3",
+    "Manhattan (Real Slow Remix).mp3",
+    "Wonder (feat. The Kite String Tangle).mp3",
+    "We Own The Night (The Chainsmokers Remix).mp3",    
+
 ];
 
 Gui.windowSizes = [ "full","400x400","600x400","600x600","800x600","800x800" ];
