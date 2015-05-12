@@ -82,7 +82,7 @@ function pause() {
     startOffset += ctx.currentTime - startTime;
 }
 // defining the julia presets
-var julia_def = [[-0.4,0.6],[0.285,0.01],[0.37,0.1428],[-0.70176,-0.3842],[-0.8,0.156]];
+var julia_def = [[-0.4,0.6],[0.285,0.01],[.4145,.3436],[0.37,0.1428],[-0.70176,-0.3842],[-0.8,0.156],[-0.6732,0.3444]];
 var julia_idx;
 
 window.onload = function() {
@@ -163,6 +163,7 @@ window.onload = function() {
     Gui.values.value2 = value[1];
     var height = cmd.height || window.innerHeight;//600;
     var width  = cmd.width  || window.innerWidth;//600;
+
         
     var animated = parseInt(cmd.animated) || 0;
 
