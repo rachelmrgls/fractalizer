@@ -50,7 +50,15 @@ Raytracer.handleMouseDown = function(event) {
 
 Raytracer.handleMouseUp = function(event) {
 	Raytracer.mouseDown = false;
-};  
+};
+
+distance = function(a,b) {
+    var tmp = 0;
+    for (var i = 0; i < a.length; i++) {
+        tmp += Math.pow(a[i] - b[i],2);
+    }
+    return Math.sqrt(tmp);
+}
 
 Raytracer.handleZoom = function(deltaX,deltaY,deltaZ)
 {
@@ -59,9 +67,12 @@ Raytracer.handleZoom = function(deltaX,deltaY,deltaZ)
     var camOrig_loc = Raytracer.gl.getUniformLocation(Raytracer.program,"camera" );
     var camOrig = Raytracer.gl.getUniform(Raytracer.program, camOrig_loc, camOrig);
 
+    /*var rotationMatrix = mat4.create();
+    mat4.identity(rotationMatrix);*/
+
     var camPos;
     camPos = mat4.multiplyVec4(Raytracer.RotationMatrix,camOrig,camPos);
-    var zScale = Math.sqrt(Math.dot(camPos,camPos)) / 4.0;
+    var zScale = distance(camPos,camPos) / 4.0;
 
 	mat4.translate(Raytracer.RotationMatrix, [scale * deltaX, scale * deltaY, zScale * deltaZ ]);
     Raytracer.needsToDraw = true;
