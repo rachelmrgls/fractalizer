@@ -236,45 +236,13 @@ vec3 findDiffuseColor( float iter ) {
     return diffuseColor;
 }
 
-vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, bool phongOnly) {
-	
-    if (isAnimated && getAudio(0) < EPS) return vec3(0.0);
-
+vec3 calcDiffuseColor(Object obj) {
     Shape shape = obj.shape;
     vec3 diffuseColor;
 
-    if (shape.shapeType == MANDELBROT) {
-        // shift color interval based on single audio
-
+    if ( shape.shapeType == MANDELBROT || shape.shapeType == JULIA || shape.shapeType == JULIA3D ) {
         diffuseColor = findDiffuseColor( iter );
     } 
-    else if (shape.shapeType == JULIA) {
-
-        /*float aud = getAudio( 4 ); // change this to see how it looks
-
-        float shift = oneToZero(-0.2,0.0,1.0 - aud);
-        miniter = 0.29 + shift;
-        maxiter = 0.5;
-
-        diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
-        // reset values
-        iter = 0.0;*/
-        diffuseColor = findDiffuseColor( iter );
-    }
-    else if (shape.shapeType == JULIA3D) {
-
-        /*float aud = getAudio( 4 ); // change this to see how it looks
-
-        float shift = oneToZero(-0.2,0.0,1.0 - aud);
-        miniter = 0.29 + shift;
-        maxiter = 0.5;
-
-        diffuseColor = HSLtoRGB(zeroToOne(miniter,maxiter,iter),1.0,.5);
-        // reset values
-        iter = 0.0;*/
-
-        diffuseColor = findDiffuseColor( iter );
-    }
     else if (shape.shapeType == INFSPHERE && isAnimated) {
         float rad = getShapeRadius(shape);
         float fb = bounceShape( pos, rad );
@@ -295,7 +263,60 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
         diffuseColor = obj.material.color;
     }
 
+    return diffuseColor;
+}
 
+vec3 addLight( vec3 diffuseColor, Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, bool phongOnly ) {
+    vec3 outputColor = vec3( 0.0, 0.0, 0.0 ); // color defaults to black
+
+    vec3 lightVector = lights[i].position - pos;
+    //if ( pointInShadow( lights[i].position, lightVector ) ) continue;
+
+    // add color to output color for each light, based on material type
+    if (obj.material.materialType == BASICMATERIAL) {
+        outputColor += diffuseColor;
+    } 
+    else if (obj.material.materialType == PHONGMATERIAL || 
+             obj.material.materialType == LAMBERTMATERIAL) {
+        // get light attenuation
+        float dist = length(lightVector);
+        float attenuation = lights[i].attenuate * dist * dist;
+
+        float diffuseIntensity = max(0.0, dot(normalVector, lightVector)) * lights[i].intensity;
+        
+        // glass and mirror objects have specular highlights but no diffuse lighting
+        if (!phongOnly) {
+            outputColor += (diffuseColor * lights[i].color) * diffuseIntensity / attenuation; 
+        }
+        
+        if (obj.material.materialType == PHONGMATERIAL) {
+            // ----------- STUDENT CODE BEGIN ------------
+            vec3 phongTerm = vec3( 0.0, 0.0, 0.0 ); // not implemented yet, so just add black   
+
+            if (dot(normalVector, lightVector) > -EPS) {
+                vec3 Lhat = normalize(lightVector);
+                vec3 Nhat = normalize(normalVector);
+                vec3 Rhat = normalize(2.0 * dot(Lhat,Nhat) * Nhat - Lhat);
+                vec3 Vhat = normalize(camera - eyeVector);
+
+                float tmp = dot(Rhat,Vhat);
+                if (tmp > EPS) {
+                    phongTerm += obj.material.specular * pow(tmp,obj.material.shininess) * lights[i].intensity / (attenuation / 50.0);
+                }
+            }
+            // ----------- STUDENT CODE END ------------
+            outputColor += phongTerm;
+        }
+    }
+
+    return outputColor;
+}
+
+vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, bool phongOnly) {
+	
+    if (isAnimated && getAudio(0) < EPS) return vec3(0.0);
+
+    vec3 diffuseColor = calcDiffuseColor(obj);
 
 	vec3 outputColor = vec3( 0.0, 0.0, 0.0 ); // color defaults to black	
 	
@@ -303,45 +324,7 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
 
         if(i>=numLights) break; // because GLSL will not allow looping to numLights
 		
-        vec3 lightVector = lights[i].position - pos;
-        //if ( pointInShadow( lights[i].position, lightVector ) ) continue;
-
-        // add color to output color for each light, based on material type
-        if (obj.material.materialType == BASICMATERIAL) {
-            outputColor += diffuseColor;
-        } 
-        else if (obj.material.materialType == PHONGMATERIAL || 
-                 obj.material.materialType == LAMBERTMATERIAL) {
-            // get light attenuation
-            float dist = length(lightVector);
-            float attenuation = lights[i].attenuate * dist * dist;
-
-            float diffuseIntensity = max(0.0, dot(normalVector, lightVector)) * lights[i].intensity;
-            
-            // glass and mirror objects have specular highlights but no diffuse lighting
-            if (!phongOnly) {
-                outputColor += (diffuseColor * lights[i].color) * diffuseIntensity / attenuation; 
-            }
-            
-            if (obj.material.materialType == PHONGMATERIAL) {
-                // ----------- STUDENT CODE BEGIN ------------
-                vec3 phongTerm = vec3( 0.0, 0.0, 0.0 ); // not implemented yet, so just add black   
-
-                if (dot(normalVector, lightVector) > -EPS) {
-                    vec3 Lhat = normalize(lightVector);
-                    vec3 Nhat = normalize(normalVector);
-                    vec3 Rhat = normalize(2.0 * dot(Lhat,Nhat) * Nhat - Lhat);
-                    vec3 Vhat = normalize(camera - eyeVector);
-
-                    float tmp = dot(Rhat,Vhat);
-                    if (tmp > EPS) {
-                        phongTerm += obj.material.specular * pow(tmp,obj.material.shininess) * lights[i].intensity / (attenuation / 50.0);
-                    }
-                }
-                // ----------- STUDENT CODE END ------------
-                outputColor += phongTerm;
-            }
-        }
+        outputColor += addLight(diffuseColor,obj,pos,normalVector,eyeVector,phongOnly);
 	}
 	
 	return outputColor;
