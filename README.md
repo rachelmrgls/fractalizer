@@ -37,4 +37,19 @@ stuff i don't think we'll have time for
 -make file uploader for music
 -apollonian translucency!!! (http://www.fractalforums.com/3d-fractal-generation/escape-time-version-of-the-tetrahedral-apollonian-gasket/)
 
+
+
+
+
+
+
+
+
+
+FINAL TO DO LIST
+-controls tutorial page
+-make results headings link to batch urls for each
+-make default music specific to each scene
+
+
 	
