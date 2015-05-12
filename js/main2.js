@@ -22,7 +22,6 @@ var controlsChangeCallback = function() {
 
 // when HTML is finished loading, do this
 window.onload = function() {
-    Student.updateHTML();
 
     Gui.init( controlsChangeCallback );
 

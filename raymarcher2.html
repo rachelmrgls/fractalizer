@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title> Julia Fractal</title>
+    <title> Interactive 3D Julia Set </title>
     <link href="css/style.css" type="text/css" rel="stylesheet"/>
 </head>
 
 <body>
     <div id="stats"></div>
     <div id="main_div">
-        <h1> <span class="assignment">COS426 Final Project<br></span> Fractals </h1>
-        <h2 id="student"></h2>
+        <div id="title_div">
+            <h1>Interactive 3D Julia Set </h1>
+        </div>
+        <canvas id="canvas"> </canvas>
     </div>
-    <canvas id="canvas"> </canvas>
     <div id="alert_div" title="alert"> </div>
 
     <script src="libjs/dat.gui.min.js"> </script>
@@ -22,7 +23,6 @@
     <script src="libjs/glMatrix-0.9.5.min.js"> </script>
 
     <script src="js/parser.js"> </script>
-    <script src="js/student2.js"> </script>
     <script src="js/gui2.js"> </script>
     <script src="js/raymarcher2.js"> </script>
     <script src="js/main2.js"> </script>

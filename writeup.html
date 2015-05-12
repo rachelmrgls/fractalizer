@@ -55,9 +55,11 @@ The primary reason for choosing raymarching over path tracing was that our initi
 <li>Calculating Surface Normals</li>
 <li>Bounding Volumes</li>
 </ul>
+<a name='Challenges'></a><h2>Challenges</h2>
+<a name='Bugs'></a><h2>Bugs</h2>
 
 <p><hr><p><a name='Results'></a><h1>Results</h1><p><hr><p>
-We measured success qualitatively based on the resolution of our rendering, the speed of the animation, and the extent to which the visualizer seemed representative of the music. We tested our final project on computers with 8, 16, and 32 Gb of RAM and observed the expected trend that increasing RAM allowed for higher resolution, faster animations. Overall, our results indicate that we would need to further optimize our distance estimation functions in order to better accomodate users with less RAM.
+We measured success qualitatively based on the resolution of our rendering, the speed of the animation, and the extent to which the visualizer seemed representative of the music. We tested our final project on computers with 8, 16, and 32GB of RAM and observed the expected trend that increasing RAM allowed for higher resolution, faster animations. Overall, our results indicate that we would need to further optimize our distance estimation functions in order to better accomodate users with less RAM.
 <p><hr><p><a name='Discussion'></a><h1>Discussion</h1><p><hr><p>
 In general, our approach was successful in that we were able to create a fractal-based sound visualizer where audio inputs alter the nature of the generated images. However, there are obvious limitations to this approach. Of the implementation decisions discussed above, in a few cases we chose alternatives based on the time constraints of the project rather than the success of the output. For instance, given additional time, we would prefer to implement a 2D analog of the ray marcher to render the Mandelbrot set and the 2D Julia sets as 2D images rather than 2D surfaces embedded in three dimensions. Furthermore, the coloring for the Julia and Mandelbrot sets is currently based purely on the number of iterations. However, scaling presents challenges since we do not know the range of iterations ahead of time. A common coloring scheme creates a histogram of iterations in order to adjust the coloring more accurately. 
 <p>

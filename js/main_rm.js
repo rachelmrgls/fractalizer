@@ -183,8 +183,6 @@ window.onload = function() {
     if ( animated ) init(Gui.default.song);
     drawScene();
     
-    Student.updateHTML();
-    
 
     function createScene ( sceneID, level ) {
         Scene[sceneID.toString()](level);
