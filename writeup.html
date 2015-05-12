@@ -48,12 +48,16 @@ Our project relies on GLSL shaders running in the browser and should be accessed
 <p><hr><p><a name='Methodology'></a><h1>Methodology</h1><p><hr><p>
 <a name='ImplementationDecisions'></a><h2>Implementation Decisions</h2>
 <ul>
-<li>Raymarching vs. Path tracing
-<p>
-The primary reason for choosing raymarching over path tracing was that our initial 
+<li><h3>Raymarching vs. Path tracing</h3>
+The primary reason for choosing raymarching over path tracing was that we had access to the infrastructure for a functional raytracer. Using this code as a starting point, we were able to convert the raytracer to a raymarcher with relative ease.
 </li>
-<li>Calculating Surface Normals</li>
-<li>Bounding Volumes</li>
+<li><h3>Calculating Surface Normals</h3>
+To find the surface normals needed for the specular color calculation, there were two possible approaches. One method involves analytically calculating the normals for each object. For example, for a sphere we can simply subtract the sphere center from the position of the intersection and normalize the resulting vector. However, for more complicated structures (i.e. a Menger sponge) calculating normals analytically would present more of a challenge since we must track which face of the surface we have intersected as we recurse further down. The alternative is to use the finite difference method to approximate surface normals. Unfortunately, this method requires an additional six calls to the distance estimation function. This explains why the more complex scenes run more slowly than the field of infinite spheres.
+</li>
+<li><h3>Bounding Volumes</h3>
+One optimization our raymarcher performs is to first intersect the ray with a bounding sphere. If the ray fails to hit the sphere containing the fractal, we can immediately return the default color rather than marching the ray. However, we were then faced with the trade-off of using bounding volumes close enough to the fractal surface to optimize the raymarcher, but far enough to avoid cutting off areas of the fractal we wish users to view.</li>
+<li><h3>Ambient Occlusion vs. Environment Lighting</h3>
+Ambient occlusion approximates the effects of environment lighting by scaling the diffuse color based on the number of steps taken in marching the ray before intersecting the surface. We chose this alternative because </li>
 </ul>
 <a name='Challenges'></a><h2>Challenges</h2>
 <a name='Bugs'></a><h2>Bugs</h2>
