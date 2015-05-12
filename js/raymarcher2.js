@@ -45,8 +45,8 @@ Raymarcher.handleMouseMove = function(event) {
     var degToRad = function(degrees) { return degrees * Math.PI / 180; }
 	var newRotationMatrix = mat4.create();
 	mat4.identity(newRotationMatrix);
-	mat4.rotate(newRotationMatrix, degToRad(deltaX / 10), [0, 1, 0]);
-	mat4.rotate(newRotationMatrix, degToRad(deltaY / 10), [1, 0, 0]);
+	mat4.rotate(newRotationMatrix, -degToRad(deltaY / 10), [0, 1, 0]);
+	mat4.rotate(newRotationMatrix, -degToRad(deltaX / 10), [1, 0, 0]);
 	mat4.multiply(newRotationMatrix, Raymarcher.RotationMatrix, Raymarcher.RotationMatrix);
 
 	Raymarcher.lastMouseX  = newX
