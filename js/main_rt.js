@@ -87,14 +87,19 @@ var julia_idx;
 window.onload = function() {
  
     var controlsChangeCallback = function() {
-        
+        // console.log("here")
+        // Raytracer.init(height, width, debug, value, Gui.values.scene );
+
+        Raytracer.objectID = 0;
+        Raytracer.lightID = 0;
+        createScene(Gui.values.scene);
+        Raytracer.needsToDraw = true
+
+        if ( animated ) init();
+        drawScene();
     }
 
     Gui.init( controlsChangeCallback );
-
-
-
-
     
     var cmd = Parser.getCommands(document.URL)[0];
     // var batchCMD = cmd.scene || "default";

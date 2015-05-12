@@ -3,9 +3,13 @@
 var Gui = Gui || {};
 
 // list of meshes available in the GUI
-Gui.featureList = [
-    "Menger",
+Gui.sceneList = [
+    "menger",
+    "default",
+    "mandelbrot",
     "julia",
+    "julia3d",
+    "apollonian",
 ];
 
 // list of meshes available in the GUI
@@ -16,15 +20,13 @@ Gui.musicList = [
 
 Gui.windowSizes = [ "full","400x400","600x400","600x600","800x600","800x800" ];
 
-Gui.applyList = [];
-
 // due to a bug in dat GUI we need to initialize floats to non-interger values (like 0.5)
 // (the variable Gui.defaults below then carries their default values, which we set later)
 Gui.values = {
     // general gui
-    featList   : Gui.featureList[0],
+    scene   : Gui.sceneList[0],
     windowSize : Gui.windowSizes[0],
-    musicList  : Gui.featureList[0],
+    song  : Gui.musicList[0],
     reset      : function () {},
     guiToBatch : function() {},
 
@@ -44,7 +46,6 @@ Gui.values = {
 
 // defaults only hold actual mesh modifiers, no display
 Gui.defaults = {
-    translateX : 0.0,
 
     value1    : 0.0,
     recursion     : 0.0,
@@ -111,7 +112,7 @@ Gui.init = function ( controlsChangeCallback ) {
 
     var folderFT = gui.addFolder('FEATURES');
 
-    gc.featL   = folderFT.add( Gui.values, 'featList', Gui.featureList ).name("Feature");
+    gc.featL   = folderFT.add( Gui.values, 'scene', Gui.sceneList ).name("Feature");
     gc.animated = folderFT.add( Gui.values, "animated" ).name( "Animated" );
 
     gc.recursion     = folderFT.add( Gui.values, "recursion", 0.0, 1.0 ).name( "Recursion level" ).step( 0.01 ).setValue( Gui.defaults.recursion );
@@ -120,7 +121,7 @@ Gui.init = function ( controlsChangeCallback ) {
 
     var folderMU = gui.addFolder('MUSIC');
 
-    gc.music    = folderMU.add( Gui.values, 'musicList', Gui.musicList ).name("Music");
+    gc.music    = folderMU.add( Gui.values, 'song', Gui.song ).name("Music");
 
     // Helper functions
     var inReset = false;
@@ -196,7 +197,7 @@ Gui.init = function ( controlsChangeCallback ) {
 
     // button which creates the corresponding url of current gui
     gToB.onChange( function() {
-        var url = 'batch.html?featList=' + Gui.values.featList;
+        var url = 'batch.html?scene=' + Gui.values.scene;
 
         for (var i = 0; i < Gui.applyList.length; i++) {
             if (i > 0) {
@@ -208,7 +209,7 @@ Gui.init = function ( controlsChangeCallback ) {
         var cmd = Gui.toCommandString();
 
         if (cmd.length > 0) {
-            url += '&apply' + cmd;
+            url += cmd;
         }
 
         window.open( url );

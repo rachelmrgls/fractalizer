@@ -1,223 +1,214 @@
-// This is the Batch javascript file used for the batch version
-// of the mesh processing assignment for COS426.
-//
-// Unless you are expecially interested, do not bother to
-// read it closely. It's mostly just boilerplate to handle
-// processing the comamnds in the URL and load inages.
 
+// sound things
+var gfx;
+var ctx; //audio context 
+var buf; //audio buffer 
+var fft; //fft audio node 
+var samples = 128; 
+var setup = false; //indicate if audio is set up yet  
+var src;
+var startOffset = 0;
+var startTime = 0;
+var zoom = 1.0;
 
-var Batch = Batch || {
-	_geometry : undefined,
-	_material : undefined,
-	video : undefined,
-};
-
-Batch.initCamera = function()
-{
-	//http://davidwalsh.name/browser-camera
-	var canvas = document.createElement("canvas");
-	var context = canvas.getContext("2d");
-	Batch.video = document.createElement("video");
-	var	videoObj = { "video": true };
-	var	errBack = function(error) {
-			console.log("Video capture error: ", error.code); 
-		};
-	
-	Batch.cameraReady = false;
-	// Put video listeners into place
-	if(navigator.getUserMedia) { // Standard
-		navigator.getUserMedia(videoObj, function(stream) {
-			Batch.video.src = stream;
-		}, errBack);
-	} else if(navigator.webkitGetUserMedia) { // WebKit-prefixed
-		navigator.webkitGetUserMedia(videoObj, function(stream){
-			Batch.video.src = window.webkitURL.createObjectURL(stream);
-		}, errBack);
-	}
-	else if(navigator.mozGetUserMedia) { // Firefox-prefixed
-		navigator.mozGetUserMedia(videoObj, function(stream){
-			Batch.video.src = window.URL.createObjectURL(stream);
-		}, errBack);
-	}
-	
-	Batch.videoImage = document.createElement( 'canvas' );
-	Batch.videoImage.width = 256;
-	Batch.videoImage.height = 256;
-	
-	Batch.videoImageContext = Batch.videoImage.getContext( '2d' );
-	Batch.videoImageContext.fillStyle = '#000000';
-	Batch.videoImageContext.fillRect( 0, 0, Batch.videoImage.width, Batch.videoImage.height );
-
-	Batch.videoTexture = new THREE.Texture( Batch.videoImage );
-	Batch.videoTexture.wrapS = Batch.videoTexture.wrapT = THREE.RepeatWrapping;
+//init the sound system 
+function init() { 
+    try { 
+        ctx = new AudioContext();//webkitAudioContext(); //is there a better API for this? 
+        //setupCanvas(); 
+        loadFile(); 
+    } catch(e) { 
+        alert('you need webaudio support' + e); 
+    } 
 }
 
-Batch.updateCamera = function() {
-	if ( Batch.cameraReady )  {
-		Batch.videoImageContext.drawImage( Batch.video, 0, 0, Batch.video.videoWidth,Batch.video.videoHeight, 0,0, Batch.videoImage.width,Batch.videoImage.height );
-		Batch.videoTexture.needsUpdate = true;
-	}
-	if (Batch.video.readyState === Batch.video.HAVE_ENOUGH_DATA) {
-		setTimeout(function() { Batch.cameraReady = true; }, 200);
-	}
-};
+//load the mp3 file 
+function loadFile() { 
+    var req = new XMLHttpRequest(); //
+    var music;
+    music = "music/Forever (Pt. II) Feat. Kaleem Taylor.mp3";
+    req.open("GET",music,true);//"Ten Feet Tall (Elephante Remix)
+    //we can't use jquery because we need the arraybuffer type 
+    req.responseType = "arraybuffer"; 
+    req.onload = function() { 
+        //decode the loaded data 
+        ctx.decodeAudioData(req.response, function(buffer) { 
+            buf = buffer; 
+            play(); 
+        }); 
+    }; 
+    req.send(); 
+} 
 
-// gui file selection changed; load new model
-Batch.meshChangeCallback = function( filename, callback ) {
-	Batch.mesh_name = filename;
-	if(filename.indexOf("THREE") === 0) {
-		//object in THREE
-		if( filename == "THREE.box" )
-			Batch._geometry = new THREE.BoxGeometry( 5, 5, 5 );
-		else if( filename == "THREE.cylinder")
-			Batch._geometry = new THREE.CylinderGeometry( 3, 3, 5, 64 );
-		else if( filename == "THREE.dodecahedron")
-			Batch._geometry = new THREE.DodecahedronGeometry( 4 );
-		else if( filename == "THREE.icosahedron")
-			Batch._geometry = new THREE.IcosahedronGeometry( 4 );
-		else if( filename == "THREE.octahedron")
-			Batch._geometry = new THREE.OctahedronGeometry( 4 );
-		else if( filename == "THREE.tetrahedron")
-			Batch._geometry = new THREE.TetrahedronGeometry( 4 );
-		else if( filename == "THREE.torus")
-			Batch._geometry = new THREE.TorusGeometry( 3, 1, 16, 50 );
-		else if( filename == "THREE.torusknot")
-			Batch._geometry = new THREE.TorusKnotGeometry( 3, 1, 100, 32 );
-		else if( filename == "THREE.sphere")
-			Batch._geometry = new THREE.SphereGeometry( 3, 64, 64 );
-					
-		Batch.controlsChangeCallback();
-	
-		if(callback !== undefined) callback();
-	}else
-	{
-		var manager = new THREE.LoadingManager();
-		var loader = new THREE.OBJLoader( manager );
-		loader.load( 'obj/'+filename, function ( object ) {
-			Batch._geometry = object.children[0].geometry;
-			
-			//normalize to [-normal_R,normal_R]
-			var normal_R = 5;
-			var minV = 1e100, maxV = -1e100;
-			var positions = Batch._geometry.attributes.position.array;
-			
-			for(var i=0;i < positions.length;i++) {
-				minV = Math.min(minV,positions[i]);
-				maxV = Math.max(maxV,positions[i]);
-			}
-			for(var i=0;i < positions.length;i++) {
-				positions[i] = ( positions[i] - minV ) / (maxV - minV) * 2 * normal_R - normal_R;
-			}
-			
-			//move to center
-			for(var i=0;i <3;i++) {
-				var avg_position = 0.0;
-				var avg_tot = 0;
-				for(var j=i;j < positions.length;j+=3) {
-					avg_position += positions[j];
-					avg_tot ++; 
-				}
-				avg_position /= avg_tot;
-				for(var j=i;j < positions.length;j+=3) positions[j] -= avg_position;
-			}
-			
-			Batch.controlsChangeCallback();
-		
-			if(callback !== undefined) callback();
-		});
-	}
-	
-};
+function play() { 
 
-Batch.fetchTexture = function(textureName)
-{
-	var texture;
-	
-	if(textureName == "camera") {
-		//setup webcam
-		if(Batch.video == undefined) Batch.initCamera();
-		
-		if(Batch.video.paused) Batch.video.play();
-		Renderer.usingCamera = true;
-		texture = Batch.videoTexture;
-	}else
-	{
-		if(Batch.video !== undefined) Batch.video.pause();
-		Renderer.usingCamera = false;
-		
-		if(textureName == "default") {
-			var default_texture = {
-				"Strongman.obj":"texture/Strongman.jpg",
-				"sheep.obj":"texture/sheep.jpg",
-			};
-			
-			if( (Batch.mesh_name in default_texture) && (Batch.shadingMethod !== "EnvMap") )
-				texture = THREE.ImageUtils.loadTexture( default_texture[Batch.mesh_name] );
-			else
-				texture = THREE.ImageUtils.loadTexture( "texture/white.jpg" );
-		}
-		else texture = THREE.ImageUtils.loadTexture( "texture/"+textureName );
-	}
-	
-	texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-	return texture;
+    startTime = ctx.currentTime;
+    //var source = context.createBufferSource();
+    // Connect graph
+    //source.buffer = this.buffer;
+    //src.loop = true;
+    //source.connect(context.destination);
+    // Start playback, but make sure we stay in bound of the buffer.
+    //source.start(0, startOffset % buffer.duration);
+
+
+    //create a source node from the buffer 
+    src = ctx.createBufferSource();  
+    src.buffer = buf; 
+     
+    //create fft 
+    fft = ctx.createAnalyser(); 
+    fft.fftSize = samples; 
+     
+    src.loop = true;
+
+    //connect them up into a chain 
+    src.connect(fft); 
+    fft.connect(ctx.destination); 
+     
+    //play immediately 
+    src.start(0, startOffset % buf.duration);
+    //src.start(0);//src.noteOn(0); 
+    setup = true; 
+}  
+
+//http://chimera.labs.oreilly.com/books/1234000001552/ch02.html#s02_2
+function pause() {
+    src.stop();
+    // Measure how much time passed since the last pause.
+    startOffset += ctx.currentTime - startTime;
 }
 
-Batch.controlsChangeCallback = function()
-{
-	Batch.shadingMethod = Batch.values.shadingModel;
-
-	var meshs = [];
-	
-	var uniforms = {
-			inflate : {type: 'f', value: Batch.values.inflate},
-		    ambient :     { type: "c", value: new THREE.Color( Batch.values.ambient ) },
-		    diffuse :     { type: "c", value: new THREE.Color( Batch.values.diffuse ) },
-		    specular :     { type: "c", value: new THREE.Color( Batch.values.specular ) },
-		    lightDir : {type: "v3", value : Renderer.lightDir},
-			texture : {type: 't', value: Batch.fetchTexture( Batch.values.texture) },
-			shininess: {type: 'f', value: Batch.values.shininess},		
-	};
-	
-	Batch._material = new THREE.ShaderMaterial( {
-		uniforms:       uniforms,
-		vertexShader:   Parser.parseTxt('shaders/'+Batch.shadingMethod+"-vert.txt"),
-		fragmentShader: Parser.parseTxt('shaders/'+Batch.shadingMethod+"-frag.txt"),
-	});
-	meshs.push( new THREE.Mesh(Batch._geometry,Batch._material) );
-	
-	Renderer.updateScene( meshs );
-}
-
-// parse the command out of the url
-Batch.parseUrl = function() {
-    var url  = document.URL;
-    var cmds = Parser.getCommands(url);
-
-    Batch.obj = cmds[0].meshFile;
-    if ( Batch.obj == undefined ) {
-        Batch.obj = Gui.meshList[0]; // defaut to cube
-    }
-	
-	if(cmds.length>1) Batch.values = cmds[1];
-	else Batch.values = {};
-	
-	for(var prop in Gui.values)
-		if(Batch.values[prop] == undefined)
-			Batch.values[prop] = Gui.values[prop];
-}
+var julia_def = [[-0.4,0.6],[0.285,0.01],[0.45,0.1428],[-0.70176,-0.3842],[-0.835,-0.2321],[-0.8,0.156]];
+var julia_idx;
 
 
-// when HTML is finished loading, do this
+
 window.onload = function() {
+    
+    var cmd = Parser.getCommands(document.URL)[0];
+    // var batchCMD = cmd.scene || "default";
+
+    julia_idx = 0;
+
+    var value1 = cmd.value1 || julia_def[julia_idx][0];
+    var value2 = cmd.value2 || julia_def[julia_idx][1];
+
+    var batchCMD = cmd.scene || "menger";
+
+    var default_level;
+    if (batchCMD == "menger") {default_level = 0.;}
+    else {default_level = 8.;}
+
+    var level = parseFloat(cmd.level) || default_level;
+        
+    var value = [parseFloat(value1), parseFloat(value2)];
+    var height = cmd.height || window.innerHeight;//600;
+    var width  = cmd.width  || window.innerWidth;//600;
+        
+    var animated = parseInt(cmd.animated) || 0;
+
+    var paused = false;
+    var debug = cmd.debug||false;
+
+    Raytracer.init(height, width, debug, value, batchCMD );
+    createScene(batchCMD);
+    
+    if ( animated ) init();
+    drawScene();
+    
     Student.updateHTML();
-	
-    // setup renderer
-    Renderer.create( document.getElementById("canvas"), Batch.updateCamera );
+    
 
-    // load new mesh
-	Batch.parseUrl();
-    Batch.meshChangeCallback( Batch.obj );
+    function createScene ( sceneID ) {
+        Scene[sceneID.toString()](level);
+    }
 
-    Renderer.update();
-};
+    function drawScene() {
+        var data = new Uint8Array(samples); 
+        if (setup) fft.getByteFrequencyData(data); 
+
+        if (!animated || !paused) Raytracer.render(animated,data);
+        
+        requestAnimationFrame(drawScene);
+    }
+    
+    function snapShot() {
+        // get the image data
+        try {
+            var dataURL = document.getElementById('canvas').toDataURL();
+        }
+        catch( err ) {
+            alert('Sorry, your browser does not support capturing an image.');
+            return;
+        }
+
+        // this will force downloading data as an image (rather than open in new window)
+        var url = dataURL.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
+        window.open( url );
+    }
+
+    // add event listener that will cause 'I' key to download image
+    window.addEventListener( 'keyup', function( event ) {
+        // only respond to 'I' key
+        if ( event.which == 73 ) {
+            snapShot();
+        }
+        else if ( event.which == 32 ) {
+            if (paused) {
+                play();
+            } else {
+                pause();
+            }
+            paused = !paused;
+        }
+    });
+    window.addEventListener( 'keydown', function( event ) {
+        var zoom = this.zoom;
+        // only respond to 'I' key
+        if (event.which == 38) {
+            // up arrow key
+        	Raytracer.handleZoom(0.0,-zoom,0.0);	
+        } else if (event.which == 40) {
+            // down arrow key
+        	Raytracer.handleZoom(0.0,zoom,0.0);	
+        } else if (event.which == 37) {
+            // left arrow key pressed
+            Raytracer.handleZoom(zoom,0.0,0.0);
+        } else if (event.which == 39) {
+            // right arrow key pressed
+            Raytracer.handleZoom(-zoom,0.0,0.0);
+        } else if (event.which == 188) {
+            // left carat
+            Raytracer.handleZoom(0.0,0.0,-zoom);
+            this.zoom = zoom * 1.02;
+        } else if (event.which == 190) {
+            // right carat
+            Raytracer.handleZoom(0.0,0.0,zoom);
+            this.zoom = zoom/1.02;
+        } 
+
+        /*  d = 68; f = 70
+        j = 74; k = 75  */
+        
+        else if (event.which == 68) {
+            Raytracer.handleValue(-1.0,0.0);
+        } else if (event.which == 70) {
+            Raytracer.handleValue(1.0,0.0);
+        } else if (event.which == 74) {
+            Raytracer.handleValue(0.0,-1.0);
+        } else if (event.which == 75) {
+            Raytracer.handleValue(0.0,1.0);
+        } 
+
+        // user pressed the enter key
+        else if (event.which == 13) {
+            // rotate defaults for julia
+            julia_idx = (julia_idx + 1) % julia_def.length;
+            Raytracer.value[0] = julia_def[julia_idx][0];
+            Raytracer.value[1] = julia_def[julia_idx][1];
+            Raytracer.needsToDraw = true;
+        }
+
+    });
+}
