@@ -50,30 +50,21 @@ Raytracer.handleMouseDown = function(event) {
 
 Raytracer.handleMouseUp = function(event) {
 	Raytracer.mouseDown = false;
-
-    //console.log(Raytracer.program);
-    /*var whatever = Raytracer.gl.getUniformLocation(Raytracer.program,"camera" );
-    var poop;
-    poop = Raytracer.gl.getUniform(Raytracer.program, whatever, poop);
-   console.log(poop)*/
-   //console.log(Raytracer.RotationMatrix);
-    //console.log(whatever);
 };  
 
 Raytracer.handleZoom = function(deltaX,deltaY,deltaZ)
 {
+    var scale = 0.3;
 
-    var scale = 0.5;
+    var camOrig_loc = Raytracer.gl.getUniformLocation(Raytracer.program,"camera" );
+    var camOrig = Raytracer.gl.getUniform(Raytracer.program, camOrig_loc, camOrig);
 
-    var zValue = Raytracer.howZoomed/Raytracer.MAX_ZOOM;
-	mat4.translate(Raytracer.RotationMatrix, [scale * deltaX, scale * deltaY, deltaZ * zValue ]);
+    var camPos;
+    camPos = mat4.multiplyVec4(Raytracer.RotationMatrix,camOrig,camPos);
+    var zScale = Math.sqrt(Math.dot(camPos,camPos)) / 4.0;
+
+	mat4.translate(Raytracer.RotationMatrix, [scale * deltaX, scale * deltaY, zScale * deltaZ ]);
     Raytracer.needsToDraw = true;
-
-    if (deltaZ > 0.0 && Raytracer.howZoomed < Raytracer.MAX_ZOOM) {
-        Raytracer.howZoomed++;
-    } else if (deltaZ < 0.0 && Raytracer.howZoomed > 0) {
-        Raytracer.howZoomed--;
-    }
 };
 
 Raytracer.handleValue = function(dv1,dv2) {

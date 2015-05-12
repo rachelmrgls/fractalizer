@@ -904,7 +904,7 @@ void main() {
     /*gl_FragColor = vec4( vec3(0.0), 1.0 );
     return; */
 
-    float cameraFOV = 0.1;
+    float cameraFOV = 0.0;
     vec3 direction = vec3(v_position.x * cameraFOV * width/height, v_position.y * cameraFOV, 1.0);
 
     Ray ray;
