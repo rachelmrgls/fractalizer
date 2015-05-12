@@ -112,9 +112,6 @@ window.onload = function() {
     createScene(batchCMD, level);
     
     var songInd = cmd.song || 0;
-
-    console.log(song)
-
     if ( animated ) init(Gui.musicList[songInd]);
     drawScene();
     
