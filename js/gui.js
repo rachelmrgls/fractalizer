@@ -7,7 +7,7 @@ Gui.sceneList = [
     "menger",
     "spheres",
     "mandelbrot",
-    "julia",
+    "julia2d",
     "julia3d",
     "apollonian",
 ];
@@ -29,7 +29,7 @@ Gui.musicList = [
     "We Own The Night (The Chainsmokers Remix).mp3",
 ];
 
-Gui.windowSizes = [ "full","400x400","600x400","600x600","800x600","800x800" ];
+Gui.windowSizes = [ "full","200x200","400x400","600x600","800x800" ];
 
 // due to a bug in dat GUI we need to initialize floats to non-interger values (like 0.5)
 // (the variable Gui.defaults below then carries their default values, which we set later)
