@@ -61,11 +61,18 @@ Raytracer.handleMouseUp = function(event) {
 
 Raytracer.handleZoom = function(deltaX,deltaY,deltaZ)
 {
+
     var scale = 0.3;
-	mat4.translate(Raytracer.RotationMatrix, [scale * deltaX, scale * deltaY, scale * deltaZ / Math.pow(2.0,Raytracer.howZoomed)]);
+
+    var zValue = Raytracer.howZoomed == 0 ? 1.0 : 1 / Raytracer.howZoomed;
+	mat4.translate(Raytracer.RotationMatrix, [scale * deltaX, scale * deltaY, scale * deltaZ * zValue ]);
     Raytracer.needsToDraw = true;
 
-    if (deltaZ != 0.0) {Raytracer.howZoomed++;}
+    if (deltaZ > 0.0) {
+        Raytracer.howZoomed++;
+    } else if (deltaZ < 0.0) {
+        Raytracer.howZoomed--;
+    }
 };
 
 Raytracer.handleValue = function(dv1,dv2) {
