@@ -60,6 +60,11 @@ Raytracer.handleMouseUp = function(event) {
     //console.log(whatever);
 };  
 
+zeroToOne = function( mini, maxi, val ) {
+    return (val - mini)/(maxi - mini);
+}
+
+
 Raytracer.handleZoom = function(deltaX,deltaY,deltaZ)
 {
 
