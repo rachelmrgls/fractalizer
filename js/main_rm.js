@@ -9,6 +9,7 @@ var src;
 var startOffset = 0;
 var startTime = 0;
 var zoom = 1.0;
+var paused = false;
 
 //init the sound system 
 function init(music) { 
@@ -70,6 +71,7 @@ function play() {
     src.start(0, startOffset % buf.duration);
     //src.start(0);//src.noteOn(0); 
     setup = true; 
+    paused = false;
 }  
 
 //http://chimera.labs.oreilly.com/books/1234000001552/ch02.html#s02_2
@@ -79,6 +81,7 @@ function pause() {
     src.stop();
     // Measure how much time passed since the last pause.
     startOffset += ctx.currentTime - startTime;
+    paused = true;
 }
 // defining the julia presets
 var julia_def = [[-0.4,0.6],[0.285,0.01],[.4145,.3436],[0.37,0.1428],[-0.70176,-0.3842],[-0.8,0.156],[-0.6732,0.3444]];
@@ -225,7 +228,6 @@ window.onload = function() {
         
     var animated = parseInt(cmd.animated) || 0;
 
-    var paused = false;
     var debug = cmd.debug||false;
 
     Raymarcher.init(height, width, debug, value, batchCMD );
@@ -272,12 +274,13 @@ window.onload = function() {
         }
         //space.32 ..> p.80
         else if ( event.which == 80 ) {
-            if (paused) {
+            if (animated) {
+                if (paused) {
                 play();
-            } else {
-                pause();
+                } else {
+                    pause();
+                }
             }
-            paused = !paused;
         }
     });
     window.addEventListener( 'keydown', function( event ) {
