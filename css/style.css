@@ -39,16 +39,14 @@ body {
     z-index: 100;
 }
 #index-div {
-    margin:80px 200px 0px 200px;
-    max-width:900px;
+    margin:80px 0px 0px 0px;
     text-align: center;
     align: center;
 }
 #index-table td {
     align: center;
     border: 10px solid #222;
-    height:500px; 
-    width: 280px; 
+    height:500px;  
     vertical-align: top;
 }
 img.demoplot {
