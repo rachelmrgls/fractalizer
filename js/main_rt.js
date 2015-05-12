@@ -83,7 +83,18 @@ var julia_def = [[-0.4,0.6],[0.285,0.01],[0.45,0.1428],[-0.70176,-0.3842],[-0.83
 var julia_idx;
 
 
+
 window.onload = function() {
+ 
+    var controlsChangeCallback = function() {
+        
+    }
+
+    Gui.init( controlsChangeCallback );
+
+
+
+
     
     var cmd = Parser.getCommands(document.URL)[0];
     // var batchCMD = cmd.scene || "default";
@@ -96,7 +107,7 @@ window.onload = function() {
     var batchCMD = cmd.scene || "menger";
 
     var default_level;
-    if (batchCMD == "menger") {default_level = 4.;}
+    if (batchCMD == "menger") {default_level = 0.;}
     else {default_level = 8.;}
 
     var level = parseFloat(cmd.level) || default_level;
