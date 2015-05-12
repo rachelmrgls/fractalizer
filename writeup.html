@@ -30,9 +30,9 @@
 <li><a href='#Conclusion'>Conclusion</a></li>
 </ul></div>
 
-<p><hr><p><a name='Introduction'></a><h2>Introduction</h2><p><hr><p>
+<p><hr><p><a name='Introduction'></a><h1>Introduction</h1><p><hr><p>
 
-<a name='Goal'></a><h3>Goal</h3>
+<a name='Goal'></a><h2>Goal</h2>
 Inspired by the <a href='https://www.youtube.com/watch?v=l-lTqSNmcys'>Mandelbulb 3D</a> shown in precept, our goal was to create a fractal-based sound visualizer. We envisioned an interactive, explorable 3D environment in which our extra dimension, music, controlled parameters of the animation. This visualizer could be used for educational purposes to help students conceptualize fractals in higher dimensions or for entertainment in the music industry. In general, fractals can be used to generate realistic terrains for movies and video games.
 
 <a name='PreviousWork'></a><h3>Previous Work</h3>
@@ -46,6 +46,8 @@ Christensen also covers an alternative approach to raymarching known as <a href=
 Our project relies on GLSL shaders running in the browser and should be accessed using Google Chrome on a Mac. We built our visualizer starting with the framework from previous assignments - specifically, the raytracer in Assignment 3 and the GUI from Assignment 2. Based on our initial survey of the previous work and the fact that we already had a working version of raytracing, we chose to implement raymarching rather than path tracing. We used fast fourier transforms (FFT) to sample the audio data using WebAudio, and animated the colors, size, and other fractal parameters based on the resulting data. We expected this approach to work well for smaller screen sizes, since we must march a new ray for each pixel. Similarly, computers with more RAM tend to outperform they are better equipped to handle the necessary computations. Finally, we anticipated that the visualizer would run more smoothly with lower recursion levels since this cuts the runtime of the distance estimation function.
 
 <p><hr><p><a name='Methodology'></a><h2>Methodology</h2><p><hr><p>
+<a name='Approach'></a><h2>Approach</h2>
+Our project relies on GLSL shaders running in the browser and should be accessed using Google Chrome on a Mac. We built our visualizer starting with the framework from previous assignments - specifically, the raytracer in Assignment 3 and the GUI from Assignment 2. Based on our initial survey of the previous work and the fact that we already had a working version of raytracing, we chose to implement raymarching rather than path tracing. We used fast fourier transforms (FFT) to sample the audio data using WebAudio, and animated the colors, size, and other fractal parameters based on the resulting data. We expected this approach to work well for smaller screen sizes, since we must march a new ray for each pixel. Similarly, computers with more RAM tend to outperform they are better equipped to handle the necessary computations. Finally, we anticipated that the visualizer would run more smoothly with lower recursion levels since this cuts the runtime of the distance estimation function.
 <a name='ImplementationDecisions'></a><h3>Implementation Decisions</h3>
 <ul>
 <li>Raymarching vs. Path tracing</li>
