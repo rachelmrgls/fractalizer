@@ -154,6 +154,7 @@ window.onload = function() {
         if ( Gui.values.animated ) {
             animated = 1;
             if ("music/" + Gui.values.song !== music || songNeedsChange) {
+
                 this.pause();
                 this.init(Gui.values.song);
             } else {
@@ -165,6 +166,7 @@ window.onload = function() {
         }
         drawScene();
         
+        Gui.gc.music.updateDisplay()
         Gui.gc.level.updateDisplay()
         Gui.gc.value1.updateDisplay()
         Gui.gc.value2.updateDisplay()
@@ -339,7 +341,7 @@ window.onload = function() {
         Gui.gc.value2.updateDisplay()
 
     });
-    Gui.gc.song.updateDisplay()
+    Gui.gc.music.updateDisplay()
     Gui.gc.level.updateDisplay()
     Gui.gc.value1.updateDisplay()
     Gui.gc.value2.updateDisplay()
