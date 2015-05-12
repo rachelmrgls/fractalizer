@@ -1,4 +1,3 @@
-
 // sound things
 var gfx;
 var ctx; //audio context 
@@ -10,6 +9,7 @@ var src;
 var startOffset = 0;
 var startTime = 0;
 var zoom = 1.0;
+var paused = false;
 
 //init the sound system 
 function init(music) { 
@@ -71,6 +71,7 @@ function play() {
     src.start(0, startOffset % buf.duration);
     //src.start(0);//src.noteOn(0); 
     setup = true; 
+    paused = false;
 }  
 
 //http://chimera.labs.oreilly.com/books/1234000001552/ch02.html#s02_2
@@ -80,17 +81,13 @@ function pause() {
     src.stop();
     // Measure how much time passed since the last pause.
     startOffset += ctx.currentTime - startTime;
+    paused = true;
 }
-
-var julia_def = [[-0.4,0.6],[0.285,0.01],[0.45,0.1428],[0.37,0.1428],[-0.70176,-0.3842],[-0.835,-0.2321],[-0.8,0.156]];
+// defining the julia presets
+var julia_def = [[-0.4,0.6],[0.285,0.01],[.4145,.3436],[0.37,0.1428],[-0.70176,-0.3842],[-0.8,0.156],[-0.6732,0.3444]];
 var julia_idx;
 
-
-
 window.onload = function() {
- 
-
-    
     var cmd = Parser.getCommands(document.URL)[0];
     // var batchCMD = cmd.scene || "default";
 
@@ -101,31 +98,25 @@ window.onload = function() {
 
     var batchCMD = cmd.scene || "menger";
 
-    var default_level;
-    if (batchCMD == "menger") {default_level = 0.;}
-    else {default_level = 8.;}
-
-    var level = parseFloat(cmd.level) || default_level;
+    var level = parseFloat(cmd.level) || Gui.values.level;
         
     var value = [parseFloat(value1), parseFloat(value2)];
-    Gui.values.value1 = value[0];
-    Gui.values.value2 = value[1];
     var height = cmd.height || window.innerHeight;//600;
     var width  = cmd.width  || window.innerWidth;//600;
         
     var animated = parseInt(cmd.animated) || 0;
 
-    var paused = false;
     var debug = cmd.debug||false;
 
-    Raytracer.init(height, width, debug, value, batchCMD );
+    Raymarcher.init(height, width, debug, value, batchCMD );
     createScene(batchCMD, level);
     
-    // if ( Gui.values.song !== "none" ) init(Gui.default.song);
-    if ( animated ) init(Gui.default.song);
+    var songInd = cmd.song || 0;
+
+    console.log(song)
+
+    if ( animated ) init(Gui.musicList[songInd]);
     drawScene();
-    
-    Student.updateHTML();
     
 
     function createScene ( sceneID, level ) {
@@ -136,7 +127,7 @@ window.onload = function() {
         var data = new Uint8Array(samples); 
         if (setup) fft.getByteFrequencyData(data); 
 
-        if (!animated || !paused) Raytracer.render(animated,data);
+        if (!animated || !paused) Raymarcher.render(animated,data);
         
         requestAnimationFrame(drawScene);
     }
@@ -162,13 +153,15 @@ window.onload = function() {
         if ( event.which == 73 ) {
             snapShot();
         }
-        else if ( event.which == 32 ) {
-            if (paused) {
+        //space.32 ..> p.80
+        else if ( event.which == 80 ) {
+            if (animated) {
+                if (paused) {
                 play();
-            } else {
-                pause();
+                } else {
+                    pause();
+                }
             }
-            paused = !paused;
         }
     });
     window.addEventListener( 'keydown', function( event ) {
@@ -176,23 +169,23 @@ window.onload = function() {
         // only respond to 'I' key
         if (event.which == 38) {
             // up arrow key
-        	Raytracer.handleZoom(0.0,-zoom,0.0);	
+            Raymarcher.handleZoom(0.0,-zoom,0.0);   
         } else if (event.which == 40) {
             // down arrow key
-        	Raytracer.handleZoom(0.0,zoom,0.0);	
+            Raymarcher.handleZoom(0.0,zoom,0.0);    
         } else if (event.which == 37) {
             // left arrow key pressed
-            Raytracer.handleZoom(zoom,0.0,0.0);
+            Raymarcher.handleZoom(zoom,0.0,0.0);
         } else if (event.which == 39) {
             // right arrow key pressed
-            Raytracer.handleZoom(-zoom,0.0,0.0);
+            Raymarcher.handleZoom(-zoom,0.0,0.0);
         } else if (event.which == 188) {
             // left carat
-            Raytracer.handleZoom(0.0,0.0,-zoom);
+            Raymarcher.handleZoom(0.0,0.0,-zoom);
             this.zoom = zoom * 1.02;
         } else if (event.which == 190) {
             // right carat
-            Raytracer.handleZoom(0.0,0.0,zoom);
+            Raymarcher.handleZoom(0.0,0.0,zoom);
             this.zoom = zoom/1.02;
         } 
 
@@ -200,28 +193,22 @@ window.onload = function() {
         j = 74; k = 75  */
         
         else if (event.which == 68) {
-            Raytracer.handleValue(-1.0,0.0);
-            Gui.values.value1 = Raytracer.value[0];
+            Raymarcher.handleValue(-1.0,0.0);
         } else if (event.which == 70) {
-            Raytracer.handleValue(1.0,0.0);
-            Gui.values.value1 = Raytracer.value[0];
+            Raymarcher.handleValue(1.0,0.0);
         } else if (event.which == 74) {
-            Raytracer.handleValue(0.0,-1.0);
-            Gui.values.value2 = Raytracer.value[1];
+            Raymarcher.handleValue(0.0,-1.0);
         } else if (event.which == 75) {
-            Raytracer.handleValue(0.0,1.0);
-            Gui.values.value2 = Raytracer.value[1];
+            Raymarcher.handleValue(0.0,1.0);
         } 
 
         // user pressed the enter key
         else if (event.which == 13) {
             // rotate defaults for julia
             julia_idx = (julia_idx + 1) % julia_def.length;
-            Raytracer.value[0] = julia_def[julia_idx][0];
-            Raytracer.value[1] = julia_def[julia_idx][1];
-            Gui.values.value1 = Raytracer.value[0];
-            Gui.values.value2 = Raytracer.value[1];
-            Raytracer.needsToDraw = true;
+            Raymarcher.value[0] = julia_def[julia_idx][0];
+            Raymarcher.value[1] = julia_def[julia_idx][1];
+            Raymarcher.needsToDraw = true;
         }
 
     });

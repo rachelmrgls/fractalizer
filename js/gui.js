@@ -68,6 +68,12 @@ Gui.toCommandString = function () {
     var url = '';
     for ( var prop in Gui.defaults ) {
         if( Gui.values[prop] !== undefined && Gui.values[prop] !== Gui.defaults[prop]) {
+            if (prop === "song") {
+                url += "&";
+                val = Gui.musicList.indexOf(Gui.values[prop]);
+                url += prop + "=" + val;
+                continue;
+            }
 
             url += "&";
             var val = Gui.values[prop];
