@@ -67,11 +67,11 @@ Though in our existing implementation the hue of the diffuse color depends on th
 <li><h3>Julia & Mandelbrot - Terminal Condition</h3>
 In the distance estimation functions for Julia and Mandelbrot, we break out of the recursion if the complex modulus of second complex number becomes too large. Tweaking the definition of 'too large' is essentially a trade-off between the visuals and the speed of the animations, since lowering the cutoff shortens the distance calculation. The following image shows a single frame of the animated Mandelbrot set with a cutoff of 1e20.
 <p>
-<img src='results/mandelbrot1e20.png'>
+<img src='results/e20mandelbrot.png'>
 <p>
 Though this version does include the external rings, the animation runs far slower. If we adjust the cutoff to be 1e8, the animation runs noticably more smoothly, however the external rings have vanished.
 <p>
-<img src='results/mandelbrot1e8.png'>
+<img src='results/e8mandelbrot.png'>
 <p>
 </li>
 <li><h3>Zoom - Standard vs. Diminishing</h3>
@@ -96,7 +96,7 @@ We fixed this by adjusting the height changes to be less drastic, however a more
 <li><h3>Menger Sponge - Slicing</h3>
 Our initial implementation of the menger sponge exhibited a 'slicing' behavior, as shown in the following image.
 <p>
-<img src='results/slicingmenger.png'>
+<img src='results/slicedcorner.png'>
 <p>
 Ultimately, we discovered that slicing occured as we approach the interior of the sponge, and found that decreasing the camera's field of view (FOV) eliminated this issue.
 </li>
