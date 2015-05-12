@@ -44,7 +44,7 @@ Gui.textureList = [
 Gui.values = {
     // general gui
     // meshFile   : Gui.meshList[0],
-    windowSize : Gui.windowSizes[0],
+    // windowSize : Gui.windowSizes[0],
     reset      : function () {},
     exclusive  : false,
     guiToBatch : function() {},
@@ -56,6 +56,7 @@ Gui.values = {
     i : 1.0,
     j : 1.0,
     k : 1.0,
+    precision : 6.0,
 	// texture : Gui.textureList[0],
 	// ambient: "#252137",
 	// diffuse: "#705d5d",
@@ -65,17 +66,11 @@ Gui.values = {
 
 // defaults only hold actual mesh modifiers, no display
 Gui.defaults = {
-	// shadingModel : Gui.shadingList[0],
-    // muVals : [0.0, 0.0, 0.0, 0.0]
     r: 0.0,
     i: 0.0,
     j: 0.0,
     k: 0.0,
-	// texture : Gui.textureList[0],
-	// ambient: "#252137",
-	// diffuse: "#705d5d",
-	// specular: "#4a4a28",
-	// shininess: 0.0,
+    precision: 3.0,
 };
 
 Gui.selection_possible = true;
@@ -101,7 +96,7 @@ Gui.toCommandString = function () {
 Gui.init = function (controlsChangeCallback ) {
     // create top level controls
     var gui     = new dat.GUI( { width: 300 } );
-    var size    = gui.add( Gui.values, 'windowSize', Gui.windowSizes ).name("Window Size");
+    // var size    = gui.add( Gui.values, 'windowSize', Gui.windowSizes ).name("Window Size");
 
     // var shading = gui.add( Gui.values, "shadingModel", Gui.shadingList );
 
@@ -110,6 +105,7 @@ Gui.init = function (controlsChangeCallback ) {
     gc.i = gui.add( Gui.values,'i',-5.0,5.0).step(0.05).setValue(  Gui.defaults.i );
     gc.j = gui.add( Gui.values,'j',-5.0,5.0).step(0.05).setValue(  Gui.defaults.j );
     gc.k = gui.add( Gui.values,'k',-5.0,5.0).step(0.05).setValue(  Gui.defaults.k );
+    gc.precision = gui.add( Gui.values,'precision',0.0,6.0).step(0.05).setValue(  Gui.defaults.precision );
 	// gc.texture = gui.add( Gui.values,'texture', Gui.textureList);
 	// gc.ambient = gui.addColor( Gui.values, 'ambient' );
 	// gc.diffuse = gui.addColor( Gui.values, 'diffuse' );
@@ -180,6 +176,8 @@ Gui.init = function (controlsChangeCallback ) {
     for ( var prop in gc ) {
         gc[prop].onChange( handleControlsChange );
     }
+
+    Gui.gc = gc;
 
 };
 

@@ -296,8 +296,11 @@ Raymarcher.resetMaterial = function ( ) {
     Raymarcher.setUniformMaterial( '1i','special', this.NONE );  
 };
 
+Raymarcher.precision = 0.003;
+
 
 Raymarcher.render = function () {
+    // console.log(Raymarcher.precision)
     // Render to an off-screen frame buffer (with attached texture)
     this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.frameBuffer.frameBuffer);
     this.gl.viewport(0, 0, this.frameBuffer.frameBuffer.width, this.frameBuffer.frameBuffer.height);

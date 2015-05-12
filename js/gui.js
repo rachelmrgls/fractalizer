@@ -18,10 +18,7 @@ Gui.musicList = [
     "Compass (Louis The Child Remix).mp3",
     "All Too Well.m4a",
     "Rather Be (Elephante Remix).mp3",
-<<<<<<< Updated upstream
-=======
     "Ten Feet Tall (Elephante Remix).mp3",
->>>>>>> Stashed changes
 ];
 
 Gui.windowSizes = [ "full","400x400","600x400","600x600","800x600","800x800" ];
@@ -101,19 +98,19 @@ Gui.init = function ( controlsChangeCallback ) {
     var size    = gui.add( Gui.values, 'windowSize', Gui.windowSizes ).name("Window Size");
     // var reset   = gui.add( Gui.values, 'reset' ).name("Reset");
     var gToB    = gui.add( Gui.values, 'guiToBatch' );
+    var featL   = gui.add( Gui.values, 'scene', Gui.sceneList ).name("Feature");
 
     var folderFT = gui.addFolder('FEATURES');
 
-    gc.featL   = folderFT.add( Gui.values, 'scene', Gui.sceneList ).name("Feature");
-    gc.animated = folderFT.add( Gui.values, "animated" ).name( "Animated" );
 
-    gc.level     = folderFT.add( Gui.values, "level", 0, 15 ).name( "Recursion level" ).step( 1 ).setValue( Gui.defaults.level ).listen();
-    gc.value1    = folderFT.add( Gui.values, "value1", -1.0, 1.0 ).name( "Value 1" ).step( 0.001 ).setValue( Gui.defaults.value1 ).listen();
-    gc.value2   = folderFT.add( Gui.values, "value2", -1.0, 1.0 ).name( "Value 2" ).step( 0.001 ).setValue( Gui.defaults.value2 ).listen();
+    gc.level     = folderFT.add( Gui.values, "level", 0, 15 ).name( "Recursion level" ).step( 1 ).setValue( Gui.defaults.level );
+    gc.value1    = folderFT.add( Gui.values, "value1", -1.0, 1.0 ).name( "Value 1" ).step( 0.001 ).setValue( Gui.defaults.value1 );
+    gc.value2   = folderFT.add( Gui.values, "value2", -1.0, 1.0 ).name( "Value 2" ).step( 0.001 ).setValue( Gui.defaults.value2 );
 
     var folderMU = gui.addFolder('MUSIC');
 
     gc.music    = folderMU.add( Gui.values, 'song', Gui.musicList ).name("Music");
+    gc.animated = folderMU.add( Gui.values, "animated" ).name( "Animated" );
 
     // Helper functions
     var inReset = false;
@@ -149,6 +146,7 @@ Gui.init = function ( controlsChangeCallback ) {
                 }
             }
             Gui.oldVals = JSON.parse( JSON.stringify(Gui.values) );
+
             controlsChangeCallback();
         }
         Gui.selection_possible = true;
@@ -171,6 +169,7 @@ Gui.init = function ( controlsChangeCallback ) {
 
     // REGISTER CALLBACKS FOR WHEN GUI CHANGES:
 
+    featL.onChange( handleControlsChange );
     size.onChange( handleControlsChange );
 
     // back button pressed
@@ -200,6 +199,7 @@ Gui.init = function ( controlsChangeCallback ) {
 
         window.open( url );
     } );
+    Gui.gc = gc;
 };
 
 

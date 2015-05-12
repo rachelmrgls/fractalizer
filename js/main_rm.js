@@ -1,4 +1,3 @@
-
 // sound things
 var gfx;
 var ctx; //audio context 
@@ -137,6 +136,10 @@ window.onload = function() {
             animated = 0;
         }
         drawScene();
+        
+        Gui.gc.level.updateDisplay()
+        Gui.gc.value1.updateDisplay()
+        Gui.gc.value2.updateDisplay()
     }
 
     Gui.init( controlsChangeCallback );
@@ -274,6 +277,11 @@ window.onload = function() {
             Gui.values.value2 = Raymarcher.value[1];
             Raymarcher.needsToDraw = true;
         }
+        Gui.gc.value1.updateDisplay()
+        Gui.gc.value2.updateDisplay()
 
     });
+    Gui.gc.level.updateDisplay()
+    Gui.gc.value1.updateDisplay()
+    Gui.gc.value2.updateDisplay()
 }
