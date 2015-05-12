@@ -266,7 +266,7 @@ vec3 calcDiffuseColor(Object obj, vec3 pos) {
     return diffuseColor;
 }
 
-vec3 addLight( vec3 diffuseColor, Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, bool phongOnly ) {
+vec3 addLight( int i, vec3 diffuseColor, Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, bool phongOnly ) {
     vec3 outputColor = vec3( 0.0, 0.0, 0.0 ); // color defaults to black
 
     vec3 lightVector = lights[i].position - pos;
@@ -324,7 +324,7 @@ vec3 calcSpecularColor(Object obj, vec3 pos, vec3 normalVector, vec3 eyeVector, 
 
         if(i>=numLights) break; // because GLSL will not allow looping to numLights
 		
-        outputColor += addLight(diffuseColor,obj,pos,normalVector,eyeVector,phongOnly);
+        outputColor += addLight(i,diffuseColor,obj,pos,normalVector,eyeVector,phongOnly);
 	}
 	
 	return outputColor;
