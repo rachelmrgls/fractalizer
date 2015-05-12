@@ -12,21 +12,22 @@ var startTime = 0;
 var zoom = 1.0;
 
 //init the sound system 
-function init() { 
+function init(music) { 
     try { 
         ctx = new AudioContext();//webkitAudioContext(); //is there a better API for this? 
-        //setupCanvas(); 
-        loadFile(); 
+        //setupCanvas();
+        startOffset = 0; 
+        loadFile(music); 
     } catch(e) { 
         alert('you need webaudio support' + e); 
     } 
 }
 
 //load the mp3 file 
-function loadFile() { 
+var music;
+function loadFile(title) { 
     var req = new XMLHttpRequest(); //
-    var music;
-    music = "music/Forever (Pt. II) Feat. Kaleem Taylor.mp3";
+    music = "music/" + title; // Forever (Pt. II) Feat. Kaleem Taylor.mp3
     req.open("GET",music,true);//"Ten Feet Tall (Elephante Remix)
     //we can't use jquery because we need the arraybuffer type 
     req.responseType = "arraybuffer"; 
@@ -40,7 +41,7 @@ function loadFile() {
     req.send(); 
 } 
 
-function play() { 
+function play() {
 
     startTime = ctx.currentTime;
     //var source = context.createBufferSource();
@@ -74,12 +75,14 @@ function play() {
 
 //http://chimera.labs.oreilly.com/books/1234000001552/ch02.html#s02_2
 function pause() {
+    if (!src) return;
+
     src.stop();
     // Measure how much time passed since the last pause.
     startOffset += ctx.currentTime - startTime;
 }
 
-var julia_def = [[-0.4,0.6],[0.285,0.01],[0.45,0.1428],[-0.70176,-0.3842],[-0.835,-0.2321],[-0.8,0.156]];
+var julia_def = [[-0.4,0.6],[0.285,0.01],[0.45,0.1428],[0.37,0.1428],[-0.70176,-0.3842],[-0.835,-0.2321],[-0.8,0.156]];
 var julia_idx;
 
 
@@ -87,15 +90,44 @@ var julia_idx;
 window.onload = function() {
  
     var controlsChangeCallback = function() {
-        // console.log("here")
-        // Raytracer.init(height, width, debug, value, Gui.values.scene );
+
+        Raytracer.needsToDraw = true
+
+        Raytracer.value = [Gui.values.value1,Gui.values.value2];
+
+        height = cmd.height || window.innerHeight;
+        width  = cmd.width  || window.innerWidth;
+        if (Gui.values.windowSize !== "full") {
+            var parts = Gui.values.windowSize.split('x');
+            width  = parseInt(parts[0]);
+            height = parseInt(parts[1]);
+        }
+        Raytracer.init(height, width, debug, Raytracer.value, Gui.values.scene );
 
         Raytracer.objectID = 0;
         Raytracer.lightID = 0;
-        createScene(Gui.values.scene);
-        Raytracer.needsToDraw = true
+        createScene(Gui.values.scene, Gui.values.level);
 
-        if ( animated ) init();
+
+        // if (Gui.values.song === "none") {
+        //     pause();
+        // } else if (Gui.values.song !== music) {
+        //     pause();
+        //     init(Gui.values.song);
+        // }
+
+        if ( Gui.values.animated ) {
+            animated = 1;
+            if ("music/" + Gui.values.song !== music) {
+                pause();
+                init(Gui.values.song);
+            } else {
+                play();
+            }
+        } else {
+            pause();
+            animated = 0;
+        }
         drawScene();
     }
 
@@ -118,6 +150,8 @@ window.onload = function() {
     var level = parseFloat(cmd.level) || default_level;
         
     var value = [parseFloat(value1), parseFloat(value2)];
+    Gui.values.value1 = value[0];
+    Gui.values.value2 = value[1];
     var height = cmd.height || window.innerHeight;//600;
     var width  = cmd.width  || window.innerWidth;//600;
         
@@ -127,15 +161,16 @@ window.onload = function() {
     var debug = cmd.debug||false;
 
     Raytracer.init(height, width, debug, value, batchCMD );
-    createScene(batchCMD);
+    createScene(batchCMD, level);
     
-    if ( animated ) init();
+    // if ( Gui.values.song !== "none" ) init(Gui.default.song);
+    if ( animated ) init(Gui.default.song);
     drawScene();
     
     Student.updateHTML();
     
 
-    function createScene ( sceneID ) {
+    function createScene ( sceneID, level ) {
         Scene[sceneID.toString()](level);
     }
 
@@ -208,12 +243,16 @@ window.onload = function() {
         
         else if (event.which == 68) {
             Raytracer.handleValue(-1.0,0.0);
+            Gui.values.value1 = Raytracer.value[0];
         } else if (event.which == 70) {
             Raytracer.handleValue(1.0,0.0);
+            Gui.values.value1 = Raytracer.value[0];
         } else if (event.which == 74) {
             Raytracer.handleValue(0.0,-1.0);
+            Gui.values.value2 = Raytracer.value[1];
         } else if (event.which == 75) {
             Raytracer.handleValue(0.0,1.0);
+            Gui.values.value2 = Raytracer.value[1];
         } 
 
         // user pressed the enter key
@@ -222,6 +261,8 @@ window.onload = function() {
             julia_idx = (julia_idx + 1) % julia_def.length;
             Raytracer.value[0] = julia_def[julia_idx][0];
             Raytracer.value[1] = julia_def[julia_idx][1];
+            Gui.values.value1 = Raytracer.value[0];
+            Gui.values.value2 = Raytracer.value[1];
             Raytracer.needsToDraw = true;
         }
 

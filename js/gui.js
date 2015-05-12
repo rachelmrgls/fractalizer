@@ -14,8 +14,10 @@ Gui.sceneList = [
 
 // list of meshes available in the GUI
 Gui.musicList = [
-    "All Too Well",
-    "Rather Be",
+    "Forever (Pt. II) Feat. Kaleem Taylor.mp3",
+    "Compass (Louis The Child Remix).mp3",
+    "All Too Well.m4a",
+    "Rather Be.mp4",
 ];
 
 Gui.windowSizes = [ "full","400x400","600x400","600x600","800x600","800x800" ];
@@ -37,21 +39,23 @@ Gui.values = {
     'Thomas Greenspan' : function () {},
     'Fractals' : function () {},
 
-    value1    : 0.5,
-    recursion     : 0.5,
-    value2   : 0.5,
-    animated : false,
+    value1    : 0.37,
+    level : 0,
+    value2    : 0.1428,
+    animated  : false,
 };
 
 
 // defaults only hold actual mesh modifiers, no display
 Gui.defaults = {
 
-    value1    : 0.0,
-    recursion     : 0.0,
-    value2   : 0.0,
+    value1    : 0.37,
+    level : 0,
+    value2    : 0.1428,
 
     animated : false,
+
+    song : Gui.musicList[0],
 
 };
 
@@ -62,6 +66,7 @@ Gui.toCommandString = function () {
     var url = '';
     for ( var prop in Gui.defaults ) {
         if( Gui.values[prop] !== undefined && Gui.values[prop] !== Gui.defaults[prop]) {
+
             url += "&";
             var val = Gui.values[prop];
 
@@ -74,23 +79,6 @@ Gui.toCommandString = function () {
     return url;
 }
 
-Gui.getModifiableFacesString = function() {
-    if (Main._mesh.numSelectedFaces() == 0) {
-        return '';
-    }
-    var sel = Main._mesh.getModifiableFaces();
-    var ids = sel.map(function(face) {return face.id;}); // replaces the faces with their ids
-    var str = '&selected=(' + ids.join() + ')';
-    return str;
-}
-
-Gui.parseSelected = function(sel) {
-    if (sel == undefined) return sel;
-    sel = sel.replace(/[\(\)]/g,'');
-    sel = sel.split(',');
-    sel = sel.map(function (s) {return parseInt(s);});
-    return sel;
-}
 
 Gui.init = function ( controlsChangeCallback ) {
     // create top level controls
@@ -107,7 +95,7 @@ Gui.init = function ( controlsChangeCallback ) {
     
 
     var size    = gui.add( Gui.values, 'windowSize', Gui.windowSizes ).name("Window Size");
-    var reset   = gui.add( Gui.values, 'reset' ).name("Reset");
+    // var reset   = gui.add( Gui.values, 'reset' ).name("Reset");
     var gToB    = gui.add( Gui.values, 'guiToBatch' );
 
     var folderFT = gui.addFolder('FEATURES');
@@ -115,13 +103,13 @@ Gui.init = function ( controlsChangeCallback ) {
     gc.featL   = folderFT.add( Gui.values, 'scene', Gui.sceneList ).name("Feature");
     gc.animated = folderFT.add( Gui.values, "animated" ).name( "Animated" );
 
-    gc.recursion     = folderFT.add( Gui.values, "recursion", 0.0, 1.0 ).name( "Recursion level" ).step( 0.01 ).setValue( Gui.defaults.recursion );
-    gc.value1    = folderFT.add( Gui.values, "value1", -1.0, 1.0 ).name( "Value 1" ).step( 0.01 ).setValue( Gui.defaults.value1 );
-    gc.value2   = folderFT.add( Gui.values, "value2", -1.0, 1.0 ).name( "Value 2" ).step( 0.01 ).setValue( Gui.defaults.value2 );
+    gc.level     = folderFT.add( Gui.values, "level", 0, 15 ).name( "Recursion level" ).step( 1 ).setValue( Gui.defaults.level );
+    gc.value1    = folderFT.add( Gui.values, "value1", -1.0, 1.0 ).name( "Value 1" ).step( 0.001 ).setValue( Gui.defaults.value1 ).listen();
+    gc.value2   = folderFT.add( Gui.values, "value2", -1.0, 1.0 ).name( "Value 2" ).step( 0.001 ).setValue( Gui.defaults.value2 ).listen();
 
     var folderMU = gui.addFolder('MUSIC');
 
-    gc.music    = folderMU.add( Gui.values, 'song', Gui.song ).name("Music");
+    gc.music    = folderMU.add( Gui.values, 'song', Gui.musicList ).name("Music");
 
     // Helper functions
     var inReset = false;
@@ -169,26 +157,27 @@ Gui.init = function ( controlsChangeCallback ) {
         // console.log( Gui.selection_possible );
     };
 
-    var resetAll = function() {
-        console.log("here")
-        resetGuiValues();
-        handleControlsChange();
+    // var resetAll = function() {
+    //     console.log("here")
+    //     resetGuiValues();
+    //     handleControlsChange();
 
-        Gui.selection_possible = true;
-    };
+    //     Gui.selection_possible = true;
+    // };
 
     // REGISTER CALLBACKS FOR WHEN GUI CHANGES:
 
+    size.onChange( handleControlsChange );
 
     // back button pressed
-    reset.onChange( function () {
-        var cmd = Gui.toCommandString();
-        if (cmd.length > 0) {
-            // Gui had non-default values so reset to defaults
-            resetAll();
-            return;
-        }
-    } );
+    // reset.onChange( function () {
+    //     var cmd = Gui.toCommandString();
+    //     if (cmd.length > 0) {
+    //         // Gui had non-default values so reset to defaults
+    //         resetAll();
+    //         return;
+    //     }
+    // } );
 
     // setup the callback function for all display related gui changes
     for ( var prop in gc ) {
@@ -198,13 +187,6 @@ Gui.init = function ( controlsChangeCallback ) {
     // button which creates the corresponding url of current gui
     gToB.onChange( function() {
         var url = 'batch.html?scene=' + Gui.values.scene;
-
-        for (var i = 0; i < Gui.applyList.length; i++) {
-            if (i > 0) {
-                url += '&apply';
-            }
-            url += Gui.applyList[i];
-        }
 
         var cmd = Gui.toCommandString();
 

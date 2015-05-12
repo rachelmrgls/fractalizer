@@ -33,14 +33,19 @@ Scene.apollonian = function (level) {
     Raytracer.setUniformMaterial( '1f','shininess', 200 ); 
     Raytracer.setUniformMaterial( '3f','color', 0.2, 0.4, 0.5 );
     //Raytracer.addSphere( 0.0, 0.0, 0.0, 1.0 );
+
+    console.log(level);
     Raytracer.addApollonian( level ); // recursion level
     
     Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);
     
     Raytracer.addLight( 20.0, 20.0, 5.0, 1.0, 1.0, 1.0, 40.0, 2);
-    //Raytracer.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 40.0, 1);
+    // Raytracer.addLight( 10.0, 20.0, -10.0, 1.0, 1.0, 1.0, 40.0, 1);
     Raytracer.setUniform('1i', 'numLights', Raytracer.lightID);
     Raytracer.setUniform('1i', 'isBounded', 0);
+
+    console.log("here")
+
 };
 
 Scene.menger = function (level) {
@@ -84,7 +89,7 @@ Scene.julia3d = function ( ) {
 
     Raytracer.addJulia3d(); // recursion level
 
-    //Raytracer.setBound( 2.0, 0.0, 0.0, 0.0 );
+    // Raytracer.setBound( 2.0, 0.0, 0.0, 0.0 );
     Raytracer.setUniform('1i', 'isBounded', 0);
 
     Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);
@@ -114,8 +119,8 @@ Scene.julia = function ( ) {
 
     Raytracer.addJulia(); // recursion level
 
-    Raytracer.setBound( 2.0, 0.0, 0.0, 0.0 );
-    Raytracer.setUniform('1i', 'isBounded', 1);
+    // Raytracer.setBound( 2.0, 0.0, 0.0, 0.0 );
+    Raytracer.setUniform('1i', 'isBounded', 0);
 
     Raytracer.setUniform('1i', 'numObjects', Raytracer.objectID);
     
