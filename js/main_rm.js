@@ -151,6 +151,7 @@ window.onload = function() {
         if ( Gui.values.animated ) {
             animated = 1;
             if ("music/" + Gui.values.song !== music || songNeedsChange) {
+                src = undefined;
                 pause();
                 init(Gui.values.song);
             } else {
@@ -217,7 +218,11 @@ window.onload = function() {
     Gui.values.value2 = value[1];
     var height = cmd.height || window.innerHeight;//600;
     var width  = cmd.width  || window.innerWidth;//600;
-
+    if (Gui.values.windowSize !== "full") {
+        var parts = Gui.values.windowSize.split('x');
+        width  = parseInt(parts[0]);
+        height = parseInt(parts[1]);
+    }
         
     var animated = parseInt(cmd.animated) || 0;
 

@@ -36,7 +36,7 @@ Gui.windowSizes = [ "full","200x200","400x400","600x600","800x800" ];
 Gui.values = {
     // general gui
     scene   : Gui.sceneList[0],
-    windowSize : Gui.windowSizes[0],
+    windowSize : Gui.windowSizes[2],
     song  : Gui.musicList[0],
     reset      : function () {},
     guiToBatch : function() {},
