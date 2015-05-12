@@ -11,7 +11,7 @@
         <table  style="width:100%;">
         <td>
             <h1>COS426 Final Project <br><br>Fractalizer &mdash; Writeup</h1>
-            <h1>Switch to: <a href='index.html'>Home Page</a></h1>
+            <h1><a href='index.html'>Home</a></h1>
             <br>
             <br>
             <h1 id='student'></h1>
@@ -49,17 +49,17 @@ Inspired by the <a href='https://www.youtube.com/watch?v=l-lTqSNmcys'>Mandelbulb
 
 The <a href='http://www.mandelbulber.com/'>Mandelbulber</a> system uses raymarching to render fractals in real-time. This technique relies on distance estimation, a method developed in the <a href='http://www.fractalforums.com/'>Fractal Forums</a> community. The raymarching algorithm iteratively steps forward in the ray direction according to the distance estimation function. <a href='http://iquilezles.org/'>Inigo Quilez's</a> site includes tutorials on distance estimation and raymarching, in addition to sample code and images. <a href='http://inst.eecs.berkeley.edu/~cs184/sp12/assignments/Archive/HW6/Fractal%20Renderer.htm'>Kevin Horowitz</a> describes some of the effects (fog, glow, environmental lighting by ambient occlusion) easily implemented within a pre-existing a raymarching framework. <a href='http://blog.hvidtfeldts.net/index.php/2011/06/distance-estimated-3d-fractals-part-i/'>Mikael Christensen</a> presents another helpful tutorial on the same topic.
 <p>
-Christensen also covers an alternative approach to raymarching known as <a href="http://blog.hvidtfeldts.net/index.php/2015/01/path-tracing-3d-fractals/">path tracing</a> in the context of the open source, GLSL-based <a href='http://syntopia.github.io/Fragmentarium/'>Fragmentarium</a> system. Though both path tracing and raymarching shoot rays from the camera into the scene, path tracing calculates global illumination by integrating over the all the illuminance arriving at a single point on the surface and then reducing by the bidirectional reflectance distribution function (BRDF). Finally, <a href="http://joshondesign.com/p/books/canvasdeepdive/chapter12.html">Josh Marinacci</a> presents an introduction to WebAudio and gives sample code for creating a basic visualizer by getting a frequency analysis of the sound playing at each frame of the animation.
-[[When do previous approaches fail/succeed?]]
+Christensen also covers a supplementary lighting technique known as <a href="http://blog.hvidtfeldts.net/index.php/2015/01/path-tracing-3d-fractals/">path tracing</a> in the context of the open source, GLSL-based <a href='http://syntopia.github.io/Fragmentarium/'>Fragmentarium</a> system. Though both path tracing and raymarching shoot rays from the camera into the scene, path tracing calculates global illumination by integrating over the all the illuminance arriving at a single point on the surface using Monte Carlo sampling and then reducing by the bidirectional reflectance distribution function (BRDF). Finally, <a href="http://joshondesign.com/p/books/canvasdeepdive/chapter12.html">Josh Marinacci</a> presents an introduction to WebAudio and gives sample code for creating a basic visualizer by getting a frequency analysis of the sound playing at each frame of the animation.
+
 
 <a name='Approach'></a><h2>Approach</h2>
-Our project relies on GLSL shaders running in the browser and should be accessed using Google Chrome on a Mac (preferably on a processor with at least 8GB of RAM). We built our visualizer starting with the framework from previous assignments - specifically, the raytracer in Assignment 3 and the GUI from Assignment 2. Based on our initial survey of the previous work and the fact that we already had a working version of raytracing, we chose to implement raymarching rather than path tracing. We used Fast Fourier Transforms (FFT) to sample the audio data using WebAudio, and animated the colors, size, and other fractal parameters based on the resulting data. We expected this approach to work well for smaller screen sizes, since we must march a new ray for each pixel. Similarly, computers with more RAM tend to outperform other processors; they are better equipped to handle the necessary computations. If you have a slower computer we suggest making the browser window small (200x200 is a safe bet). Finally, we anticipated that the visualizer would run more smoothly with lower recursion levels since this cuts down the runtime of the distance estimation function.
+Our project relies on GLSL shaders running in the browser and should be accessed using Google Chrome on a Mac (preferably on a processor with at least 8GB of RAM). We built our visualizer starting with the framework from previous assignments - specifically, the raytracer in Assignment 3 and the GUI from Assignment 2. Based on our initial survey of the previous work and the fact that we already had a working version of raytracing, we chose to implement raymarching. We used Fast Fourier Transforms (FFT) to sample the audio data using WebAudio, and animated the colors, size, and other fractal parameters based on the resulting data. We expected this approach to work well for smaller screen sizes, since we must march a new ray for each pixel. Similarly, computers with more RAM tend to outperform other processors; they are better equipped to handle the necessary computations. If you have a slower computer we suggest making the browser window small (200x200 is a safe bet). Finally, we anticipated that the visualizer would run more smoothly with lower recursion levels since this cuts down the runtime of the distance estimation function.
 
 <p><hr><p><a name='Methodology'></a><h1>Methodology</h1><p><hr><p>
 <a name='ImplementationDecisions'></a><h2>Implementation Decisions</h2>
 <ul>
-<li><h3>Raymarching vs. Path Tracing</h3>
-The primary reason for choosing raymarching over path tracing was that we had access to the infrastructure for a functional raytracer. Using this code as a starting point, we were able to convert the raytracer to a raymarcher with relative ease.
+<li><h3>Raymarching</h3>
+The primary reason for choosing raymarching was that we had access to the infrastructure for a functional raytracer. Using this code as a starting point, we were able to convert the raytracer to a raymarcher with relative ease.
 </li>
 <li><h3>Calculating Surface Normals</h3>
 To find the surface normals needed for the specular color calculation, there were two possible approaches. One method involves analytically calculating the normals for each object. For example, for a sphere we can simply subtract the sphere center from the position of the intersection and normalize the resulting vector. However, for more complicated structures (i.e. a Menger sponge) calculating normals analytically would present more of a challenge since we must track which face of the surface we have intersected as we recurse further down. The alternative is to use the finite difference method to approximate surface normals. Unfortunately, this method requires an additional six calls to the distance estimation function. This explains why the more complex scenes (like Mandelbrot, Julia 2D, Julia 3D) run more slowly than the field of infinite spheres.
@@ -117,37 +117,37 @@ We measured success qualitatively based on the resolution of our rendering, the 
 Below, we go through each of the animated scenes briefly. Each header links to the batch url for the given scene. Check out our <a href='tutorial.html'>brief tutorial</a> to learn how to navigate and interact with the visualizations.
 
 <ul>
-<li><h3>Infinite Spheres</h3></li>
+<li><h3><a href='batch.html?scene=spheres&animated=1&song=Wonder%20(feat.%20The%20Kite%20String%20Tangle).mp3'>Infinite Spheres</a></h3></li>
 <p>
 <img src='results/spheres.png'>
 <p>
 Color and height (by manhattan distance to center sphere) dependent on audio.
-<li><h3>Menger Sponge</h3></li>
+<li><h3><a href='batch.html?scene=menger&animated=1&level=4&song=Float%20(TheFatRat%20Remix).mp3'>Menger Sponge</a></h3></li>
 <p>
 <img src='results/menger.png'>
 <p>
 Color (by distance to origin) dependent on audio.
-<li><h3>Mandelbrot</h3></li>
+<li><h3><a href='batch.html?scene=mandelbrot&animated=1&song=Rather%20Be%20(Elephante%20Remix).mp3'>Mandelbrot</a></h3></li>
 <p>
 <img src='results/mandelbrotstandard.png'>
 <p>
 Color (by ratio of iterations) dependent on audio.
-<li><h3>Julia 2D</h3></li>
+<li><h3><a href='batch.html?scene=julia2d&animated=1&value1=-0.4&value2=0.6&song=Forever%20(Pt.%20II)%20Feat.%20Kaleem%20Taylor.mp3'>Julia 2D</a></h3></li>
 <p>
 <img src='results/julia2d3.png'>
 <p>
 Color (by ratio of iterations) and values for the second complex number (single audio indices for real and imaginary coordinates) dependent on audio.
-<li><h3>Julia 3D</h3></li>
+<li><h3><a href='batch.html?scene=julia3d&animated=1&value2=0.6&song=Borderline.mp3'>Julia 3D</a></h3></li>
 <p>
 <img src='results/julia3d2.png'>
 <p>
-<li><h3>Interactive Julia 3D</h3></li>
+<li><h3><a href='raymarcher2.html'>Interactive Julia 3D</a></h3></li>
 Color (by ratio of iterations) and values for the imaginary part of the second complex number (single audio index) dependent on audio.
 <p>
 <img src='results/interactivejulia2.png'>
 <p>
 No audio.
-<li><h3>Apollonian Gasket</h3></li>
+<li><h3><a href='batch.html?scene=apollonian&animated=1&level=12&song=Kanye%20(Ookay%20Remix).mp3'>Apollonian Gasket</a></h3></li>
 <p>
 <img src='results/apollonian2.png'>
 <p>
