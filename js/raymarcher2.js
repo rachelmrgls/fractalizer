@@ -296,11 +296,8 @@ Raymarcher.resetMaterial = function ( ) {
     Raymarcher.setUniformMaterial( '1i','special', this.NONE );  
 };
 
-Raymarcher.precision = 0.003;
-
 
 Raymarcher.render = function () {
-    // console.log(Raymarcher.precision)
     // Render to an off-screen frame buffer (with attached texture)
     this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.frameBuffer.frameBuffer);
     this.gl.viewport(0, 0, this.frameBuffer.frameBuffer.width, this.frameBuffer.frameBuffer.height);
@@ -312,7 +309,7 @@ Raymarcher.render = function () {
     this.gl.uniform1i(this.mainShader.uniforms.maxIterations, 20);    // bounds precision
     this.gl.uniform1f(this.mainShader.uniforms.epsilon, 0.003);       // bounds precision
     this.gl.uniform3f(this.mainShader.uniforms.eye, eye[0], eye[1], eye[2]);
-    this.gl.uniform3f(this.mainShader.uniforms.diffuse, 0.81, 0.76, 0.878); // diffuse color. We can find a cool color later
+    this.gl.uniform3f(this.mainShader.uniforms.diffuse, 1.0, 0.52, 0.0); // diffuse color
     this.gl.uniform3f(this.mainShader.uniforms.light, light[0], light[1], light[2]);
 
     // Rays are specified by determining the ray from the eye to each of the

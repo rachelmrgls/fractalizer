@@ -19,7 +19,6 @@ var controlsChangeCallback = function() {
 	mu.cur[1] = Gui.values.i;
 	mu.cur[2] = Gui.values.j;
 	mu.cur[3] = Gui.values.k;
-
 }
 
 // when HTML is finished loading, do this
@@ -27,7 +26,6 @@ window.onload = function() {
     Student.updateHTML();
 
     Gui.init( controlsChangeCallback );
-	Gui.gc.precision.updateDisplay();
 
 	Raymarcher.init('julia3D');
 	Raymarcher.update();

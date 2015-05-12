@@ -56,7 +56,6 @@ Gui.values = {
     i : 1.0,
     j : 1.0,
     k : 1.0,
-    precision : 6.0,
 	// texture : Gui.textureList[0],
 	// ambient: "#252137",
 	// diffuse: "#705d5d",
@@ -70,7 +69,6 @@ Gui.defaults = {
     i: 0.0,
     j: 0.0,
     k: 0.0,
-    precision: 3.0,
 };
 
 Gui.selection_possible = true;
@@ -101,11 +99,10 @@ Gui.init = function (controlsChangeCallback ) {
     // var shading = gui.add( Gui.values, "shadingModel", Gui.shadingList );
 
     var gc = {};
-    gc.r = gui.add( Gui.values,'r',-5.0,5.0).step(0.05).setValue(  Gui.defaults.r );
-    gc.i = gui.add( Gui.values,'i',-5.0,5.0).step(0.05).setValue(  Gui.defaults.i );
-    gc.j = gui.add( Gui.values,'j',-5.0,5.0).step(0.05).setValue(  Gui.defaults.j );
-    gc.k = gui.add( Gui.values,'k',-5.0,5.0).step(0.05).setValue(  Gui.defaults.k );
-    gc.precision = gui.add( Gui.values,'precision',0.0,6.0).step(0.05).setValue(  Gui.defaults.precision );
+    gc.r = gui.add( Gui.values,'r',-2.0,2.0).step(0.05).setValue(  Gui.defaults.r );
+    gc.i = gui.add( Gui.values,'i',-2.0,2.0).step(0.05).setValue(  Gui.defaults.i );
+    gc.j = gui.add( Gui.values,'j',-2.0,2.0).step(0.05).setValue(  Gui.defaults.j );
+    gc.k = gui.add( Gui.values,'k',-1.15,1.15).step(0.05).setValue(  Gui.defaults.k );
 	// gc.texture = gui.add( Gui.values,'texture', Gui.textureList);
 	// gc.ambient = gui.addColor( Gui.values, 'ambient' );
 	// gc.diffuse = gui.addColor( Gui.values, 'diffuse' );
