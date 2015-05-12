@@ -477,7 +477,7 @@ float mandelbrot_de( vec3 p ) {
         z = complexMult(z,z) + c;
 
         m2 = complexModSquared(z);
-        if( m2>1e20  ) { /// fix me fix me the 2d thang
+        if( m2>1e8  ) { /// fix me fix me the 2d thang
             iter = float(i)/float(MAX_MANDEL_ITER);
             
             break;
