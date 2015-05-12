@@ -125,14 +125,14 @@ h1, h2, h3 {
 }
 
 h1 {
-    font-size: 100%;
+    font-size: 120%;
 }
 h2 {
     margin-top:10px;
-    font-size: 70%;
+    font-size: 100%;
 }
 h3 {
-    font-size: 60%;
+    font-size: 80%;
 }
 
 a, a:visited, a:active {
