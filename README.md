@@ -20,7 +20,12 @@ http://www.iquilezles.org/www/material/nvscene2008/nvscene2008.htm
 (frames per second) https://documentation.apple.com/en/finalcutpro/usermanual/index.html#chapter=D%26section=3%26tasks=true
 (apollonian gasket - code) https://www.shadertoy.com/view/4ds3zn
 
+<<<<<<< Updated upstream
 -fix index page/do writeup
+=======
+fix index page/do writeup
+
+>>>>>>> Stashed changes
 -fix controls/add dropdown thingy (thomas)
 -make smaller and then scale so that people can play at shitty resolutions on shitty computers
 

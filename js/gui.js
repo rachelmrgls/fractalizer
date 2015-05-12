@@ -18,6 +18,10 @@ Gui.musicList = [
     "Compass (Louis The Child Remix).mp3",
     "All Too Well.m4a",
     "Rather Be (Elephante Remix).mp3",
+<<<<<<< Updated upstream
+=======
+    "Ten Feet Tall (Elephante Remix).mp3",
+>>>>>>> Stashed changes
 ];
 
 Gui.windowSizes = [ "full","400x400","600x400","600x600","800x600","800x800" ];
