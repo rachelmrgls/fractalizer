@@ -4,8 +4,8 @@ var Gui = Gui || {};
 
 // list of meshes available in the GUI
 Gui.sceneList = [
-    "menger",
     "spheres",
+    "menger",
     "mandelbrot",
     "julia2d",
     "julia3d",

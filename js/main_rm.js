@@ -181,7 +181,7 @@ window.onload = function() {
     var value1 = cmd.value1 || julia_def[julia_idx][0];
     var value2 = cmd.value2 || julia_def[julia_idx][1];
 
-    var batchCMD = cmd.scene || "menger";
+    var batchCMD = cmd.scene || "spheres";
 
     if (batchCMD === "menger") {
         Gui.values.level = 4.;
