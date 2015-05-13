@@ -93,7 +93,7 @@ Gui.toCommandString = function () {
 
 Gui.init = function (controlsChangeCallback ) {
     // create top level controls
-    var gui     = new dat.GUI( { width: 300 } );
+    var gui     = new dat.GUI( { width: 200 } );
     // var size    = gui.add( Gui.values, 'windowSize', Gui.windowSizes ).name("Window Size");
 
     // var shading = gui.add( Gui.values, "shadingModel", Gui.shadingList );

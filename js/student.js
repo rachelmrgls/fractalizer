@@ -9,5 +9,5 @@ Student.updateHTML = function( ) {
     var studentInfo = 'Rachel Margulies' + ' &lt;' + 'rachelbm' + '&gt;' + '<br>' +
     				  'Sonia Skoularikis' + ' &lt;' + 'sskoular' + '&gt;' + '<br>' +
     				  'Thomas Greenspan' + ' &lt;' + 'tgreensp' + '&gt;';
-    document.getElementById('student').innerHTML = studentInfo;
+    //document.getElementById('student').innerHTML = studentInfo;
 }

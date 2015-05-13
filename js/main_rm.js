@@ -88,7 +88,6 @@ var julia_def = [[-0.4,0.6],[0.285,0.01],[.4145,.3436],[0.37,0.1428],[-0.70176,-
 var julia_idx;
 
 window.onload = function() {
- 
     var controlsChangeCallback = function() {
 
         var songNeedsChange = false
