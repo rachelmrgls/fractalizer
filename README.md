@@ -7,7 +7,7 @@ Rachel Margulies, Sonia Skoularikis, Thomas Greenspan
 - To view the website, go to http://fractalizer.herokuapp.com
 - To run locally, download the source code and run
 
-> python -m SimpleHttpServer
+> python -m SimpleHTTPServer
 
 
 # For more information...
