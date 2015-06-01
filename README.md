@@ -8,7 +8,7 @@ To run locally, download the source code and run
 
 
 # For more information...
-Check out the writeup file (./writeup.html)
+Check out the [writeup file](writeup.html)
 
 # Future Updates
 - put julia/mandelbrot into actual 2d
