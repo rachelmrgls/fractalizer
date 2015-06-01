@@ -8,14 +8,14 @@ To run locally, download the source code and run
 
 
 # For more information...
-Check out the writeup file (writeup.html)
+Check out the writeup file (/writeup.html)
 
 # Future Updates
--put julia/mandelbrot into actual 2d
--make the distance estimation only look at part of the thing/make recursion level depend on the amount you're zoomed in
--apollonian gasket, with translucency (bubbles + random bubbly colors); look at assignment 3 refraction stuff; colored based on bubble size, smaller bubbles more translucent;
--make file uploader for music
--apollonian translucency!!! (http://www.fractalforums.com/3d-fractal-generation/escape-time-version-of-the-tetrahedral-apollonian-gasket/)
+- put julia/mandelbrot into actual 2d
+- make the distance estimation only look at part of the thing/make recursion level depend on the amount you're zoomed in
+- apollonian gasket, with translucency (bubbles + random bubbly colors); look at assignment 3 refraction stuff; colored based on bubble size, smaller bubbles more translucent;
+- make file uploader for music
+- apollonian translucency!!! (http://www.fractalforums.com/3d-fractal-generation/escape-time-version-of-the-tetrahedral-apollonian-gasket/)
 
 
 # Sources 
